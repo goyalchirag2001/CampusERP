@@ -1,6 +1,6 @@
 namespace CampusERP.Domain.Common;
 
-public abstract class BaseEntity
+public abstract class BaseEntity : IAuditableEntity, ISoftDelete
 {
     public Guid Id { get; set; }
 

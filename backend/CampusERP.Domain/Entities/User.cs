@@ -3,7 +3,7 @@ using CampusERP.Domain.Common;
 
 namespace CampusERP.Domain.Entities;
 
-public class User : BaseEntity
+public class User : BaseEntity, ITenantEntity
 {
     [Required]
     [MaxLength(100)]
@@ -19,6 +19,10 @@ public class User : BaseEntity
 
     [Required]
     public string PasswordHash { get; set; } = string.Empty;
+
+    public Guid InstitutionId { get; set; }
+
+    public Institution Institution { get; set; } = null!;
 
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 

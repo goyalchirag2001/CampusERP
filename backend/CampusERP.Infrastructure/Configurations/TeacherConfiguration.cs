@@ -16,12 +16,14 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.HasIndex(x => x.EmployeeCode)
-            .IsUnique();
-
         builder.Property(x => x.Designation)
             .HasMaxLength(100)
             .IsRequired();
+
+        builder.HasOne(x => x.Institution)
+            .WithMany(x => x.Teachers)
+            .HasForeignKey(x => x.InstitutionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.User)
             .WithOne(x => x.Teacher)
@@ -32,5 +34,11 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
             .WithMany(x => x.Teachers)
             .HasForeignKey(x => x.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new
+        {
+            x.InstitutionId,
+            x.EmployeeCode
+        }).IsUnique();
     }
 }

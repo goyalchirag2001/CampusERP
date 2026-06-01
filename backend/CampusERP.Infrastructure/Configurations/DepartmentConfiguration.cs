@@ -15,5 +15,16 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.Property(x => x.Name)
             .HasMaxLength(100)
             .IsRequired();
+
+        builder.HasOne(x => x.Institution)
+            .WithMany(x => x.Departments)
+            .HasForeignKey(x => x.InstitutionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new
+        {
+            x.InstitutionId,
+            x.Name
+        }).IsUnique();
     }
 }

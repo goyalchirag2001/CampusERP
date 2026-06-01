@@ -3,9 +3,13 @@ using CampusERP.Domain.Common;
 
 namespace CampusERP.Domain.Entities;
 
-public class Teacher : BaseEntity
+public class Teacher : BaseEntity, ITenantEntity
 {
     public Guid UserId { get; set; }
+
+    public Guid InstitutionId { get; set; }
+
+    public Institution Institution { get; set; } = null!;
 
     [Required]
     [MaxLength(20)]

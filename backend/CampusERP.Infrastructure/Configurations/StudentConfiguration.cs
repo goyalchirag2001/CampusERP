@@ -16,15 +16,17 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasMaxLength(20)
             .IsRequired();
 
-        builder.HasIndex(x => x.RollNumber)
-            .IsUnique();
-
         builder.Property(x => x.Batch)
             .HasMaxLength(20)
             .IsRequired();
 
         builder.Property(x => x.AdmissionDate)
             .IsRequired();
+
+        builder.HasOne(x => x.Institution)
+            .WithMany(x => x.Students)
+            .HasForeignKey(x => x.InstitutionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.User)
             .WithOne(x => x.Student)
@@ -35,5 +37,11 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .WithMany(x => x.Students)
             .HasForeignKey(x => x.CourseId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new
+        {
+            x.InstitutionId,
+            x.RollNumber
+        }).IsUnique();
     }
 }
