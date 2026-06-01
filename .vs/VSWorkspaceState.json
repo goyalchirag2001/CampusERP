@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\CampusERP.API\\Properties",
+    "\\backend\\CampusERP.Domain\\Common",
+    "\\backend\\CampusERP.Domain\\Entities",
+    "\\backend\\CampusERP.Infrastructure",
+    "\\backend\\CampusERP.Infrastructure\\Data"
+  ],
+  "PreviewInSolutionExplorer": false
+}

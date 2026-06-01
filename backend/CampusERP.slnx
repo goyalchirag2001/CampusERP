@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="CampusERP.API/CampusERP.API.csproj" />
+  <Project Path="CampusERP.Application/CampusERP.Application.csproj" />
+  <Project Path="CampusERP.BackgroundJobs/CampusERP.BackgroundJobs.csproj" />
+  <Project Path="CampusERP.Contracts/CampusERP.Contracts.csproj" />
+  <Project Path="CampusERP.Domain/CampusERP.Domain.csproj" />
+  <Project Path="CampusERP.Infrastructure/CampusERP.Infrastructure.csproj" />
+  <Project Path="CampusERP.Shared/CampusERP.Shared.csproj" />
+  <Project Path="CampusERP.Tests/CampusERP.Tests.csproj" />
+</Solution>

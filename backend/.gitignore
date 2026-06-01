@@ -1,0 +1,43 @@
+# Build folders
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# NuGet
+packages/
+*.nupkg
+
+# EF Core generated
+*.db
+
+# Publish output
+publish/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Environment files
+.env
+
+# Test Results
+TestResults/
+
+# Coverage
+coverage/
+
+# Temporary files
+*.tmp
