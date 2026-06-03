@@ -9,6 +9,8 @@ public class Student : BaseEntity, ITenantEntity
 
     public Guid InstitutionId { get; set; }
 
+    public Guid CampusId { get; set; }
+
     public Institution Institution { get; set; } = null!;
 
     [Required]
@@ -24,6 +26,8 @@ public class Student : BaseEntity, ITenantEntity
     public DateTime AdmissionDate { get; set; }
 
     public User User { get; set; } = null!;
+
+    public Campus Campus { get; set; } = null!;
 
     public Course Course { get; set; } = null!;
 }

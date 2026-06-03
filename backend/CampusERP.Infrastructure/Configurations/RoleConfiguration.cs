@@ -1,4 +1,6 @@
 ﻿using CampusERP.Domain.Entities;
+using CampusERP.Infrastructure.Data;
+using CampusERP.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -18,5 +20,46 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 
         builder.HasIndex(x => x.Name)
             .IsUnique();
+
+        builder.HasData(
+        new Role
+        {
+            Id = SeedData.PlatformAdminRoleId,
+            Name = RoleConstants.PlatformAdmin,
+            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0,DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0,DateTimeKind.Utc)
+        },
+
+        new Role
+        {
+            Id = SeedData.InstitutionAdminRoleId,
+            Name = RoleConstants.InstitutionAdmin,
+            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        },
+
+        new Role
+        {
+            Id = SeedData.CampusAdminRoleId,
+            Name = RoleConstants.CampusAdmin,
+            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        },
+
+        new Role
+        {
+            Id = SeedData.TeacherRoleId,
+            Name = RoleConstants.Teacher,
+            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        },
+
+        new Role
+        {
+            Id = SeedData.StudentRoleId,
+            Name = RoleConstants.Student,
+            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+            UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        });
     }
 }

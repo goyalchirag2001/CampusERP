@@ -22,7 +22,11 @@ public class User : BaseEntity, ITenantEntity
 
     public Guid InstitutionId { get; set; }
 
+    public Guid CampusId { get; set; }
+
     public Institution Institution { get; set; } = null!;
+
+    public Campus Campus { get; set; } = null!;
 
     public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 

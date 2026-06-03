@@ -1,7 +1,8 @@
-using CampusERP.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using CampusERP.Application.Interfaces;
 using CampusERP.Domain.Common;
+using CampusERP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CampusERP.Infrastructure.Data;
 
@@ -9,15 +10,26 @@ public class ApplicationDbContext : DbContext
 {
     private readonly ICurrentUserService _currentUserService;
 
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options,
-        ICurrentUserService currentUserService)
-        : base(options)
+    private readonly Guid? _institutionId;
+
+    private readonly Guid? _campusId;
+
+    public Guid? CurrentInstitutionId => _institutionId;
+
+    public Guid? CurrentCampusId => _campusId;
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options,ICurrentUserService currentUserService) : base(options)
     {
         _currentUserService = currentUserService;
+
+        _institutionId = currentUserService.InstitutionId;
+
+        _campusId = currentUserService.CampusId;
     }
 
     public DbSet<Institution> Institutions => Set<Institution>();
+
+    public DbSet<Campus> Campuses => Set<Campus>();
 
     public DbSet<User> Users => Set<User>();
 
@@ -43,8 +55,9 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+
+        ConfigureGlobalFilters(modelBuilder);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -96,5 +109,36 @@ public class ApplicationDbContext : DbContext
 
         return await base.SaveChangesAsync(
             cancellationToken);
+    }
+
+    private void ConfigureGlobalFilters(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Student>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<Teacher>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<Course>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<Department>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<User>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<Campus>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
+
+        modelBuilder.Entity<Institution>()
+            .HasQueryFilter(x =>
+                !x.IsDeleted);
     }
 }

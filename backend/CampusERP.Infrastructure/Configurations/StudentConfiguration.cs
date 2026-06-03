@@ -28,6 +28,11 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasForeignKey(x => x.InstitutionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.Campus)
+            .WithMany(x => x.Students)
+            .HasForeignKey(x => x.CampusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(x => x.User)
             .WithOne(x => x.Student)
             .HasForeignKey<Student>(x => x.UserId)
@@ -40,7 +45,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
 
         builder.HasIndex(x => new
         {
-            x.InstitutionId,
+            x.CampusId,
             x.RollNumber
         }).IsUnique();
     }

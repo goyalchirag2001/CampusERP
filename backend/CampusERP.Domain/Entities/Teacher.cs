@@ -9,13 +9,13 @@ public class Teacher : BaseEntity, ITenantEntity
 
     public Guid InstitutionId { get; set; }
 
-    public Institution Institution { get; set; } = null!;
+    public Guid DepartmentId { get; set; }
+
+    public Guid CampusId { get; set; }
 
     [Required]
     [MaxLength(20)]
     public string EmployeeCode { get; set; } = string.Empty;
-
-    public Guid DepartmentId { get; set; }
 
     [Required]
     [MaxLength(100)]
@@ -23,5 +23,9 @@ public class Teacher : BaseEntity, ITenantEntity
 
     public User User { get; set; } = null!;
 
+    public Institution Institution { get; set; } = null!;
+
     public Department Department { get; set; } = null!;
+
+    public Campus Campus { get; set; } = null!;
 }

@@ -6,5 +6,7 @@ public interface ICurrentUserService
 
     Guid? InstitutionId { get; }
 
+    Guid? CampusId { get; }
+
     string? Email { get; }
 }

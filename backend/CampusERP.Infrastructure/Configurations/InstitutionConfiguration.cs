@@ -1,6 +1,7 @@
 ﻿using CampusERP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using CampusERP.Infrastructure.Data;
 
 namespace CampusERP.Infrastructure.Configurations;
 

@@ -27,6 +27,9 @@ public class Institution : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
+    public ICollection<Campus> Campuses { get; set; }
+    = new List<Campus>();
+
     public ICollection<User> Users { get; set; }
         = new List<User>();
 

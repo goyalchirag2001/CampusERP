@@ -45,6 +45,22 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
+    public Guid? CampusId
+    {
+        get
+        {
+            var value = _httpContextAccessor
+                .HttpContext?
+                .User?
+                .FindFirst("campusId")
+                ?.Value;
+
+            return Guid.TryParse(value, out var id)
+                ? id
+                : null;
+        }
+    }
+
     public string? Email =>
         _httpContextAccessor
             .HttpContext?

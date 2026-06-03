@@ -21,9 +21,20 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
             .HasForeignKey(x => x.InstitutionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.Campus)
+            .WithMany(x => x.Courses)
+            .HasForeignKey(x => x.CampusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Department)
+            .WithMany(x => x.Courses)
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasIndex(x => new
         {
-            x.InstitutionId,
+            x.CampusId,
+            x.DepartmentId,
             x.Name
         }).IsUnique();
     }

@@ -25,6 +25,11 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
             .HasForeignKey(x => x.InstitutionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.Campus)
+            .WithMany(x => x.Teachers)
+            .HasForeignKey(x => x.CampusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasOne(x => x.User)
             .WithOne(x => x.Teacher)
             .HasForeignKey<Teacher>(x => x.UserId)
@@ -37,7 +42,7 @@ public class TeacherConfiguration : IEntityTypeConfiguration<Teacher>
 
         builder.HasIndex(x => new
         {
-            x.InstitutionId,
+            x.CampusId,
             x.EmployeeCode
         }).IsUnique();
     }
