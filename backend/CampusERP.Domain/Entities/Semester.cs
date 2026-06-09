@@ -3,27 +3,25 @@ using CampusERP.Domain.Common;
 
 namespace CampusERP.Domain.Entities;
 
-public class Department : BaseEntity, ITenantEntity
+public class Semester : BaseEntity, ITenantEntity
 {
     public Guid InstitutionId { get; set; }
 
     public Guid CampusId { get; set; }
 
-    [Required]
-    [MaxLength(100)]
-    public string Name { get; set; } = string.Empty;
+    public Guid CourseId { get; set; }
 
     [Required]
-    [MaxLength(20)]
-    public string Code { get; set; } = string.Empty;
+    [MaxLength(50)]
+    public string Name { get; set; } = string.Empty;
+
+    public int SequenceNumber { get; set; }
+
+    public bool IsActive { get; set; } = true;
 
     public Institution Institution { get; set; } = null!;
 
     public Campus Campus { get; set; } = null!;
 
-    public ICollection<Course> Courses { get; set; }
-        = new List<Course>();
-
-    public ICollection<Teacher> Teachers { get; set; }
-        = new List<Teacher>();
+    public Course Course { get; set; } = null!;
 }

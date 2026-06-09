@@ -4,6 +4,7 @@ using CampusERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CampusERP.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260609092454_AddCourseAcademicFields")]
+    partial class AddCourseAcademicFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -433,59 +436,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.ToTable("RolePermissions", (string)null);
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.Semester", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CampusId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("InstitutionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("SequenceNumber")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CampusId");
-
-                    b.HasIndex("InstitutionId");
-
-                    b.HasIndex("CourseId", "SequenceNumber")
-                        .IsUnique();
-
-                    b.ToTable("Semesters", (string)null);
-                });
-
             modelBuilder.Entity("CampusERP.Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
@@ -793,33 +743,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.Semester", b =>
-                {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
-                        .WithMany("Semesters")
-                        .HasForeignKey("CampusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CampusERP.Domain.Entities.Course", "Course")
-                        .WithMany("Semesters")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CampusERP.Domain.Entities.Institution", "Institution")
-                        .WithMany("Semesters")
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Campus");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Institution");
-                });
-
             modelBuilder.Entity("CampusERP.Domain.Entities.Student", b =>
                 {
                     b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
@@ -942,8 +865,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Navigation("Departments");
 
-                    b.Navigation("Semesters");
-
                     b.Navigation("Students");
 
                     b.Navigation("Teachers");
@@ -953,8 +874,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Course", b =>
                 {
-                    b.Navigation("Semesters");
-
                     b.Navigation("Students");
                 });
 
@@ -972,8 +891,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Navigation("Courses");
 
                     b.Navigation("Departments");
-
-                    b.Navigation("Semesters");
 
                     b.Navigation("Students");
 

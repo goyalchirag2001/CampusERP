@@ -11,8 +11,9 @@ public class Campus : BaseEntity, ITenantEntity
     [MaxLength(200)]
     public string Name { get; set; } = string.Empty;
 
+    [Required]
     [MaxLength(50)]
-    public string? Code { get; set; }
+    public string Code { get; set; } = string.Empty;
 
     [MaxLength(500)]
     public string? Address { get; set; }
@@ -21,18 +22,15 @@ public class Campus : BaseEntity, ITenantEntity
 
     public Institution Institution { get; set; } = null!;
 
-    public ICollection<Department> Departments { get; set; }
-        = new List<Department>();
+    public ICollection<Department> Departments { get; set; } = new List<Department>();
 
-    public ICollection<Course> Courses { get; set; }
-        = new List<Course>();
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 
-    public ICollection<Student> Students { get; set; }
-        = new List<Student>();
+    public ICollection<Student> Students { get; set; } = new List<Student>();
 
-    public ICollection<Teacher> Teachers { get; set; }
-        = new List<Teacher>();
+    public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 
-    public ICollection<User> Users { get; set; }
-        = new List<User>();
+    public ICollection<User> Users { get; set; } = new List<User>();
+
+    public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 }

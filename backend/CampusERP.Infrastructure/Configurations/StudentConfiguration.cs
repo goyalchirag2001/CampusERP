@@ -43,6 +43,11 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasForeignKey(x => x.CourseId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(x => x.Department)
+            .WithMany()
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasIndex(x => new
         {
             x.CampusId,

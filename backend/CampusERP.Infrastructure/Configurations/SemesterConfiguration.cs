@@ -1,40 +1,43 @@
-using CampusERP.Domain.Entities;
+﻿using CampusERP.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CampusERP.Infrastructure.Configurations;
 
-public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
+public class SemesterConfiguration: IEntityTypeConfiguration<Semester>
 {
-    public void Configure(EntityTypeBuilder<Department> builder)
+    public void Configure(EntityTypeBuilder<Semester> builder)
     {
-        builder.ToTable("Departments");
+        builder.ToTable("Semesters");
 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
-            .HasMaxLength(100)
+            .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(x => x.Code)
-            .HasMaxLength(20)
+        builder.Property(x => x.SequenceNumber)
             .IsRequired();
 
         builder.HasOne(x => x.Institution)
-            .WithMany(x => x.Departments)
+            .WithMany(x => x.Semesters)
             .HasForeignKey(x => x.InstitutionId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Campus)
-            .WithMany(x => x.Departments)
+            .WithMany(x => x.Semesters)
             .HasForeignKey(x => x.CampusId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.Course)
+            .WithMany(x => x.Semesters)
+            .HasForeignKey(x => x.CourseId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => new
         {
-            x.InstitutionId,
-            x.CampusId,
-            x.Code
+            x.CourseId,
+            x.SequenceNumber
         }).IsUnique();
     }
 }

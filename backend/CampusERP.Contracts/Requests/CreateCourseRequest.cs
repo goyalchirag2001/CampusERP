@@ -1,0 +1,20 @@
+﻿namespace CampusERP.Contracts.Requests;
+
+public class CreateCourseRequest
+{
+    public Guid InstitutionId { get; set; }
+
+    public Guid CampusId { get; set; }
+
+    public Guid DepartmentId { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Code { get; set; } = string.Empty;
+
+    public string DegreeType { get; set; } = string.Empty;
+
+    public int DurationYears { get; set; }
+
+    public int TotalSemesters { get; set; }
+}

@@ -19,6 +19,8 @@ public class Student : BaseEntity, ITenantEntity
 
     public Guid CourseId { get; set; }
 
+    public Guid DepartmentId { get; set; }
+
     [Required]
     [MaxLength(20)]
     public string Batch { get; set; } = string.Empty;
@@ -30,4 +32,6 @@ public class Student : BaseEntity, ITenantEntity
     public Campus Campus { get; set; } = null!;
 
     public Course Course { get; set; } = null!;
+
+    public Department Department { get; set; } = null!;
 }

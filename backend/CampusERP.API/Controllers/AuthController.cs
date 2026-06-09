@@ -17,12 +17,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(
-        LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var response =
-            await _authService.LoginAsync(
-                request);
+        var response = await _authService.LoginAsync(request);
 
         return Ok(response);
     }
@@ -31,10 +28,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken(
         RefreshTokenRequest request)
     {
-        var response =
-            await _authService
-                .RefreshTokenAsync(
-                    request);
+        var response = await _authService.RefreshTokenAsync(request);
 
         return Ok(response);
     }

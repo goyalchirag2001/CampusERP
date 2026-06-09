@@ -27,21 +27,17 @@ public class Institution : BaseEntity
 
     public bool IsActive { get; set; } = true;
 
-    public ICollection<Campus> Campuses { get; set; }
-    = new List<Campus>();
+    public ICollection<Campus> Campuses { get; set; } = new List<Campus>();
 
-    public ICollection<User> Users { get; set; }
-        = new List<User>();
+    public ICollection<User> Users { get; set; } = new List<User>();
 
-    public ICollection<Student> Students { get; set; }
-        = new List<Student>();
+    public ICollection<Student> Students { get; set; } = new List<Student>();
 
-    public ICollection<Teacher> Teachers { get; set; }
-        = new List<Teacher>();
+    public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 
-    public ICollection<Course> Courses { get; set; }
-        = new List<Course>();
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 
-    public ICollection<Department> Departments { get; set; }
-        = new List<Department>();
+    public ICollection<Department> Departments { get; set; } = new List<Department>();
+
+    public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 }

@@ -18,7 +18,8 @@ public class CampusConfiguration : IEntityTypeConfiguration<Campus>
             .IsRequired();
 
         builder.Property(x => x.Code)
-            .HasMaxLength(50);
+            .HasMaxLength(50)
+            .IsRequired();
 
         builder.Property(x => x.Address)
             .HasMaxLength(500);
@@ -31,7 +32,7 @@ public class CampusConfiguration : IEntityTypeConfiguration<Campus>
         builder.HasIndex(x => new
         {
             x.InstitutionId,
-            x.Name
+            x.Code
         }).IsUnique();
     }
 }

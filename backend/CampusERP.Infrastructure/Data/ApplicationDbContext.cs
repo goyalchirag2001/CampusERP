@@ -41,6 +41,8 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Department> Departments => Set<Department>();
 
+    public DbSet<Semester> Semesters => Set<Semester>();
+
     public DbSet<Role> Roles => Set<Role>();
 
     public DbSet<Permission> Permissions => Set<Permission>();

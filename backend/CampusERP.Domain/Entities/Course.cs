@@ -15,8 +15,19 @@ public class Course : BaseEntity, ITenantEntity
     [MaxLength(100)]
     public string Name { get; set; } = string.Empty;
 
+    [Required]
+    [MaxLength(30)]
+    public string Code { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(20)]
+    public string DegreeType { get; set; } = string.Empty;
+
     [Range(1, 10)]
     public int DurationYears { get; set; }
+
+    [Range(1, 20)]
+    public int TotalSemesters { get; set; }
 
     public Institution Institution { get; set; } = null!;
 
@@ -24,6 +35,7 @@ public class Course : BaseEntity, ITenantEntity
 
     public Department Department { get; set; } = null!;
 
-    public ICollection<Student> Students { get; set; }
-        = new List<Student>();
+    public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
+
+    public ICollection<Student> Students { get; set; } = new List<Student>();
 }
