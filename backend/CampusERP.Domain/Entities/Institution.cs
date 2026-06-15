@@ -40,4 +40,6 @@ public class Institution : BaseEntity
     public ICollection<Department> Departments { get; set; } = new List<Department>();
 
     public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
+
+    public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
 }

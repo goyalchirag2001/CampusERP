@@ -53,6 +53,11 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<Subject> Subjects => Set<Subject>();
+
+    public DbSet<SemesterSubject> SemesterSubjects => Set<SemesterSubject>();
+
+    public DbSet<TeacherAssignment> TeacherAssignments => Set<TeacherAssignment>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -116,31 +121,42 @@ public class ApplicationDbContext : DbContext
     private void ConfigureGlobalFilters(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Student>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<Teacher>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<Course>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<Department>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<User>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<Campus>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
 
         modelBuilder.Entity<Institution>()
-            .HasQueryFilter(x =>
-                !x.IsDeleted);
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<Semester>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<Subject>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<SemesterSubject>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<TeacherAssignment>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<Role>()
+            .HasQueryFilter(x => !x.IsDeleted);
+
+        modelBuilder.Entity<Permission>()
+            .HasQueryFilter(x => !x.IsDeleted);
     }
 }

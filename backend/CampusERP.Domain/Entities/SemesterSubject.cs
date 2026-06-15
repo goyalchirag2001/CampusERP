@@ -11,4 +11,6 @@ public class SemesterSubject : BaseEntity
     public Semester Semester { get; set; } = null!;
 
     public Subject Subject { get; set; } = null!;
+
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
 }

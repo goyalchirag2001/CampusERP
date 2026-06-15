@@ -17,6 +17,9 @@ public class User : BaseEntity, ITenantEntity
     [MaxLength(255)]
     public string Email { get; set; } = string.Empty;
 
+    [MaxLength(20)]
+    public string? PhoneNumber { get; set; }
+
     [Required]
     public string PasswordHash { get; set; } = string.Empty;
 

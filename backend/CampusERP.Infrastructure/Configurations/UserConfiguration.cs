@@ -24,6 +24,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(255)
             .IsRequired();
 
+        builder.Property(x => x.PhoneNumber)
+            .HasMaxLength(20);
+
         builder.Property(x => x.PasswordHash)
             .IsRequired();
 
@@ -40,10 +43,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(x => x.CampusId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => new
-        {
-            x.CampusId,
-            x.Email
-        }).IsUnique();
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
     }
 }

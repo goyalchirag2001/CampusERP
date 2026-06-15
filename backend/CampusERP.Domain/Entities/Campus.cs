@@ -33,4 +33,6 @@ public class Campus : BaseEntity, ITenantEntity
     public ICollection<User> Users { get; set; } = new List<User>();
 
     public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
+
+    public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
 }

@@ -4,6 +4,7 @@ using CampusERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CampusERP.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260614132344_AddSubjectCatalog")]
+    partial class AddSubjectCatalog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -700,43 +703,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.ToTable("Teachers", (string)null);
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.TeacherAssignment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("SemesterSubjectId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TeacherId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SemesterSubjectId");
-
-                    b.HasIndex("TeacherId", "SemesterSubjectId")
-                        .IsUnique();
-
-                    b.ToTable("TeacherAssignments", (string)null);
-                });
-
             modelBuilder.Entity("CampusERP.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -780,10 +746,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -792,12 +754,10 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CampusId");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.HasIndex("InstitutionId");
+
+                    b.HasIndex("CampusId", "Email")
+                        .IsUnique();
 
                     b.ToTable("Users", (string)null);
                 });
@@ -1069,25 +1029,6 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.TeacherAssignment", b =>
-                {
-                    b.HasOne("CampusERP.Domain.Entities.SemesterSubject", "SemesterSubject")
-                        .WithMany("TeacherAssignments")
-                        .HasForeignKey("SemesterSubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("CampusERP.Domain.Entities.Teacher", "Teacher")
-                        .WithMany("TeacherAssignments")
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SemesterSubject");
-
-                    b.Navigation("Teacher");
-                });
-
             modelBuilder.Entity("CampusERP.Domain.Entities.User", b =>
                 {
                     b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
@@ -1193,19 +1134,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Navigation("SemesterSubjects");
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.SemesterSubject", b =>
-                {
-                    b.Navigation("TeacherAssignments");
-                });
-
             modelBuilder.Entity("CampusERP.Domain.Entities.Subject", b =>
                 {
                     b.Navigation("SemesterSubjects");
-                });
-
-            modelBuilder.Entity("CampusERP.Domain.Entities.Teacher", b =>
-                {
-                    b.Navigation("TeacherAssignments");
                 });
 
             modelBuilder.Entity("CampusERP.Domain.Entities.User", b =>

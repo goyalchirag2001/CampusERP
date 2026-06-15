@@ -28,4 +28,6 @@ public class Teacher : BaseEntity, ITenantEntity
     public Department Department { get; set; } = null!;
 
     public Campus Campus { get; set; } = null!;
+
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
 }
