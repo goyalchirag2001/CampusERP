@@ -1,0 +1,65 @@
+.drawer-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  backdrop-filter: blur(6px);
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  z-index: 1000;
+}
+
+.drawer-panel {
+  width: 550px;
+
+  max-width: 100%;
+
+  height: 100%;
+
+  background: var(--background);
+
+  padding: 24px;
+
+  overflow-y: auto;
+
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.drawer-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+  flex: 1;
+}
+
+.drawer-footer {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 24px;
+}

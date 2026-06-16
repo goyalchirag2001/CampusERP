@@ -1,0 +1,80 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-orb"></div>
+
+      <div>
+        <button mat-icon-button class="mobile-menu-button" (click)="toggleMobileMenu()">
+          <mat-icon> menu </mat-icon>
+        </button>
+        <h2>CampusERP</h2>
+
+        <span>Education Platform</span>
+      </div>
+    </div>
+
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon>dashboard</mat-icon>
+
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/students" routerLinkActive="active-link">
+        <mat-icon>school</mat-icon>
+
+        <span>Students</span>
+      </a>
+
+      <a routerLink="/teachers" routerLinkActive="active-link">
+        <mat-icon>person</mat-icon>
+
+        <span>Teachers</span>
+      </a>
+
+      <a routerLink="/subjects" routerLinkActive="active-link">
+        <mat-icon>menu_book</mat-icon>
+
+        <span>Subjects</span>
+      </a>
+    </nav>
+
+    <div class="user-card">
+      <div class="avatar">
+        {{ userName.charAt(0) }}
+      </div>
+
+      <div>
+        <strong>
+          {{ userName }}
+        </strong>
+
+        <p>Administrator</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="header">
+      <div>
+        <h3>CampusERP</h3>
+      </div>
+
+      <div class="header-actions">
+        <button mat-icon-button (click)="toggleTheme()">
+          <mat-icon> contrast </mat-icon>
+        </button>
+
+        <span>
+          {{ userName }}
+        </span>
+
+        <button mat-button (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <section class="page-content">
+      <router-outlet />
+    </section>
+  </main>
+</div>

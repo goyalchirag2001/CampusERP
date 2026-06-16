@@ -1,0 +1,51 @@
+<div class="student-page">
+  <div class="page-header">
+    <div>
+      <h1>Students</h1>
+
+      <p>Manage students across your institution.</p>
+    </div>
+
+    <button mat-raised-button (click)="openDrawer()">
+      <mat-icon> add </mat-icon>
+
+      Add Student
+    </button>
+  </div>
+
+  <div class="search-card glass-panel">
+    <mat-form-field appearance="outline">
+      <mat-label> Search Students </mat-label>
+
+      <input matInput [(ngModel)]="searchText" (input)="onSearch()" />
+    </mat-form-field>
+  </div>
+
+  <div class="student-grid">
+    @for (student of filteredStudents; track student.id) {
+      <div class="student-card glass-panel">
+        <div class="avatar">
+          {{ student.firstName.charAt(0) }}
+        </div>
+
+        <div class="student-info">
+          <h3>
+            {{ student.firstName }}
+            {{ student.lastName }}
+          </h3>
+
+          <p>
+            {{ student.email }}
+          </p>
+
+          <span>
+            {{ student.rollNumber }}
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+@if (isDrawerOpen) {
+  <app-student-drawer (closed)="closeDrawer()" (saved)="onStudentSaved()"> </app-student-drawer>
+}

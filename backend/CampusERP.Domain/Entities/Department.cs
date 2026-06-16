@@ -21,9 +21,9 @@ public class Department : BaseEntity, ITenantEntity
 
     public Campus Campus { get; set; } = null!;
 
-    public ICollection<Course> Courses { get; set; }
-        = new List<Course>();
+    public ICollection<Course> Courses { get; set; } = new List<Course>();
 
-    public ICollection<Teacher> Teachers { get; set; }
-        = new List<Teacher>();
+    public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
+
+    public ICollection<Student> Students { get; set; } = new List<Student>();
 }

@@ -1,0 +1,120 @@
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+:root {
+  --primary: #4f46e5;
+  --primary-light: #818cf8;
+
+  --glass-border: rgba(255, 255, 255, 0.18);
+
+  --shadow-premium: 0 8px 32px rgba(31, 38, 135, 0.15);
+
+  --background: #f6f8fc;
+
+  --surface: rgba(255, 255, 255, 0.7);
+
+  --text: #0f172a;
+
+  --muted: #64748b;
+}
+
+body[data-theme='dark'] {
+  --background: #0f172a;
+
+  --surface: rgba(15, 23, 42, 0.65);
+
+  --text: #f8fafc;
+
+  --muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+
+  background: var(--background);
+
+  color: var(--text);
+
+  font-family: Inter, Roboto, sans-serif;
+
+  transition:
+    background 0.35s ease,
+    color 0.35s ease;
+
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+
+  position: fixed;
+
+  width: 700px;
+  height: 700px;
+
+  top: -200px;
+  left: -200px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.25), transparent 70%);
+
+  pointer-events: none;
+
+  z-index: -1;
+}
+
+body::after {
+  content: '';
+
+  position: fixed;
+
+  width: 700px;
+  height: 700px;
+
+  bottom: -250px;
+  right: -250px;
+
+  border-radius: 50%;
+
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%);
+
+  pointer-events: none;
+
+  z-index: -1;
+}
+
+.glass-panel {
+  background: var(--surface);
+
+  backdrop-filter: blur(24px);
+
+  border: 1px solid var(--glass-border);
+
+  box-shadow: var(--shadow-premium);
+
+  border-radius: 24px;
+}

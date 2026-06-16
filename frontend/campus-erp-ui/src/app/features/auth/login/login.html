@@ -1,0 +1,31 @@
+<div class="login-page">
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="login-panel">
+    <div class="brand-section">
+      <div class="brand-logo">CE</div>
+
+      <h1>CampusERP</h1>
+
+      <p>Intelligent Education Management Platform</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+
+        <input matInput formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+
+      <button mat-raised-button class="login-button" type="submit">Sign In</button>
+    </form>
+  </div>
+</div>

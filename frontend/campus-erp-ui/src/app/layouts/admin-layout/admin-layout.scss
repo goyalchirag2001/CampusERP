@@ -1,0 +1,179 @@
+@use '../../../styles/breakpoints' as bp;
+
+.app-shell {
+  display: flex;
+
+  min-height: 100vh;
+
+  background: var(--background);
+}
+
+.sidebar {
+  width: 300px;
+
+  margin: 16px;
+
+  padding: 24px;
+
+  border-radius: 32px;
+
+  background: var(--surface);
+
+  backdrop-filter: blur(24px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.sidebar-logo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 40px;
+}
+
+.logo-orb {
+  width: 56px;
+
+  height: 56px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+}
+
+.sidebar nav {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.sidebar nav a {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.active-link {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(14, 165, 233, 0.18));
+
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+.user-card {
+  margin-top: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 16px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.avatar {
+  width: 48px;
+
+  height: 48px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: white;
+
+  font-weight: 700;
+}
+
+.user-card p {
+  margin: 4px 0 0;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.sidebar nav a:hover {
+  background: rgba(79, 70, 229, 0.12);
+
+  transform: translateX(4px);
+}
+
+.main-content {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.header {
+  height: 80px;
+
+  margin: 16px 16px 0 0;
+
+  padding: 0 24px;
+
+  border-radius: 24px;
+
+  background: var(--surface);
+
+  backdrop-filter: blur(24px);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+}
+
+.header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+.page-content {
+  padding: 24px;
+}
+
+@include bp.mobile {
+  .sidebar {
+    display: none;
+  }
+
+  .header {
+    margin: 12px;
+  }
+
+  .page-content {
+    padding: 12px;
+  }
+}

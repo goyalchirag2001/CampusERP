@@ -44,7 +44,7 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Department)
-            .WithMany()
+            .WithMany(x => x.Students)
             .HasForeignKey(x => x.DepartmentId)
             .OnDelete(DeleteBehavior.Restrict);
 
