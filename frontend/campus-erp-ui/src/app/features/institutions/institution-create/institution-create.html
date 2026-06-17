@@ -1,0 +1,147 @@
+<div class="create-page">
+  <div class="page-header">
+    <div>
+      <h1>Create Institution</h1>
+
+      <p>Onboard a new university to CampusERP</p>
+    </div>
+
+    <button mat-flat-button class="create-button" (click)="create()">Create Institution</button>
+  </div>
+
+  <div class="page-grid">
+    <form class="form-panel" [formGroup]="form">
+      <section class="section">
+        <h2>Institution Information</h2>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Institution Name</mat-label>
+
+          <input matInput formControlName="name" (input)="onInstitutionNameChange()" />
+        </mat-form-field>
+
+        <div class="two-column">
+          <mat-form-field appearance="outline">
+            <mat-label>Code</mat-label>
+
+            <input matInput formControlName="code" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Login Slug</mat-label>
+
+            <input matInput formControlName="loginSlug" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+
+          <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone</mat-label>
+
+          <input matInput formControlName="phone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Website</mat-label>
+
+          <input matInput formControlName="website" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
+
+          <textarea matInput rows="3" formControlName="address"></textarea>
+        </mat-form-field>
+      </section>
+
+      <section class="section">
+        <h2>Branding</h2>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Logo Url</mat-label>
+
+          <input matInput formControlName="logoUrl" />
+        </mat-form-field>
+
+        <div class="two-column">
+          <div class="color-picker-group">
+            <label> Primary Color </label>
+
+            <input type="color" formControlName="primaryColor" />
+          </div>
+
+          <div class="color-picker-group">
+            <label> Secondary Color </label>
+
+            <input type="color" formControlName="secondaryColor" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Administrator</h2>
+
+        <div class="two-column">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+
+            <input matInput formControlName="adminFirstName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+
+            <input matInput formControlName="adminLastName" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+
+          <input matInput formControlName="adminEmail" />
+        </mat-form-field>
+      </section>
+
+      <section class="section">
+        <h2>Campus</h2>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Campus Name</mat-label>
+
+          <input matInput formControlName="campusName" />
+        </mat-form-field>
+      </section>
+    </form>
+
+    <div class="preview-panel">
+      <div class="preview-header" [style.background]="form.value.primaryColor">
+        <h2>
+          {{ form.value.name || 'Institution Name' }}
+        </h2>
+
+        <span>
+          {{ form.value.loginSlug || 'institution' }}
+        </span>
+      </div>
+
+      <div class="preview-body">
+        <h3>Login Portal Preview</h3>
+
+        <div class="login-card">
+          <div class="preview-input"></div>
+
+          <div class="preview-input"></div>
+
+          <button class="preview-button" [style.background]="form.value.secondaryColor">
+            Sign In
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

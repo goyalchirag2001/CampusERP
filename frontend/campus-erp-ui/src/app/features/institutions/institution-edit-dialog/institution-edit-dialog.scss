@@ -1,0 +1,34 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 700px;
+  padding-top: 12px;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.color-picker input[type='color'] {
+  width: 100%;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+}
+
+h3 {
+  margin: 16px 0 0;
+}
+
+mat-form-field {
+  width: 100%;
+}

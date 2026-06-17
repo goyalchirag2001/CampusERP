@@ -40,38 +40,50 @@
   margin-bottom: 40px;
 }
 
-.logo-orb {
-  width: 56px;
+.sidebar-logo-image {
+  width: 96px;
 
-  height: 56px;
+  height: 96px;
 
-  border-radius: 50%;
+  border-radius: 24px;
 
-  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+  object-fit: contain;
 
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
-}
+  background: white;
 
-.sidebar nav {
-  display: flex;
+  padding: 8px;
 
-  flex-direction: column;
+  margin-bottom: 16px;
 
-  gap: 12px;
-}
-
-.sidebar nav a {
-  display: flex;
-
-  align-items: center;
-
-  gap: 14px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
 .active-link {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.18), rgba(14, 165, 233, 0.18));
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.16), rgba(59, 130, 246, 0.06));
 
-  border: 1px solid rgba(79, 70, 229, 0.15);
+  color: #2563eb;
+
+  font-weight: 700;
+
+  position: relative;
+}
+
+.active-link::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+
+  top: 8px;
+
+  bottom: 8px;
+
+  width: 4px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: #2563eb;
 }
 
 .user-card {
@@ -119,9 +131,9 @@
 }
 
 .sidebar nav a:hover {
-  background: rgba(79, 70, 229, 0.12);
+  transform: translateX(6px);
 
-  transform: translateX(4px);
+  background: rgba(59, 130, 246, 0.08);
 }
 
 .main-content {
@@ -177,3 +189,88 @@
     padding: 12px;
   }
 }
+
+.sidebar-top {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  margin-bottom: 48px;
+}
+
+.sidebar-logo-placeholder {
+  width: 96px;
+
+  height: 96px;
+
+  border-radius: 24px;
+
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: white;
+
+  font-size: 36px;
+
+  font-weight: 700;
+
+  margin-bottom: 16px;
+}
+
+.sidebar-brand h2 {
+  margin: 0;
+
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+.sidebar-brand span {
+  color: var(--muted);
+
+  font-size: 14px;
+}
+
+.sidebar-nav {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.sidebar-nav a {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  height: 56px;
+
+  padding: 0 18px;
+
+  border-radius: 18px;
+
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: 0.25s ease;
+}
+
+.sidebar-nav a:hover {
+  background: rgba(59, 130, 246, 0.08);
+
+  transform: translateX(4px);
+}
+

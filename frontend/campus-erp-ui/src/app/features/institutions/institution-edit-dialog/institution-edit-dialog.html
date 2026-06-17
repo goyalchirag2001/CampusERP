@@ -1,0 +1,91 @@
+<h2 mat-dialog-title>Edit Institution</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Institution Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <div class="two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Login Slug</mat-label>
+        <input matInput formControlName="loginSlug" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Website</mat-label>
+      <input matInput formControlName="website" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Address</mat-label>
+      <textarea matInput rows="3" formControlName="address"> </textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Logo URL</mat-label>
+      <input matInput formControlName="logoUrl" />
+    </mat-form-field>
+
+    <div class="two-column">
+      <div class="color-picker">
+        <label>Primary Color</label>
+        <input type="color" formControlName="primaryColor" />
+      </div>
+
+      <div class="color-picker">
+        <label>Secondary Color</label>
+        <input type="color" formControlName="secondaryColor" />
+      </div>
+    </div>
+
+    <h3>Administrator</h3>
+
+    <div class="two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="adminFirstName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="adminLastName" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Admin Email</mat-label>
+      <input matInput formControlName="adminEmail" />
+    </mat-form-field>
+
+    <h3>Campus</h3>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Campus Name</mat-label>
+      <input matInput formControlName="campusName" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" (click)="save()">Save Changes</button>
+</mat-dialog-actions>

@@ -1,0 +1,183 @@
+.details-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-header-card,
+.info-card,
+.branding-card,
+.preview-card {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 24px;
+}
+
+.page-header-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+  min-width: 0;
+}
+
+.header-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 700;
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.institution-logo,
+.institution-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 20px;
+}
+
+.institution-logo {
+  object-fit: contain;
+  background: white;
+  padding: 8px;
+}
+
+.institution-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.header-left h1 {
+  margin: 0;
+  font-size: 36px;
+}
+
+.header-left p {
+  margin: 6px 0;
+  color: var(--muted);
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-chip.inactive {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header-actions button {
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.info-grid label {
+  color: var(--muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.info-grid p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 24px;
+}
+
+.color-section {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.color-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  margin-top: 10px;
+}
+
+.login-preview {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.preview-header {
+  color: white;
+  padding: 20px;
+  font-weight: 600;
+}
+
+.preview-body {
+  padding: 20px;
+}
+
+.preview-input {
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 12px;
+}
+
+.preview-button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+}
+
+@media (max-width: 1200px) {
+  .page-header-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}

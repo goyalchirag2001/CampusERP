@@ -2,6 +2,38 @@
 
 html {
   height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+
+html {
+  height: 100%;
 
   @include mat.theme(
     (
@@ -30,6 +62,22 @@ html {
   --text: #0f172a;
 
   --muted: #64748b;
+
+  --card-bg: #ffffff;
+
+  --card-text: #111827;
+
+  --card-secondary: #6b7280;
+
+  --panel-bg: rgba(255, 255, 255, 0.75);
+
+  --success: #22c55e;
+
+  --warning: #f59e0b;
+
+  --danger: #ef4444;
+
+  --info: #3b82f6;
 }
 
 body[data-theme='dark'] {
@@ -40,6 +88,16 @@ body[data-theme='dark'] {
   --text: #f8fafc;
 
   --muted: #94a3b8;
+
+  --card-bg: #1e293b;
+
+  --card-text: #f8fafc;
+
+  --card-secondary: #cbd5e1;
+
+  --panel-bg: rgba(30, 41, 59, 0.85);
+
+  --glass-border: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -117,4 +175,12 @@ body::after {
   box-shadow: var(--shadow-premium);
 
   border-radius: 24px;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: 18px !important;
 }

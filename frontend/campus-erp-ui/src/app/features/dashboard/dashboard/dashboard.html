@@ -1,34 +1,76 @@
-<div class="dashboard">
-  <div class="dashboard-header">
-    <div>
-      <h1>
-        Welcome back,
-        {{ userName }}
-      </h1>
+@if (dashboard(); as data) {
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <div>
+        <h1>
+          Welcome back,
+          {{ userName }}
+        </h1>
 
-      <p>Here's what's happening today.</p>
+        <p>Platform Administration Dashboard</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <span> Institutions </span>
+
+        <h2>
+          {{ data.institutionCount }}
+        </h2>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span> Campuses </span>
+
+        <h2>
+          {{ data.campusCount }}
+        </h2>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span> Users </span>
+
+        <h2>
+          {{ data.userCount }}
+        </h2>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span> Students </span>
+
+        <h2>
+          {{ data.studentCount }}
+        </h2>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <span> Teachers </span>
+
+        <h2>
+          {{ data.teacherCount }}
+        </h2>
+      </mat-card>
+    </div>
+
+    <div class="dashboard-panels">
+      <div class="panel">
+        <h3>Platform Overview</h3>
+
+        <p>Manage institutions, campuses and users from a central location.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Quick Actions</h3>
+
+        <ul>
+          <li>Add Institution</li>
+
+          <li>Manage Branding</li>
+
+          <li>Review Users</li>
+        </ul>
+      </div>
     </div>
   </div>
-
-  <div class="stats-grid">
-    <mat-card class="stat-card">
-      <h2>Students</h2>
-      <span>1248</span>
-    </mat-card>
-
-    <mat-card class="stat-card">
-      <h2>Teachers</h2>
-      <span>84</span>
-    </mat-card>
-
-    <mat-card class="stat-card">
-      <h2>Courses</h2>
-      <span>22</span>
-    </mat-card>
-
-    <mat-card class="stat-card">
-      <h2>Subjects</h2>
-      <span>196</span>
-    </mat-card>
-  </div>
-</div>
+}

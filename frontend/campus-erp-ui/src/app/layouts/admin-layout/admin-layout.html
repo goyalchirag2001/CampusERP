@@ -1,64 +1,62 @@
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-orb"></div>
+    <div class="sidebar-top">
+      @if (branding()?.logoUrl) {
+        <img class="sidebar-logo-image" [src]="branding()?.logoUrl" [alt]="branding()?.name" />
+      } @else {
+        <div class="sidebar-logo-placeholder">
+          {{ branding()?.name?.charAt(0) || user()?.institutionSlug?.charAt(0) || 'C' }}
+        </div>
+      }
 
-      <div>
-        <button mat-icon-button class="mobile-menu-button" (click)="toggleMobileMenu()">
-          <mat-icon> menu </mat-icon>
-        </button>
-        <h2>CampusERP</h2>
+      <div class="sidebar-brand">
+        <h2 [title]="branding()?.name">
+          {{ branding()?.loginSlug?.toUpperCase() }}
+        </h2>
 
-        <span>Education Platform</span>
+        <span>
+          {{ user()?.institutionSlug ? 'Institution Portal' : 'Platform Administration' }}
+        </span>
       </div>
     </div>
 
-    <nav>
-      <a routerLink="/dashboard" routerLinkActive="active-link">
-        <mat-icon>dashboard</mat-icon>
+    <nav class="sidebar-nav">
+      @for (item of menuItems(); track item.route) {
+        <a [routerLink]="item.route" routerLinkActive="active-link">
+          <mat-icon>
+            {{ item.icon }}
+          </mat-icon>
 
-        <span>Dashboard</span>
-      </a>
-
-      <a routerLink="/students" routerLinkActive="active-link">
-        <mat-icon>school</mat-icon>
-
-        <span>Students</span>
-      </a>
-
-      <a routerLink="/teachers" routerLinkActive="active-link">
-        <mat-icon>person</mat-icon>
-
-        <span>Teachers</span>
-      </a>
-
-      <a routerLink="/subjects" routerLinkActive="active-link">
-        <mat-icon>menu_book</mat-icon>
-
-        <span>Subjects</span>
-      </a>
+          <span>
+            {{ item.label }}
+          </span>
+        </a>
+      }
     </nav>
 
     <div class="user-card">
       <div class="avatar">
-        {{ userName.charAt(0) }}
+        {{ user()?.firstName?.charAt(0) }}
       </div>
 
       <div>
         <strong>
-          {{ userName }}
+          {{ user()?.firstName }}
+          {{ user()?.lastName }}
         </strong>
 
-        <p>Administrator</p>
+        <p>
+          {{ user()?.roles?.[0] }}
+        </p>
       </div>
     </div>
   </aside>
 
   <main class="main-content">
     <header class="header">
-      <div>
-        <h3>CampusERP</h3>
-      </div>
+      <h3>
+        {{ branding()?.name || 'CampusERP' }}
+      </h3>
 
       <div class="header-actions">
         <button mat-icon-button (click)="toggleTheme()">
@@ -66,7 +64,8 @@
         </button>
 
         <span>
-          {{ userName }}
+          {{ user()?.firstName }}
+          {{ user()?.lastName }}
         </span>
 
         <button mat-button (click)="logout()">Logout</button>

@@ -1,0 +1,62 @@
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+
+import { Router } from '@angular/router';
+
+import { FormsModule } from '@angular/forms';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+
+import { InstitutionService } from '../services/institution';
+
+import { Institution } from '../../../core/models/institution';
+import { CurrentUserService } from '../../../core/services/current-user';
+
+@Component({
+  selector: 'app-institution-list',
+  standalone: true,
+  imports: [FormsModule, MatButtonModule, MatIconModule, MatInputModule, MatTableModule],
+  templateUrl: './institution-list.html',
+  styleUrl: './institution-list.scss',
+})
+export class InstitutionList implements OnInit {
+  private readonly institutionService = inject(InstitutionService);
+
+  private readonly router = inject(Router);
+
+  private readonly currentUserService = inject(CurrentUserService);
+
+  readonly institutions = signal<Institution[]>([]);
+
+  readonly search = signal('');
+
+  private get baseRoute(): string {
+    const slug = this.currentUserService.user()?.institutionSlug;
+
+    return slug ? `/${slug}` : '/platform';
+  }
+
+  displayedColumns = ['name', 'code', 'slug', 'status', 'actions'];
+
+  readonly filteredInstitutions = computed(() =>
+    this.institutions().filter((x) => x.name.toLowerCase().includes(this.search().toLowerCase())),
+  );
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load(): void {
+    this.institutionService.getAll().subscribe((data) => this.institutions.set(data));
+  }
+
+  createInstitution(): void {
+    this.router.navigate([this.baseRoute, 'institutions', 'new']);
+  }
+
+  openInstitution(id: string): void {
+    this.router.navigate([this.baseRoute, 'institutions', id]);
+  }
+}

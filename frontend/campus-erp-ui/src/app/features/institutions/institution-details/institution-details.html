@@ -1,0 +1,113 @@
+@if (institution(); as institution) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        @if (institution.logoUrl) {
+          <img class="institution-logo" [src]="institution.logoUrl" [alt]="institution.name" />
+        } @else {
+          <div class="institution-avatar" [style.background]="institution.primaryColor">
+            {{ institution.name.charAt(0) }}
+          </div>
+        }
+
+        <div class="header-content">
+          <h1>{{ institution.name }}</h1>
+
+          <p>{{ institution.code }}</p>
+
+          <span class="status-chip" [class.inactive]="!institution.isActive">
+            {{ institution.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editInstitution()">
+          Edit Institution
+        </button>
+
+        <button mat-stroked-button (click)="copyLoginUrl()">Copy Portal URL</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ institution.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Institution Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Login Slug</label>
+          <p>{{ institution.loginSlug }}</p>
+        </div>
+
+        <div>
+          <label>Portal URL</label>
+          <p>{{ loginUrl }}</p>
+        </div>
+
+        <div>
+          <label>Email</label>
+          <p>{{ institution.email || '-' }}</p>
+        </div>
+
+        <div>
+          <label>Phone</label>
+          <p>{{ institution.phone || '-' }}</p>
+        </div>
+
+        <div>
+          <label>Website</label>
+          <p>{{ institution.website || '-' }}</p>
+        </div>
+
+        <div>
+          <label>Address</label>
+          <p>{{ institution.address || '-' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="branding-card">
+        <h2>Branding</h2>
+
+        <div class="color-section">
+          <div>
+            <label>Primary Color</label>
+
+            <div class="color-box" [style.background]="institution.primaryColor"></div>
+          </div>
+
+          <div>
+            <label>Secondary Color</label>
+
+            <div class="color-box" [style.background]="institution.secondaryColor"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <h2>Portal Preview</h2>
+
+        <div class="login-preview">
+          <div class="preview-header" [style.background]="institution.primaryColor">
+            {{ institution.name }}
+          </div>
+
+          <div class="preview-body">
+            <div class="preview-input"></div>
+
+            <div class="preview-input"></div>
+
+            <button class="preview-button" [style.background]="institution.secondaryColor">
+              Sign In
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

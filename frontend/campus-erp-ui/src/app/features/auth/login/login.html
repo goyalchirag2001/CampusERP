@@ -1,31 +1,61 @@
 <div class="login-page">
-  <div class="bg-orb orb-1"></div>
-  <div class="bg-orb orb-2"></div>
-  <div class="bg-orb orb-3"></div>
+  <div class="login-container">
+    <div class="branding-panel">
+      @if (isPlatformLogin) {
+        <div class="platform-brand">
+          <div class="brand-logo">CE</div>
 
-  <div class="login-panel">
-    <div class="brand-section">
-      <div class="brand-logo">CE</div>
+          <div class="platform-badge">CLOUD ERP</div>
 
-      <h1>CampusERP</h1>
+          <h1>CampusERP</h1>
 
-      <p>Intelligent Education Management Platform</p>
+          <p class="branding-tagline">Multi Institution ERP Platform</p>
+        </div>
+      } @else {
+        <div class="institution-brand">
+          @if (branding()?.logoUrl) {
+            <img class="institution-logo" [src]="branding()?.logoUrl" [alt]="branding()?.name" />
+          } @else {
+            <div class="brand-logo">
+              {{ branding()?.name?.charAt(0) }}
+            </div>
+          }
+
+          <h1>
+            {{ branding()?.name }}
+          </h1>
+
+          <p class="branding-tagline">Institution Portal</p>
+        </div>
+      }
+
+      <div class="branding-footer">Modern Education Management Platform</div>
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
+    <div class="login-panel">
+      <div class="login-header">
+        <h2>Welcome Back</h2>
 
-        <input matInput formControlName="email" />
-      </mat-form-field>
+        <p>Sign in to continue</p>
+      </div>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
 
-        <input matInput type="password" formControlName="password" />
-      </mat-form-field>
+          <input matInput formControlName="email" />
+        </mat-form-field>
 
-      <button mat-raised-button class="login-button" type="submit">Sign In</button>
-    </form>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+
+          <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+
+        <button mat-raised-button class="login-button" type="submit">Sign In</button>
+      </form>
+
+      <div class="powered-by">Powered by CampusERP</div>
+    </div>
   </div>
 </div>
