@@ -35,5 +35,24 @@ public class InstitutionConfiguration : IEntityTypeConfiguration<Institution>
 
         builder.Property(x => x.Address)
             .HasMaxLength(1000);
+
+        builder.Property(x => x.LoginSlug)
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(x => x.LogoUrl)
+            .HasMaxLength(500);
+
+        builder.Property(x => x.PrimaryColor)
+            .HasMaxLength(20);
+
+        builder.Property(x => x.SecondaryColor)
+            .HasMaxLength(20);
+
+        builder.Property(x => x.IsActive)
+            .IsRequired();
+
+        builder.HasIndex(x => x.LoginSlug)
+            .IsUnique();
     }
 }

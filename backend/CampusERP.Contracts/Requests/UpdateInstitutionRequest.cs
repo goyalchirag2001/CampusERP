@@ -1,12 +1,8 @@
-﻿namespace CampusERP.Contracts.Responses;
+﻿namespace CampusERP.Contracts.Requests;
 
-public class InstitutionResponse
+public class UpdateInstitutionRequest
 {
-    public Guid Id { get; set; }
-
     public string Name { get; set; } = string.Empty;
-
-    public string Code { get; set; } = string.Empty;
 
     public string LoginSlug { get; set; } = string.Empty;
 
@@ -23,16 +19,6 @@ public class InstitutionResponse
     public string? PrimaryColor { get; set; }
 
     public string? SecondaryColor { get; set; }
-
-    public int CampusCount { get; set; }
-
-    public int StudentCount { get; set; }
-
-    public int TeacherCount { get; set; }
-
-    public string AdminEmail { get; set; } = string.Empty;
-
-    public string TemporaryPassword { get; set; } = string.Empty;
 
     public bool IsActive { get; set; }
 }

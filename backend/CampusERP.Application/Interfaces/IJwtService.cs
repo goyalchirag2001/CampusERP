@@ -4,7 +4,7 @@ namespace CampusERP.Application.Interfaces;
 
 public interface IJwtService
 {
-    string GenerateAccessToken(User user, IEnumerable<string> roles);
+    string GenerateAccessToken(User user, IEnumerable<string> roles, string? institutionSlug);
 
     string GenerateRefreshToken();
 }

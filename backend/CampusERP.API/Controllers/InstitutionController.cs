@@ -36,8 +36,7 @@ public class InstitutionController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(
-        Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _institutionService.GetByIdAsync(id);
 
@@ -47,5 +46,37 @@ public class InstitutionController : ControllerBase
         }
 
         return Ok(result);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateInstitutionRequest request)
+    {
+        var result = await _institutionService.UpdateAsync(id, request);
+
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        await _institutionService.DeleteAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}/activate")]
+    public async Task<IActionResult> Activate(Guid id)
+    {
+        await _institutionService.ActivateAsync(id);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}/deactivate")]
+    public async Task<IActionResult> Deactivate(Guid id)
+    {
+        await _institutionService.DeactivateAsync(id);
+
+        return NoContent();
     }
 }

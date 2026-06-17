@@ -1,10 +1,10 @@
-﻿namespace CampusERP.Contracts.Requests;
-
-public class CreateInstitutionRequest
+﻿public class CreateInstitutionRequest
 {
     public string Name { get; set; } = string.Empty;
 
     public string Code { get; set; } = string.Empty;
+
+    public string LoginSlug { get; set; } = string.Empty;
 
     public string? Email { get; set; }
 
@@ -13,4 +13,18 @@ public class CreateInstitutionRequest
     public string? Website { get; set; }
 
     public string? Address { get; set; }
+
+    public string? LogoUrl { get; set; }
+
+    public string? PrimaryColor { get; set; }
+
+    public string? SecondaryColor { get; set; }
+
+    public string AdminFirstName { get; set; } = string.Empty;
+
+    public string AdminLastName { get; set; } = string.Empty;
+
+    public string AdminEmail { get; set; } = string.Empty;
+
+    public string CampusName { get; set; } = string.Empty;
 }

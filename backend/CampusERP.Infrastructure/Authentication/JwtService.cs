@@ -18,7 +18,7 @@ public class JwtService : IJwtService
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateAccessToken(User user, IEnumerable<string> roles)
+    public string GenerateAccessToken(User user, IEnumerable<string> roles, string? institutionSlug)
     {
         var claims = new List<Claim>
         {
@@ -28,7 +28,9 @@ public class JwtService : IJwtService
 
             new("institutionId", user.InstitutionId.ToString()),
 
-            new("campusId", user.CampusId.ToString())
+            new("campusId", user.CampusId.ToString()),
+
+            new("institutionSlug", institutionSlug ?? string.Empty)
         };
 
         foreach (var role in roles)

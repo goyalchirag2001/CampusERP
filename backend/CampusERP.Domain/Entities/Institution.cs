@@ -25,6 +25,19 @@ public class Institution : BaseEntity
     [MaxLength(1000)]
     public string? Address { get; set; }
 
+    [Required]
+    [MaxLength(100)]
+    public string LoginSlug { get; set; } = string.Empty;
+
+    [MaxLength(500)]
+    public string? LogoUrl { get; set; }
+
+    [MaxLength(20)]
+    public string? PrimaryColor { get; set; }
+
+    [MaxLength(20)]
+    public string? SecondaryColor { get; set; }
+
     public bool IsActive { get; set; } = true;
 
     public ICollection<Campus> Campuses { get; set; } = new List<Campus>();

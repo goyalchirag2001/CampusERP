@@ -12,12 +12,14 @@ public class AuthService : IAuthService
     private readonly ApplicationDbContext _dbContext;
     private readonly IPasswordService _passwordService;
     private readonly IJwtService _jwtService;
+    private readonly ICurrentUserService _currentUserService;
 
-    public AuthService(ApplicationDbContext dbContext,IPasswordService passwordService,IJwtService jwtService)
+    public AuthService(ApplicationDbContext dbContext,IPasswordService passwordService,IJwtService jwtService, ICurrentUserService currentUserService)
     {
         _dbContext = dbContext;
         _passwordService = passwordService;
         _jwtService = jwtService;
+        _currentUserService = currentUserService;
     }
 
     public async Task<LoginResponse> RegisterAsync(RegisterRequest request)
@@ -56,7 +58,7 @@ public class AuthService : IAuthService
 
         var roles = new List<string>();
 
-        var accessToken = _jwtService.GenerateAccessToken(user,roles);
+        var accessToken = _jwtService.GenerateAccessToken(user,roles, null);
 
         var refreshToken = _jwtService.GenerateRefreshToken();
 
@@ -80,11 +82,40 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
-        var user = await _dbContext.Users
+        User? user;
+
+        if (string.IsNullOrWhiteSpace(request.InstitutionSlug))
+        {
+            // Platform Login
+
+            user = await _dbContext.Users
+                .Include(x => x.Institution)
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
                 .FirstOrDefaultAsync(x =>
-                    x.Email == request.Email);
+                    x.Email == request.Email &&
+                    x.InstitutionId == SeedData.PlatformInstitutionId);
+        }
+        else
+        {
+            var institution = await _dbContext.Institutions
+                .FirstOrDefaultAsync(x =>
+                    x.LoginSlug == request.InstitutionSlug &&
+                    x.IsActive);
+
+            if (institution is null)
+            {
+                throw new Exception("Institution not found.");
+            }
+
+            user = await _dbContext.Users
+                .Include(x => x.Institution)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
+                .FirstOrDefaultAsync(x =>
+                    x.Email == request.Email &&
+                    x.InstitutionId == institution.Id);
+        }
 
         if (user is null)
         {
@@ -100,9 +131,18 @@ public class AuthService : IAuthService
             throw new Exception("Invalid email or password.");
         }
 
-        var roles = user.UserRoles.Select(x => x.Role.Name).ToList();
+        string? institutionSlug = null;
 
-        var accessToken = _jwtService.GenerateAccessToken(user, roles);
+        if (user.InstitutionId != SeedData.PlatformInstitutionId)
+        {
+            institutionSlug = user.Institution.LoginSlug;
+        }
+
+        var roles = user.UserRoles
+            .Select(x => x.Role.Name)
+            .ToList();
+
+        var accessToken = _jwtService.GenerateAccessToken(user, roles, institutionSlug);
 
         var refreshTokenValue = _jwtService.GenerateRefreshToken();
 
@@ -115,8 +155,7 @@ public class AuthService : IAuthService
 
                 Token = refreshTokenValue,
 
-                ExpiresAt =
-                    DateTime.UtcNow.AddDays(30)
+                ExpiresAt = DateTime.UtcNow.AddDays(30)
             };
 
         _dbContext.RefreshTokens.Add(refreshToken);
@@ -133,6 +172,8 @@ public class AuthService : IAuthService
 
             Email = user.Email,
 
+            InstitutionSlug = institutionSlug,
+
             AccessToken = accessToken,
 
             RefreshToken = refreshTokenValue,
@@ -144,5 +185,54 @@ public class AuthService : IAuthService
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<CurrentUserResponse> GetCurrentUserAsync()
+    {
+        var userId = _currentUserService.UserId;
+
+        if (userId is null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        var user = await _dbContext.Users
+            .Include(x => x.Institution)
+            .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+            .FirstOrDefaultAsync(x => x.Id == userId.Value);
+
+        if (user is null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        string? institutionSlug = null;
+
+        if (user.InstitutionId != SeedData.PlatformInstitutionId)
+        {
+            institutionSlug = user.Institution.LoginSlug;
+        }
+
+        return new CurrentUserResponse
+        {
+            UserId = user.Id,
+
+            FirstName = user.FirstName,
+
+            LastName = user.LastName,
+
+            Email = user.Email,
+
+            InstitutionId = user.InstitutionId,
+
+            CampusId = user.CampusId,
+
+            InstitutionSlug = institutionSlug,
+
+            Roles = user.UserRoles
+                .Select(x => x.Role.Name)
+                .ToList()
+        };
     }
 }

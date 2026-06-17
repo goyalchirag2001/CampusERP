@@ -7,23 +7,16 @@ namespace CampusERP.Infrastructure.Data;
 
 public static class DatabaseSeeder
 {
-    public static async Task SeedAsync(
-        ApplicationDbContext dbContext,
-        IPasswordService passwordService)
+    public static async Task SeedAsync(ApplicationDbContext dbContext, IPasswordService passwordService)
     {
-        await SeedPlatformInstitutionAsync(
-            dbContext);
+        await SeedPlatformInstitutionAsync(dbContext);
 
-        await SeedGlobalCampusAsync(
-            dbContext);
+        await SeedGlobalCampusAsync(dbContext);
 
-        await SeedPlatformAdminAsync(
-            dbContext,
-            passwordService);
+        await SeedPlatformAdminAsync(dbContext, passwordService);
     }
 
-    private static async Task SeedPlatformInstitutionAsync(
-        ApplicationDbContext dbContext)
+    private static async Task SeedPlatformInstitutionAsync(ApplicationDbContext dbContext)
     {
         var exists =
             await dbContext.Institutions
@@ -39,14 +32,17 @@ public static class DatabaseSeeder
         dbContext.Institutions.Add(
             new Institution
             {
-                Id =
-                    SeedData.PlatformInstitutionId,
+                Id = SeedData.PlatformInstitutionId,
 
-                Name =
-                    "CampusERP Platform",
+                Name = "CampusERP Platform",
 
-                Code =
-                    "PLATFORM",
+                Code = "PLATFORM",
+
+                LoginSlug = "platform",
+
+                PrimaryColor = "#2563EB",
+
+                SecondaryColor = "#1E293B",
 
                 IsActive = true
             });
@@ -54,11 +50,9 @@ public static class DatabaseSeeder
         await dbContext.SaveChangesAsync();
     }
 
-    private static async Task SeedGlobalCampusAsync(
-        ApplicationDbContext dbContext)
+    private static async Task SeedGlobalCampusAsync(ApplicationDbContext dbContext)
     {
-        var exists =
-            await dbContext.Campuses
+        var exists = await dbContext.Campuses
                 .AnyAsync(x =>
                     x.Id ==
                     SeedData.GlobalCampusId);
@@ -71,11 +65,9 @@ public static class DatabaseSeeder
         dbContext.Campuses.Add(
             new Campus
             {
-                Id =
-                    SeedData.GlobalCampusId,
+                Id = SeedData.GlobalCampusId,
 
-                InstitutionId =
-                    SeedData.PlatformInstitutionId,
+                InstitutionId = SeedData.PlatformInstitutionId,
 
                 Name = "Global",
 
@@ -87,15 +79,10 @@ public static class DatabaseSeeder
         await dbContext.SaveChangesAsync();
     }
 
-    private static async Task SeedPlatformAdminAsync(
-    ApplicationDbContext dbContext,
-    IPasswordService passwordService)
+    private static async Task SeedPlatformAdminAsync(ApplicationDbContext dbContext, IPasswordService passwordService)
     {
-        var user =
-            await dbContext.Users
-                .FirstOrDefaultAsync(x =>
-                    x.Email ==
-                    "admin@campuserp.local");
+        var user = await dbContext.Users
+                .FirstOrDefaultAsync(x => x.Email == "goyalchirag2001@gmail.com");
 
         if (user is null)
         {
@@ -107,19 +94,15 @@ public static class DatabaseSeeder
 
                 LastName = "Admin",
 
-                Email =
-                    "admin@campuserp.local",
+                Email = "goyalchirag2001@gmail.com",
 
-                PasswordHash =
-                    passwordService
-                        .HashPassword(
-                            "Admin@123"),
+                PasswordHash = passwordService.HashPassword("Admin@123"),
 
-                InstitutionId =
-                    SeedData.PlatformInstitutionId,
+                InstitutionId = SeedData.PlatformInstitutionId,
 
-                CampusId =
-                    SeedData.GlobalCampusId,
+                CampusId = SeedData.GlobalCampusId,
+
+                PhoneNumber = "+91-9811076788",
 
                 IsActive = true
             };
@@ -145,8 +128,7 @@ public static class DatabaseSeeder
 
                     UserId = user.Id,
 
-                    RoleId =
-                        SeedData.PlatformAdminRoleId
+                    RoleId = SeedData.PlatformAdminRoleId
                 });
 
             await dbContext.SaveChangesAsync();

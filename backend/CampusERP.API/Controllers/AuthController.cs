@@ -1,5 +1,6 @@
 ﻿using CampusERP.Application.Interfaces;
 using CampusERP.Contracts.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CampusERP.API.Controllers;
@@ -31,5 +32,14 @@ public class AuthController : ControllerBase
         var response = await _authService.RefreshTokenAsync(request);
 
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var result = await _authService.GetCurrentUserAsync();
+
+        return Ok(result);
     }
 }

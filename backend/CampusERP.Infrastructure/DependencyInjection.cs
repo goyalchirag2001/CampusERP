@@ -44,6 +44,8 @@ public static class DependencyInjection
 
         services.AddScoped<IStudentService, StudentService>();
 
+        services.AddScoped<IDashboardService, DashboardService>();
+
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
