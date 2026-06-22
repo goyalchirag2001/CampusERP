@@ -4,6 +4,7 @@ using CampusERP.Contracts.Responses;
 using CampusERP.Domain.Entities;
 using CampusERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using CampusERP.Application.Common.Exceptions;
 
 namespace CampusERP.Infrastructure.Authentication;
 
@@ -105,7 +106,8 @@ public class AuthService : IAuthService
 
             if (institution is null)
             {
-                throw new Exception("Institution not found.");
+                throw new UnauthorizedException("Institution does not exist or is inactive."
+                );
             }
 
             user = await _dbContext.Users
@@ -119,7 +121,8 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            throw new Exception("Invalid email or password.");
+            throw new UnauthorizedException("Invalid email or password."
+            );
         }
 
         var isValid = _passwordService.VerifyPassword(
@@ -128,7 +131,8 @@ public class AuthService : IAuthService
 
         if (!isValid)
         {
-            throw new Exception("Invalid email or password.");
+            throw new UnauthorizedException("Invalid email or password."
+            );
         }
 
         string? institutionSlug = null;
@@ -214,6 +218,13 @@ public class AuthService : IAuthService
             institutionSlug = user.Institution.LoginSlug;
         }
 
+        var permissions = await _dbContext.UserRoles
+                            .Where(x => x.UserId == user.Id)
+                            .SelectMany(x => x.Role.RolePermissions)
+                            .Select(x => x.Permission.Code)
+                            .Distinct()
+                            .ToListAsync();
+
         return new CurrentUserResponse
         {
             UserId = user.Id,
@@ -232,7 +243,9 @@ public class AuthService : IAuthService
 
             Roles = user.UserRoles
                 .Select(x => x.Role.Name)
-                .ToList()
+                .ToList(),
+
+            Permissions = permissions
         };
     }
 }

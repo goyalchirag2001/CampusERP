@@ -8,7 +8,7 @@ namespace CampusERP.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = RoleConstants.PlatformAdmin)]
+[Authorize]
 public class SemesterSubjectController : ControllerBase
 {
     private readonly ISemesterSubjectService _semesterSubjectService;
@@ -18,19 +18,26 @@ public class SemesterSubjectController : ControllerBase
         _semesterSubjectService = semesterSubjectService;
     }
 
+    [Authorize(Policy = PermissionConstants.SemesterSubjectAssign)]
     [HttpPost]
     public async Task<IActionResult> Assign(AssignSubjectToSemesterRequest request)
     {
-        var result = await _semesterSubjectService.AssignAsync(request);
-
-        return Ok(result);
+        return Ok(await _semesterSubjectService.AssignAsync(request));
     }
 
+    [Authorize(Policy = PermissionConstants.SemesterSubjectView)]
     [HttpGet("semester/{semesterId:guid}")]
-    public async Task<IActionResult>GetBySemester(Guid semesterId)
+    public async Task<IActionResult> GetBySemester(Guid semesterId)
     {
-        var result = await _semesterSubjectService.GetBySemesterAsync(semesterId);
+        return Ok(await _semesterSubjectService.GetBySemesterAsync(semesterId));
+    }
 
-        return Ok(result);
+    [Authorize(Policy = PermissionConstants.SemesterSubjectRemove)]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Remove(Guid id)
+    {
+        await _semesterSubjectService.RemoveAsync(id);
+
+        return NoContent();
     }
 }

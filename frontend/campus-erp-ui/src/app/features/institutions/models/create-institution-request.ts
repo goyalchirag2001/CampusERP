@@ -5,25 +5,23 @@ export interface CreateInstitutionRequest {
 
   loginSlug: string;
 
-  email?: string;
+  email: string;
 
-  phone?: string;
+  phone: string;
 
-  website?: string;
+  website: string;
 
-  address?: string;
+  address: string;
 
-  logoUrl?: string;
+  logoUrl: string;
 
-  primaryColor?: string;
+  primaryColor: string;
 
-  secondaryColor?: string;
+  secondaryColor: string;
 
   adminFirstName: string;
 
   adminLastName: string;
 
   adminEmail: string;
-
-  campusName: string;
 }

@@ -1,0 +1,46 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2>Edit Role</h2>
+
+    <p>Update role information and permissions.</p>
+  </div>
+
+  <form [formGroup]="form">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+
+        <input matInput formControlName="description" />
+      </mat-form-field>
+    </div>
+
+    <div class="permissions-section">
+      <h3>Permissions</h3>
+
+      <div class="permissions-grid">
+        @for (permission of permissions(); track permission.id) {
+          <div class="permission-item">
+            <mat-checkbox
+              [checked]="isSelected(permission.id)"
+              (change)="togglePermission(permission.id, $event.checked)"
+            >
+              {{ permission.name }}
+            </mat-checkbox>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+
+      <button mat-flat-button type="button" (click)="save()">Save Changes</button>
+    </div>
+  </form>
+</div>

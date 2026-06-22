@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { CurrentUserService } from '../services/current-user';
 
-export const roleGuard = (roles: string[]) => {
+export const roleGuard = (p0: RouterStateSnapshot | ActivatedRouteSnapshot, roles: string[]) => {
   return () => {
     const currentUser = inject(CurrentUserService);
 

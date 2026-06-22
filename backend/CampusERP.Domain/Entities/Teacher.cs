@@ -29,5 +29,7 @@ public class Teacher : BaseEntity, ITenantEntity
 
     public Campus Campus { get; set; } = null!;
 
+    public bool IsActive { get; set; }
+
     public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
 }

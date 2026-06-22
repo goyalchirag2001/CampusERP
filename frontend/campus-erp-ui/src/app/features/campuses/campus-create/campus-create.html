@@ -1,0 +1,95 @@
+<div class="create-page">
+  <div class="page-header">
+    <div>
+      <h1>Create Campus</h1>
+
+      <p>Add a new campus to the institution</p>
+    </div>
+
+    <button mat-flat-button class="create-button" [disabled]="isSaving()" (click)="create()">
+      Create Campus
+    </button>
+  </div>
+
+  <div class="page-grid">
+    <form class="form-panel" [formGroup]="form">
+      <section class="section">
+        <h2>Campus Information</h2>
+
+        @if (isPlatformAdmin() || isSuperAdmin()) {
+          <mat-form-field appearance="outline">
+            <mat-label> Institution </mat-label>
+
+            <mat-select formControlName="institutionId">
+              @for (institution of institutions(); track institution.id) {
+                <mat-option [value]="institution.id">
+                  {{ institution.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        <mat-form-field appearance="outline">
+          <mat-label> Campus Name </mat-label>
+
+          <input matInput formControlName="name" (input)="onCampusNameChange()" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label> Campus Code </mat-label>
+
+          <input matInput formControlName="code" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label> Campus Head </mat-label>
+
+          <input matInput formControlName="campusHeadName" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label> Email </mat-label>
+
+          <input matInput formControlName="email" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label> Phone </mat-label>
+
+          <input matInput formControlName="phone" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label> Address </mat-label>
+
+          <textarea matInput rows="4" formControlName="address"></textarea>
+        </mat-form-field>
+      </section>
+    </form>
+
+    <div class="preview-panel">
+      <div class="preview-card">
+        <h2>Campus Preview</h2>
+
+        <div class="preview-content">
+          <h3>
+            {{ form.value.name || 'Campus Name' }}
+          </h3>
+
+          <p>
+            {{ form.value.code || 'CAMPUS' }}
+          </p>
+
+          <p>
+            {{ form.value.campusHeadName || 'Campus Head' }}
+          </p>
+
+          <p>
+            {{ form.value.email || 'Email' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

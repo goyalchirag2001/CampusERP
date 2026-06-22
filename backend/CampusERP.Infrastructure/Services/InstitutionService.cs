@@ -83,7 +83,7 @@ public class InstitutionService : IInstitutionService
 
                     InstitutionId = institution.Id,
 
-                    Name = request.CampusName,
+                    Name = "Main Campus",
 
                     Code = $"{request.Code}-MAIN",
 
@@ -214,50 +214,65 @@ public class InstitutionService : IInstitutionService
 
     public async Task<InstitutionResponse?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Institutions
-            .Where(x => x.Id == id)
-            .Select(x =>
-                new InstitutionResponse
-                {
-                    Id = x.Id,
+        var institution = await _dbContext.Institutions
+                .Where(x => x.Id == id)
+                .Select(x =>
+                    new InstitutionResponse
+                    {
+                        Id = x.Id,
 
-                    Name = x.Name,
+                        Name = x.Name,
 
-                    Code = x.Code,
+                        Code = x.Code,
 
-                    LoginSlug = x.LoginSlug,
+                        LoginSlug = x.LoginSlug,
 
-                    Email = x.Email,
+                        Email = x.Email,
 
-                    Phone = x.Phone,
+                        Phone = x.Phone,
 
-                    Website = x.Website,
+                        Website = x.Website,
 
-                    Address = x.Address,
+                        Address = x.Address,
 
-                    LogoUrl = x.LogoUrl,
+                        LogoUrl = x.LogoUrl,
 
-                    PrimaryColor = x.PrimaryColor,
+                        PrimaryColor = x.PrimaryColor,
 
-                    SecondaryColor = x.SecondaryColor,
+                        SecondaryColor = x.SecondaryColor,
 
-                    CampusCount = _dbContext.Campuses.Count(c => c.InstitutionId == x.Id),
+                        CampusCount = _dbContext.Campuses.Count(c => c.InstitutionId == x.Id),
 
-                    StudentCount = _dbContext.Students.Count(s => s.InstitutionId == x.Id),
+                        StudentCount = _dbContext.Students.Count(s => s.InstitutionId == x.Id),
 
-                    TeacherCount = _dbContext.Teachers.Count(t => t.InstitutionId == x.Id),
+                        TeacherCount = _dbContext.Teachers.Count(t => t.InstitutionId == x.Id),
 
-                    AdminEmail =
-                        _dbContext.Users
-                            .Where(u =>
-                                u.InstitutionId == x.Id)
-                            .OrderBy(u => u.CreatedAt)
-                            .Select(u => u.Email)
-                            .FirstOrDefault() ?? "",
+                        IsActive = x.IsActive
+                    })
+                .FirstOrDefaultAsync();
 
-                    IsActive = x.IsActive
-                })
-            .FirstOrDefaultAsync();
+        if (institution is null)
+        {
+            return null;
+        }
+
+        var adminUser = await _dbContext.Users
+                .Include(x => x.UserRoles)
+                .FirstOrDefaultAsync(x =>
+                    x.InstitutionId == institution.Id &&
+                    x.UserRoles.Any(r =>
+                        r.RoleId == SeedData.InstitutionAdminRoleId));
+
+        if (adminUser is not null)
+        {
+            institution.AdminFirstName = adminUser.FirstName;
+
+            institution.AdminLastName = adminUser.LastName;
+
+            institution.AdminEmail = adminUser.Email;
+        }
+
+        return institution;
     }
 
     public async Task<InstitutionBrandingResponse?> GetBySlugAsync(string slug, CancellationToken cancellationToken = default)
@@ -299,6 +314,8 @@ public class InstitutionService : IInstitutionService
 
         institution.Name = request.Name;
 
+        institution.Code = request.Code;
+
         institution.LoginSlug = request.LoginSlug;
 
         institution.Email = request.Email;
@@ -315,11 +332,26 @@ public class InstitutionService : IInstitutionService
 
         institution.SecondaryColor = request.SecondaryColor;
 
-        institution.IsActive = request.IsActive;
+        var adminUser =
+            await _dbContext.Users
+                .Include(x => x.UserRoles)
+                .FirstOrDefaultAsync(x =>
+                    x.InstitutionId == institution.Id &&
+                    x.UserRoles.Any(r =>
+                        r.RoleId == SeedData.InstitutionAdminRoleId));
+
+        if (adminUser is not null)
+        {
+            adminUser.FirstName = request.AdminFirstName ?? adminUser.FirstName;
+
+            adminUser.LastName = request.AdminLastName ?? adminUser.LastName;
+
+            adminUser.Email = request.AdminEmail ?? adminUser.Email;
+        }
 
         await _dbContext.SaveChangesAsync();
 
-        return await GetByIdAsync(id) ?? throw new Exception();
+        return await GetByIdAsync(id) ?? throw new Exception("Institution not found.");
     }
 
     public async Task DeleteAsync(Guid id)

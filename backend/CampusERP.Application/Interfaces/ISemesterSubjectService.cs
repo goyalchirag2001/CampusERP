@@ -8,4 +8,6 @@ public interface ISemesterSubjectService
     Task<SemesterSubjectResponse> AssignAsync(AssignSubjectToSemesterRequest request);
 
     Task<List<SemesterSubjectResponse>> GetBySemesterAsync(Guid semesterId);
+
+    Task RemoveAsync(Guid id);
 }

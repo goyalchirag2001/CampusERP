@@ -10,4 +10,12 @@ public interface ICourseService
     Task<List<CourseResponse>> GetAllAsync();
 
     Task<CourseResponse?> GetByIdAsync(Guid id);
+
+    Task<CourseResponse> UpdateAsync(Guid id, UpdateCourseRequest request);
+
+    Task ActivateAsync(Guid id);
+
+    Task DeactivateAsync(Guid id);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }

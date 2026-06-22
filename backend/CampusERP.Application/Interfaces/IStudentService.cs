@@ -10,4 +10,12 @@ public interface IStudentService
     Task<List<StudentResponse>> GetAllAsync();
 
     Task<StudentResponse?> GetByIdAsync(Guid id);
+
+    Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request);
+
+    Task ActivateAsync(Guid id);
+
+    Task DeactivateAsync(Guid id);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }

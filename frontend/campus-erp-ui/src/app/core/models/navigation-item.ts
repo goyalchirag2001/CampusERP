@@ -5,5 +5,7 @@ export interface NavigationItem {
 
   route: string;
 
-  roles: string[];
+  permission?: string;
+
+  roles?: string[];
 }

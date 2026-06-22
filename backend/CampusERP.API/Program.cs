@@ -1,10 +1,13 @@
+using CampusERP.API.Middleware;
 using CampusERP.Application.Interfaces;
 using CampusERP.Infrastructure;
-using CampusERP.Infrastructure.Data;
-using System.Text;
 using CampusERP.Infrastructure.Authentication;
+using CampusERP.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using CampusERP.Application.Authorization;
+using CampusERP.Shared.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +60,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    foreach (var permission in PermissionConstants.All)
+    {
+        options.AddPolicy(permission, policy =>policy.Requirements.Add(new PermissionRequirement(permission)));
+    }
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -78,6 +89,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors("AngularClient");
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
 

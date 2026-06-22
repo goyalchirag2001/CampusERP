@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using CampusERP.Infrastructure.Services;
+using CampusERP.Infrastructure.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CampusERP.Infrastructure;
 
@@ -19,6 +21,8 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        services.AddScoped<IDataAccessScope, DataAccessScope>();
 
         services.AddScoped<IPasswordService, PasswordService>();
 
@@ -45,6 +49,14 @@ public static class DependencyInjection
         services.AddScoped<IStudentService, StudentService>();
 
         services.AddScoped<IDashboardService, DashboardService>();
+
+        services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<IRoleService, RoleService>();
+
+        services.AddScoped<IPermissionService, PermissionService>();
+
+        services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {

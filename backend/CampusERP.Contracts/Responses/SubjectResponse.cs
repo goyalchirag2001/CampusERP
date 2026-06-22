@@ -16,5 +16,7 @@ public class SubjectResponse
 
     public int Credits { get; set; }
 
+    public bool IsActive { get; set; }
+
     public SubjectTypeDto SubjectType { get; set; }
 }

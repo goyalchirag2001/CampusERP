@@ -17,4 +17,6 @@ public class CurrentUserResponse
     public string? InstitutionSlug { get; set; }
 
     public List<string> Roles { get; set; } = [];
+
+    public List<string> Permissions { get; set; } = [];
 }

@@ -1,0 +1,223 @@
+.role-details-page {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+.hero-card {
+  padding: 28px;
+}
+
+.hero-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+
+  flex-wrap: wrap;
+}
+
+.hero-card,
+.stat-card,
+.permission-module,
+mat-card {
+  color: var(--mat-sys-on-surface);
+}
+
+.hero-subtitle,
+.stat-label {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.hero-avatar {
+  width: 72px;
+
+  height: 72px;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: var(--mat-sys-primary-container);
+
+  color: var(--mat-sys-on-primary-container);
+}
+
+.hero-avatar mat-icon {
+  font-size: 36px;
+
+  width: 36px;
+
+  height: 36px;
+}
+
+.hero-info {
+  flex: 1;
+}
+
+.hero-info h1 {
+  margin: 0;
+
+  font-size: 32px;
+
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  margin-top: 4px;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.hero-meta {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 12px;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+}
+
+.status-chip {
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  background: var(--mat-sys-surface-container-high);
+
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.hero-actions {
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 16px;
+}
+
+.stat-card {
+  padding: 20px;
+}
+
+.stat-label {
+  font-size: 12px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.stat-value {
+  margin-top: 8px;
+
+  font-size: 24px;
+
+  font-weight: 700;
+}
+
+.description {
+  margin-top: 12px;
+
+  line-height: 1.6;
+}
+
+.permission-module {
+  margin-top: 28px;
+  padding: 0 24px 16px;
+}
+
+h2 {
+  margin-top: 28px;
+  padding: 0 24px 16px;
+}
+
+.permission-module:first-child {
+  margin-top: 0;
+}
+
+.module-header {
+  font-size: 18px;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
+
+  padding-bottom: 8px;
+
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+
+  color: var(--text);
+}
+
+.permission-list {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 12px;
+}
+
+.permission-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  border: 1px solid var(--glass-border);
+}
+
+.permission-item mat-icon {
+  font-size: 18px;
+
+  width: 18px;
+
+  height: 18px;
+
+  color: var(--mat-sys-primary);
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .hero-actions {
+    width: 100%;
+  }
+
+  .hero-actions button {
+    flex: 1;
+  }
+}

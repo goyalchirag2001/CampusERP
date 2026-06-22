@@ -8,4 +8,6 @@ public interface ITeacherAssignmentService
     Task<TeacherAssignmentResponse> AssignAsync(AssignTeacherRequest request);
 
     Task<List<TeacherAssignmentResponse>> GetByTeacherAsync(Guid teacherId);
+
+    Task RemoveAsync(Guid id);
 }

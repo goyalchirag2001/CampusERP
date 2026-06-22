@@ -9,11 +9,17 @@ public static class DatabaseSeeder
 {
     public static async Task SeedAsync(ApplicationDbContext dbContext, IPasswordService passwordService)
     {
+        await SeedRolesAsync(dbContext);
+
+        await SeedPermissionsAsync(dbContext);
+
+        await SeedRolePermissionsAsync(dbContext);
+
         await SeedPlatformInstitutionAsync(dbContext);
 
         await SeedGlobalCampusAsync(dbContext);
 
-        await SeedPlatformAdminAsync(dbContext, passwordService);
+        await SeedSuperAdminAsync(dbContext, passwordService);
     }
 
     private static async Task SeedPlatformInstitutionAsync(ApplicationDbContext dbContext)
@@ -79,10 +85,9 @@ public static class DatabaseSeeder
         await dbContext.SaveChangesAsync();
     }
 
-    private static async Task SeedPlatformAdminAsync(ApplicationDbContext dbContext, IPasswordService passwordService)
+    private static async Task SeedSuperAdminAsync(ApplicationDbContext dbContext, IPasswordService passwordService)
     {
-        var user = await dbContext.Users
-                .FirstOrDefaultAsync(x => x.Email == "goyalchirag2001@gmail.com");
+        var user = await dbContext.Users.FirstOrDefaultAsync(x => x.Email == "goyalchirag2001@gmail.com");
 
         if (user is null)
         {
@@ -90,7 +95,7 @@ public static class DatabaseSeeder
             {
                 Id = Guid.NewGuid(),
 
-                FirstName = "Platform",
+                FirstName = "Super",
 
                 LastName = "Admin",
 
@@ -117,7 +122,7 @@ public static class DatabaseSeeder
                 .AnyAsync(x =>
                     x.UserId == user.Id &&
                     x.RoleId ==
-                    SeedData.PlatformAdminRoleId);
+                    SeedData.SuperAdminRoleId);
 
         if (!userRoleExists)
         {
@@ -128,10 +133,111 @@ public static class DatabaseSeeder
 
                     UserId = user.Id,
 
-                    RoleId = SeedData.PlatformAdminRoleId
+                    RoleId = SeedData.SuperAdminRoleId
                 });
 
             await dbContext.SaveChangesAsync();
         }
+    }
+
+    private static async Task SeedRolesAsync(ApplicationDbContext dbContext)
+    {
+        var roles =
+            new List<Role>
+            {
+            new()
+            {
+                Id = SeedData.SuperAdminRoleId,
+                Name = RoleConstants.SuperAdmin,
+                IsSystemRole = true
+            },
+
+            new()
+            {
+                Id = SeedData.PlatformAdminRoleId,
+                Name = RoleConstants.PlatformAdmin,
+                IsSystemRole = true
+            },
+
+            new()
+            {
+                Id = SeedData.InstitutionAdminRoleId,
+                Name = RoleConstants.InstitutionAdmin,
+                IsSystemRole = true
+            },
+
+            new()
+            {
+                Id = SeedData.CampusAdminRoleId,
+                Name = RoleConstants.CampusAdmin,
+                IsSystemRole = true
+            },
+
+            new()
+            {
+                Id = SeedData.TeacherRoleId,
+                Name = RoleConstants.Teacher,
+                IsSystemRole = true
+            },
+
+            new()
+            {
+                Id = SeedData.StudentRoleId,
+                Name = RoleConstants.Student,
+                IsSystemRole = true
+            }
+            };
+
+        foreach (var role in roles)
+        {
+            var exists =
+                await dbContext.Roles.AnyAsync(x =>
+                    x.Id == role.Id);
+
+            if (!exists)
+            {
+                dbContext.Roles.Add(role);
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static async Task SeedPermissionsAsync(ApplicationDbContext dbContext)
+    {
+        foreach (var permission in PermissionSeedData.Permissions)
+        {
+            var exists =
+                await dbContext.Permissions.AnyAsync(x =>
+                    x.Id == permission.Id);
+
+            if (!exists)
+            {
+                dbContext.Permissions.Add(permission);
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static async Task SeedRolePermissionsAsync(ApplicationDbContext dbContext)
+    {
+        var permissions =
+            RolePermissionSeedData.GetRolePermissions();
+
+        foreach (var permission in permissions)
+        {
+            var exists =
+                await dbContext.RolePermissions.AnyAsync(x =>
+                    x.RoleId == permission.RoleId &&
+                    x.PermissionId == permission.PermissionId);
+
+            if (!exists)
+            {
+                dbContext.RolePermissions.Add(permission);
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
     }
 }

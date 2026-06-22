@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+
 import { CurrentUser } from '../models/current-user';
 
 @Injectable({
@@ -15,6 +16,20 @@ export class CurrentUserService {
 
   clear(): void {
     this.user.set(null);
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.user()?.permissions.includes(permission) ?? false;
+  }
+
+  hasAnyPermission(...permissions: string[]): boolean {
+    const userPermissions = this.user()?.permissions ?? [];
+
+    return permissions.some((permission) => userPermissions.includes(permission));
+  }
+
+  isSuperAdmin(): boolean {
+    return this.user()?.roles.includes('SuperAdmin') ?? false;
   }
 
   isPlatformAdmin(): boolean {

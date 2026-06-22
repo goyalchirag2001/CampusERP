@@ -1,0 +1,33 @@
+.create-card {
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  padding: 32px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+
+  background: var(--card-bg);
+
+  color: var(--text);
+}
+
+form {
+  display: grid;
+
+  gap: 20px;
+}
+
+.actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 12px;
+}

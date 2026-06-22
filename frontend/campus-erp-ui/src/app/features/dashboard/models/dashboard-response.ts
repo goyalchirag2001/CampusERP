@@ -8,4 +8,12 @@ export interface DashboardResponse {
   studentCount: number;
 
   teacherCount: number;
+
+  departmentCount: number;
+
+  subjectCount: number;
+
+  courseCount: number;
+
+  isPlatformDashboard: boolean;
 }

@@ -10,4 +10,12 @@ public interface ISubjectService
     Task<List<SubjectResponse>> GetAllAsync();
 
     Task<SubjectResponse?> GetByIdAsync(Guid id);
+
+    Task<SubjectResponse> UpdateAsync(Guid id, UpdateSubjectRequest request);
+
+    Task ActivateAsync(Guid id);
+
+    Task DeactivateAsync(Guid id);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }

@@ -8,8 +8,7 @@ public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentUserService(
-        IHttpContextAccessor httpContextAccessor)
+    public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
@@ -66,4 +65,29 @@ public class CurrentUserService : ICurrentUserService
             .HttpContext?
             .User?
             .FindFirst(ClaimTypes.Email)?.Value;
+
+    public string? InstitutionSlug
+    {
+        get
+        {
+            var value = _httpContextAccessor
+                    .HttpContext?
+                    .User?
+                    .FindFirst("institutionSlug")
+                    ?.Value;
+
+            return string.IsNullOrWhiteSpace(value)
+                ? null
+                : value;
+        }
+    }
+
+    public List<string> Roles =>
+    _httpContextAccessor
+        .HttpContext?
+        .User?
+        .FindAll(ClaimTypes.Role)
+        .Select(x => x.Value)
+        .ToList()
+    ?? [];
 }

@@ -34,9 +34,11 @@
 
   border-radius: 20px;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--surface);
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  color: var(--text);
 }
 
 .search-box input {
@@ -49,6 +51,16 @@
   background: transparent;
 
   font-size: 15px;
+
+  color: var(--text);
+}
+
+.search-box input::placeholder {
+  color: var(--muted);
+}
+
+.search-box mat-icon {
+  color: var(--muted);
 }
 
 .table-container {
@@ -56,7 +68,7 @@
 
   border-radius: 28px;
 
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--surface);
 
   backdrop-filter: blur(20px);
 
@@ -107,8 +119,14 @@ table {
   font-weight: 600;
 }
 
+.status-badge.inactive {
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #dc2626;
+}
+
 .mat-mdc-row:hover {
-  background: rgba(37, 99, 235, 0.04);
+  background: color-mix(in srgb, var(--card-bg) 85%, var(--primary) 15%);
 
   cursor: pointer;
 }

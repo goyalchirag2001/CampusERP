@@ -30,9 +30,11 @@ public class InstitutionResponse
 
     public int TeacherCount { get; set; }
 
-    public string AdminEmail { get; set; } = string.Empty;
+    public string AdminFirstName { get; set; } = string.Empty;
 
-    public string TemporaryPassword { get; set; } = string.Empty;
+    public string AdminLastName { get; set; } = string.Empty;
+
+    public string AdminEmail { get; set; } = string.Empty;
 
     public bool IsActive { get; set; }
 }

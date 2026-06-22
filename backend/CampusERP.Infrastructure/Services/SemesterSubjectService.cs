@@ -11,21 +11,25 @@ public class SemesterSubjectService : ISemesterSubjectService
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public SemesterSubjectService(ApplicationDbContext dbContext)
+    private readonly IDataAccessScope _scope;
+
+    public SemesterSubjectService(ApplicationDbContext dbContext, IDataAccessScope scope)
     {
         _dbContext = dbContext;
+
+        _scope = scope;
     }
 
     public async Task<SemesterSubjectResponse> AssignAsync(AssignSubjectToSemesterRequest request)
     {
-        var semester = await _dbContext.Semesters.FirstOrDefaultAsync(x => x.Id == request.SemesterId);
+        var semester = await ApplySemesterScope(_dbContext.Semesters.Where(x => x.Id == request.SemesterId)).FirstOrDefaultAsync();
 
         if (semester is null)
         {
             throw new Exception("Semester not found.");
         }
 
-        var subject = await _dbContext.Subjects.FirstOrDefaultAsync(x => x.Id == request.SubjectId);
+        var subject = await ApplySubjectScope(_dbContext.Subjects.Where(x => x.Id == request.SubjectId)).FirstOrDefaultAsync();
 
         if (subject is null)
         {
@@ -45,10 +49,8 @@ public class SemesterSubjectService : ISemesterSubjectService
         var exists =
             await _dbContext.SemesterSubjects
                 .AnyAsync(x =>
-                    x.SemesterId ==
-                        request.SemesterId &&
-                    x.SubjectId ==
-                        request.SubjectId);
+                    x.SemesterId == request.SemesterId &&
+                    x.SubjectId == request.SubjectId);
 
         if (exists)
         {
@@ -75,8 +77,7 @@ public class SemesterSubjectService : ISemesterSubjectService
 
             SemesterId = semester.Id,
 
-            SubjectId =
-                subject.Id,
+            SubjectId = subject.Id,
 
             SemesterName = semester.Name,
 
@@ -88,11 +89,9 @@ public class SemesterSubjectService : ISemesterSubjectService
 
     public async Task<List<SemesterSubjectResponse>> GetBySemesterAsync(Guid semesterId)
     {
-        return await _dbContext
-            .SemesterSubjects
-            .Where(x =>
-                x.SemesterId ==
-                    semesterId)
+        return await ApplySemesterSubjectScope(
+                _dbContext.SemesterSubjects
+                    .Where(x => x.SemesterId == semesterId))
             .Select(x =>
                 new SemesterSubjectResponse
                 {
@@ -109,5 +108,102 @@ public class SemesterSubjectService : ISemesterSubjectService
                     SubjectName = x.Subject.Name
                 })
             .ToListAsync();
+    }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        var semesterSubject =
+            await ApplySemesterSubjectScope(
+                    _dbContext.SemesterSubjects
+                        .Where(x => x.Id == id))
+                .FirstOrDefaultAsync();
+
+        if (semesterSubject is null)
+        {
+            throw new Exception("Semester subject mapping not found.");
+        }
+
+        _dbContext.SemesterSubjects.Remove(semesterSubject);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private IQueryable<Semester> ApplySemesterScope(IQueryable<Semester> query)
+    {
+        if (_scope.IsSuperAdmin() ||
+            _scope.IsPlatformAdmin())
+        {
+            return query;
+        }
+
+        if (_scope.IsInstitutionAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.InstitutionId ==
+                    _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.CampusId ==
+                    _scope.CampusId());
+        }
+
+        return query;
+    }
+
+    private IQueryable<Subject> ApplySubjectScope(IQueryable<Subject> query)
+    {
+        if (_scope.IsSuperAdmin() || _scope.IsPlatformAdmin())
+        {
+            return query;
+        }
+
+        if (_scope.IsInstitutionAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.InstitutionId ==
+                    _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.CampusId ==
+                    _scope.CampusId());
+        }
+
+        return query;
+    }
+
+    private IQueryable<SemesterSubject> ApplySemesterSubjectScope(IQueryable<SemesterSubject> query)
+    {
+        if (_scope.IsSuperAdmin() || _scope.IsPlatformAdmin())
+        {
+            return query;
+        }
+
+        if (_scope.IsInstitutionAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.Semester.InstitutionId ==
+                    _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.Semester.CampusId ==
+                    _scope.CampusId());
+        }
+
+        return query;
     }
 }

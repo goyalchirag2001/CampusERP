@@ -56,13 +56,11 @@ export class InstitutionEditDialog {
 
       secondaryColor: [institution.secondaryColor ?? '#3B82F6'],
 
-      adminFirstName: [''],
+      adminFirstName: [institution.adminFirstName ?? ''],
 
-      adminLastName: [''],
+      adminLastName: [institution.adminLastName ?? ''],
 
-      adminEmail: [''],
-
-      campusName: [''],
+      adminEmail: [institution.adminEmail ?? ''],
     });
   }
 

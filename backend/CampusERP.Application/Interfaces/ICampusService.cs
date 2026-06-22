@@ -10,4 +10,12 @@ public interface ICampusService
     Task<List<CampusResponse>> GetAllAsync();
 
     Task<CampusResponse?> GetByIdAsync(Guid id);
+
+    Task<CampusResponse> UpdateAsync(Guid id, UpdateCampusRequest request);
+
+    Task ActivateAsync(Guid id);
+
+    Task DeactivateAsync(Guid id);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }

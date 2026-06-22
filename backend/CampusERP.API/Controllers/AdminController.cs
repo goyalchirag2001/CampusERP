@@ -9,7 +9,7 @@ namespace CampusERP.API.Controllers;
 public class AdminController : ControllerBase
 {
     [HttpGet("platform")]
-    [Authorize(Roles = RoleConstants.PlatformAdmin)]
+    [Authorize(Roles = $"{RoleConstants.SuperAdmin}," + $"{RoleConstants.PlatformAdmin}")]
     public IActionResult PlatformOnly()
     {
         return Ok(new

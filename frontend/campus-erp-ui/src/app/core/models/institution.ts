@@ -21,5 +21,17 @@ export interface Institution {
 
   secondaryColor?: string;
 
+  campusCount: number;
+
+  studentCount: number;
+
+  teacherCount: number;
+
+  adminFirstName: string;
+
+  adminLastName: string;
+
+  adminEmail: string;
+
   isActive: boolean;
 }

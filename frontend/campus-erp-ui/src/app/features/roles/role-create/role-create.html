@@ -1,0 +1,65 @@
+<mat-card class="role-card">
+  <div class="page-header">
+    <h1>Create Role</h1>
+
+    <p>Create a custom role and assign permissions.</p>
+  </div>
+
+  <form [formGroup]="form">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label> Role Name </mat-label>
+
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label> Description </mat-label>
+
+        <input matInput formControlName="description" />
+      </mat-form-field>
+    </div>
+    <div class="global-select">
+      <mat-checkbox [checked]="isAllSelected()" (change)="toggleAllPermissions($event.checked)">
+        Select All Permissions
+      </mat-checkbox>
+    </div>
+    <div class="permissions-section">
+      <h2>Permissions</h2>
+
+      @for (group of groupedPermissions(); track group[0]) {
+        <div class="permission-group">
+          <div class="group-header">
+            <h3>
+              {{ getModuleDisplayName(group[0]) }}
+            </h3>
+
+            <mat-checkbox
+              [checked]="isGroupFullySelected(group[1])"
+              (change)="toggleGroup(group[1], $event.checked)"
+            >
+              Select All
+            </mat-checkbox>
+          </div>
+
+          <div class="permission-grid">
+            @for (permission of group[1]; track permission.id) {
+              <mat-checkbox
+                [checked]="isSelected(permission.id)"
+                (change)="togglePermission(permission.id, $event.checked)"
+              >
+                {{ permission.name }}
+              </mat-checkbox>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+
+      <button mat-flat-button color="primary" type="button" (click)="create()">Create Role</button>
+    </div>
+  </form>
+</mat-card>

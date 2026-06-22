@@ -34,4 +34,6 @@ public class Student : BaseEntity, ITenantEntity
     public Course Course { get; set; } = null!;
 
     public Department Department { get; set; } = null!;
+
+    public bool IsActive { get; set; } = true;
 }

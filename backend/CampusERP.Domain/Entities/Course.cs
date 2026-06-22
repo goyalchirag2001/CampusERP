@@ -38,4 +38,6 @@ public class Course : BaseEntity, ITenantEntity
     public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 
     public ICollection<Student> Students { get; set; } = new List<Student>();
+
+    public bool IsActive { get; set; } = true;
 }

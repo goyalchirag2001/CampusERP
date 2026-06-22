@@ -17,12 +17,12 @@ namespace CampusERP.Infrastructure.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.Campus", b =>
+            modelBuilder.Entity("Campus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,6 +31,10 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("CampusHeadName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -42,6 +46,10 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
@@ -56,6 +64,10 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -104,6 +116,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -156,6 +171,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -265,6 +283,11 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -273,6 +296,11 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Module")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -352,7 +380,17 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSystemRole")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -378,7 +416,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
                             IsDeleted = false,
+                            IsSystemRole = false,
                             Name = "PlatformAdmin",
                             UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -386,7 +426,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
                             IsDeleted = false,
+                            IsSystemRole = false,
                             Name = "InstitutionAdmin",
                             UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -394,7 +436,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555555"),
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
                             IsDeleted = false,
+                            IsSystemRole = false,
                             Name = "CampusAdmin",
                             UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -402,7 +446,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666666"),
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
                             IsDeleted = false,
+                            IsSystemRole = false,
                             Name = "Teacher",
                             UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         },
@@ -410,7 +456,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         {
                             Id = new Guid("77777777-7777-7777-7777-777777777777"),
                             CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsActive = true,
                             IsDeleted = false,
+                            IsSystemRole = false,
                             Name = "Student",
                             UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
                         });
@@ -575,6 +623,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -635,6 +686,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -692,6 +746,9 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.Property<Guid>("InstitutionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -859,7 +916,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.Campus", b =>
+            modelBuilder.Entity("Campus", b =>
                 {
                     b.HasOne("CampusERP.Domain.Entities.Institution", "Institution")
                         .WithMany("Campuses")
@@ -872,7 +929,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Course", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Courses")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -899,7 +956,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Department", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Departments")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -948,7 +1005,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Semester", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Semesters")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -994,7 +1051,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Student", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Students")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1037,7 +1094,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Subject", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Subjects")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1056,7 +1113,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.Teacher", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Teachers")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1110,7 +1167,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.User", b =>
                 {
-                    b.HasOne("CampusERP.Domain.Entities.Campus", "Campus")
+                    b.HasOne("Campus", "Campus")
                         .WithMany("Users")
                         .HasForeignKey("CampusId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1146,7 +1203,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CampusERP.Domain.Entities.Campus", b =>
+            modelBuilder.Entity("Campus", b =>
                 {
                     b.Navigation("Courses");
 

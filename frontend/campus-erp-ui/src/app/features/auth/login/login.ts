@@ -1,24 +1,15 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { MatCardModule } from '@angular/material/card';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 import { MatInputModule } from '@angular/material/input';
-
 import { MatButtonModule } from '@angular/material/button';
-
 import { AuthService } from '../../../core/services/auth';
-
 import { CurrentUserService } from '../../../core/services/current-user';
-
 import { InstitutionBrandingService } from '../../../core/services/institution-branding';
-
 import { InstitutionBranding } from '../../../core/models/institution-branding';
+import { NotificationService } from '../../../core/services/notification';
 
 @Component({
   selector: 'app-login',
@@ -45,6 +36,8 @@ export class Login implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   private readonly router = inject(Router);
+
+  private readonly notificationService = inject(NotificationService);
 
   readonly branding = signal<InstitutionBranding | null>(null);
 
@@ -114,7 +107,17 @@ export class Login implements OnInit {
             },
           });
         },
-        error: console.error,
+        error: (err) => {
+          if (err.status === 401) {
+            this.notificationService.error('Invalid email or password.');
+
+            return;
+          }
+
+          this.notificationService.error(
+            err.error?.message ?? 'Unable to login. Please try again.',
+          );
+        },
       });
   }
 }

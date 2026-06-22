@@ -7,18 +7,22 @@
           {{ userName }}
         </h1>
 
-        <p>Platform Administration Dashboard</p>
+        <p>
+          {{ data.isPlatformDashboard ? 'Platform Administration Dashboard' : 'Admin Dashboard' }}
+        </p>
       </div>
     </div>
 
     <div class="stats-grid">
-      <mat-card class="stat-card">
-        <span> Institutions </span>
+      @if (data.isPlatformDashboard) {
+        <mat-card class="stat-card">
+          <span>Institutions</span>
 
-        <h2>
-          {{ data.institutionCount }}
-        </h2>
-      </mat-card>
+          <h2>
+            {{ data.institutionCount }}
+          </h2>
+        </mat-card>
+      }
 
       <mat-card class="stat-card">
         <span> Campuses </span>
@@ -51,24 +55,57 @@
           {{ data.teacherCount }}
         </h2>
       </mat-card>
+      
+      @if (!data.isPlatformDashboard) {
+        <mat-card class="stat-card">
+          <span>Departments</span>
+          <h2>{{ data.departmentCount }}</h2>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <span>Courses</span>
+          <h2>{{ data.courseCount }}</h2>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <span>Subjects</span>
+          <h2>{{ data.subjectCount }}</h2>
+        </mat-card>
+      }
     </div>
 
     <div class="dashboard-panels">
       <div class="panel">
-        <h3>Platform Overview</h3>
+        <h3>
+          {{ data.isPlatformDashboard ? 'Platform Overview' : 'Institution Overview' }}
+        </h3>
 
-        <p>Manage institutions, campuses and users from a central location.</p>
+        <p>
+          {{
+            data.isPlatformDashboard
+              ? 'Manage institutions, campuses and users from a central location.'
+              : 'Manage campuses, users, teachers and students within your institution.'
+          }}
+        </p>
       </div>
 
       <div class="panel">
         <h3>Quick Actions</h3>
 
         <ul>
-          <li>Add Institution</li>
+          @if (data.isPlatformDashboard) {
+            <li>Add Institution</li>
 
-          <li>Manage Branding</li>
+            <li>Manage Branding</li>
 
-          <li>Review Users</li>
+            <li>Review Users</li>
+          } @else {
+            <li>Add Campus</li>
+
+            <li>Create User</li>
+
+            <li>Manage Departments</li>
+          }
         </ul>
       </div>
     </div>

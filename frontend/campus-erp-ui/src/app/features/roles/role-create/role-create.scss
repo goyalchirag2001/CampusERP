@@ -1,0 +1,77 @@
+.role-card {
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 24px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-header p {
+  margin-top: 8px;
+
+  opacity: 0.8;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.permissions-section {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 20px;
+}
+
+.permission-group {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  border-radius: 12px;
+
+  padding: 20px;
+}
+
+.group-header {
+  margin-bottom: 16px;
+}
+
+.group-header h3 {
+  margin: 0;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.permission-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 24px;
+}

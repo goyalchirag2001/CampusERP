@@ -26,4 +26,6 @@ public class Department : BaseEntity, ITenantEntity
     public ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 
     public ICollection<Student> Students { get; set; } = new List<Student>();
+
+    public bool IsActive { get; set; } = true;
 }

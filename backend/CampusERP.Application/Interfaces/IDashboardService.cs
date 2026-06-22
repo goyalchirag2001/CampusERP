@@ -5,4 +5,6 @@ namespace CampusERP.Application.Interfaces;
 public interface IDashboardService
 {
     Task<DashboardResponse> GetPlatformDashboardAsync();
+
+    Task<DashboardResponse> GetInstitutionDashboardAsync(Guid institutionId);
 }

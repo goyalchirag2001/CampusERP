@@ -26,5 +26,7 @@ public class Subject : BaseEntity, ITenantEntity
 
     public Campus Campus { get; set; } = null!;
 
+    public bool IsActive { get; set; }
+
     public ICollection<SemesterSubject> SemesterSubjects { get; set; } = new List<SemesterSubject>();
 }

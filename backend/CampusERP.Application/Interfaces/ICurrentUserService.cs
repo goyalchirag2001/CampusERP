@@ -9,4 +9,8 @@ public interface ICurrentUserService
     Guid? CampusId { get; }
 
     string? Email { get; }
+
+    string? InstitutionSlug { get; }
+
+    List<string> Roles { get; }
 }

@@ -7,63 +7,88 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CampusERP.Infrastructure.Services;
 
-public class TeacherAssignmentService: ITeacherAssignmentService
+public class TeacherAssignmentService : ITeacherAssignmentService
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public TeacherAssignmentService(ApplicationDbContext dbContext)
+    private readonly IDataAccessScope _scope;
+
+    public TeacherAssignmentService(ApplicationDbContext dbContext, IDataAccessScope scope)
     {
         _dbContext = dbContext;
+
+        _scope = scope;
     }
 
     public async Task<TeacherAssignmentResponse> AssignAsync(AssignTeacherRequest request)
     {
-        var teacher = await _dbContext.Teachers.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == request.TeacherId);
+        var teacherQuery = _dbContext.Teachers.Include(x => x.User).Where(x => x.Id == request.TeacherId);
 
-        if (teacher is null)
+        if (_scope.IsInstitutionAdmin())
+        {
+            teacherQuery =
+                teacherQuery.Where(x =>
+                    x.InstitutionId ==
+                    _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            teacherQuery =
+                teacherQuery.Where(x =>
+                    x.CampusId ==
+                    _scope.CampusId());
+        }
+
+        var teacherEntity = await teacherQuery.FirstOrDefaultAsync();
+
+        if (teacherEntity is null)
         {
             throw new Exception("Teacher not found.");
         }
 
-        var semesterSubject = await _dbContext.SemesterSubjects
-                                .Include(x => x.Semester)
-                                .Include(x => x.Subject)
-                                .FirstOrDefaultAsync(x => x.Id == request.SemesterSubjectId);
+        var semesterSubject =
+            await _dbContext.SemesterSubjects
+                .Include(x => x.Semester)
+                .Include(x => x.Subject)
+                .FirstOrDefaultAsync(x =>
+                    x.Id == request.SemesterSubjectId);
 
         if (semesterSubject is null)
         {
             throw new Exception("Semester subject not found.");
         }
 
-        if (teacher.CampusId != semesterSubject.Semester.CampusId)
+        if (teacherEntity.CampusId != semesterSubject.Semester.CampusId)
         {
             throw new Exception("Campus mismatch.");
         }
 
-        if (teacher.InstitutionId != semesterSubject.Semester.InstitutionId)
+        if (teacherEntity.InstitutionId != semesterSubject.Semester.InstitutionId)
         {
             throw new Exception("Institution mismatch.");
         }
 
-        var exists = await _dbContext
-                        .TeacherAssignments
-                        .AnyAsync(x =>
-                            x.TeacherId == request.TeacherId &&
-                            x.SemesterSubjectId == request.SemesterSubjectId);
+        var exists =
+            await ApplyScope(_dbContext.TeacherAssignments)
+                .AnyAsync(x =>
+                    x.TeacherId == request.TeacherId &&
+                    x.SemesterSubjectId == request.SemesterSubjectId);
 
         if (exists)
         {
             throw new Exception("Teacher already assigned.");
         }
 
-        var assignment = new TeacherAssignment
-                        {
-                            Id = Guid.NewGuid(),
+        var assignment =
+            new TeacherAssignment
+            {
+                Id = Guid.NewGuid(),
 
-                            TeacherId = request.TeacherId,
+                TeacherId = request.TeacherId,
 
-                            SemesterSubjectId = request.SemesterSubjectId
-                        };
+                SemesterSubjectId = request.SemesterSubjectId
+            };
 
         _dbContext.TeacherAssignments.Add(assignment);
 
@@ -73,11 +98,12 @@ public class TeacherAssignmentService: ITeacherAssignmentService
         {
             Id = assignment.Id,
 
-            TeacherId = teacher.Id,
+            TeacherId = teacherEntity.Id,
 
             SemesterSubjectId = semesterSubject.Id,
 
-            TeacherName = $"{teacher.User.FirstName} {teacher.User.LastName}",
+            TeacherName =
+                $"{teacherEntity.User.FirstName} {teacherEntity.User.LastName}",
 
             SubjectName = semesterSubject.Subject.Name,
 
@@ -87,10 +113,8 @@ public class TeacherAssignmentService: ITeacherAssignmentService
 
     public async Task<List<TeacherAssignmentResponse>> GetByTeacherAsync(Guid teacherId)
     {
-        return await _dbContext
-            .TeacherAssignments
-            .Where(x =>
-                x.TeacherId == teacherId)
+        return await ApplyScope(_dbContext.TeacherAssignments)
+            .Where(x => x.TeacherId == teacherId)
             .Select(x =>
                 new TeacherAssignmentResponse
                 {
@@ -100,12 +124,61 @@ public class TeacherAssignmentService: ITeacherAssignmentService
 
                     SemesterSubjectId = x.SemesterSubjectId,
 
-                    TeacherName = x.Teacher.User.FirstName + " " + x.Teacher.User.LastName,
+                    TeacherName =
+                        x.Teacher.User.FirstName +
+                        " " +
+                        x.Teacher.User.LastName,
 
-                    SubjectName = x.SemesterSubject.Subject.Name,
+                    SubjectName =
+                        x.SemesterSubject.Subject.Name,
 
-                    SemesterName = x.SemesterSubject.Semester.Name
+                    SemesterName =
+                        x.SemesterSubject.Semester.Name
                 })
             .ToListAsync();
+    }
+
+    public async Task RemoveAsync(Guid id)
+    {
+        var assignment =
+            await ApplyScope(_dbContext.TeacherAssignments)
+                .FirstOrDefaultAsync(x =>
+                    x.Id == id);
+
+        if (assignment is null)
+        {
+            throw new Exception("Teacher assignment not found.");
+        }
+
+        _dbContext.TeacherAssignments.Remove(assignment);
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private IQueryable<TeacherAssignment> ApplyScope(IQueryable<TeacherAssignment> query)
+    {
+        if (_scope.IsSuperAdmin() ||
+            _scope.IsPlatformAdmin())
+        {
+            return query;
+        }
+
+        if (_scope.IsInstitutionAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.Teacher.InstitutionId ==
+                    _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            query =
+                query.Where(x =>
+                    x.Teacher.CampusId ==
+                    _scope.CampusId());
+        }
+
+        return query;
     }
 }

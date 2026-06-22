@@ -1,0 +1,148 @@
+.dialog-container {
+  padding: 32px;
+
+  color: var(--card-text);
+
+  background: var(--card-bg);
+}
+
+.dialog-header {
+  margin-bottom: 28px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.dialog-header h2 {
+  margin: 0;
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  color: var(--card-text);
+}
+
+.dialog-header p {
+  margin-top: 8px;
+
+  color: var(--muted);
+}
+
+.section-title {
+  margin-bottom: 16px;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  color: var(--card-text);
+}
+
+.roles-title {
+  margin-top: 28px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.roles-panel {
+  padding: 20px;
+  max-height: 280px;
+
+  overflow-y: auto;
+
+  border-radius: 16px;
+
+  background: var(--card-bg);
+
+  border: 1px solid var(--glass-border);
+}
+
+.roles-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+
+  gap: 12px;
+}
+
+.role-item {
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  background: var(--card-bg);
+
+  border: 1px solid var(--glass-border);
+
+  transition: all 0.2s ease;
+}
+
+.role-item:hover {
+  border-color: var(--primary);
+
+  transform: translateY(-1px);
+}
+
+.role-item.selected {
+  border: 2px solid var(--primary);
+
+  background: rgba(79, 70, 229, 0.12);
+}
+
+.actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 28px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid var(--glass-border);
+}
+
+.app-dialog .mat-mdc-dialog-surface {
+  border-radius: 24px !important;
+
+  overflow: hidden;
+}
+
+.actions {
+  position: sticky;
+
+  bottom: 0;
+
+  background: var(--card-bg);
+
+  padding-top: 16px;
+
+  margin-top: 24px;
+
+  border-top: 1px solid var(--glass-border);
+
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .dialog-container {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+}

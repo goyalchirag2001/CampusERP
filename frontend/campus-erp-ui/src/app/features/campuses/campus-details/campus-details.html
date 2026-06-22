@@ -1,0 +1,105 @@
+@if (campus(); as campus) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ campus.name.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ campus.name }}
+          </h1>
+
+          <p>
+            {{ campus.code }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!campus.isActive">
+            {{ campus.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editCampus()">Edit Campus</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ campus.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Campus Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label> Institution </label>
+
+          <p>
+            {{ campus.institutionName }}
+          </p>
+        </div>
+
+        <div>
+          <label> Campus Head </label>
+
+          <p>
+            {{ campus.campusHeadName || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Email</label>
+
+          <p>
+            {{ campus.email || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Phone</label>
+
+          <p>
+            {{ campus.phone || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <label> Address </label>
+
+          <p>
+            {{ campus.address || '-' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span> Departments </span>
+
+        <h3>
+          {{ campus.departmentCount }}
+        </h3>
+      </div>
+
+      <div class="stat-card">
+        <span> Teachers </span>
+
+        <h3>
+          {{ campus.teacherCount }}
+        </h3>
+      </div>
+
+      <div class="stat-card">
+        <span> Students </span>
+
+        <h3>
+          {{ campus.studentCount }}
+        </h3>
+      </div>
+    </div>
+  </div>
+}

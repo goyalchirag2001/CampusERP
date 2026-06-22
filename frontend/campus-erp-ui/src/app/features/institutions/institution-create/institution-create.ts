@@ -58,8 +58,6 @@ export class InstitutionCreate {
     adminLastName: ['', Validators.required],
 
     adminEmail: ['', [Validators.required, Validators.email]],
-
-    campusName: ['', Validators.required],
   });
 
   onInstitutionNameChange(): void {
@@ -82,7 +80,6 @@ export class InstitutionCreate {
       {
         code,
         loginSlug: slug,
-        campusName: `${name} Main Campus`,
       },
       {
         emitEvent: false,
@@ -117,8 +114,6 @@ export class InstitutionCreate {
         adminLastName: this.form.value.adminLastName ?? '',
 
         adminEmail: this.form.value.adminEmail ?? '',
-
-        campusName: this.form.value.campusName ?? '',
       })
       .subscribe({
         next: () => {

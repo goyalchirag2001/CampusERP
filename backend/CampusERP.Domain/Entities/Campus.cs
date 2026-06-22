@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CampusERP.Domain.Common;
-
-namespace CampusERP.Domain.Entities;
+﻿using CampusERP.Domain.Common;
+using CampusERP.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 public class Campus : BaseEntity, ITenantEntity
 {
@@ -15,8 +14,17 @@ public class Campus : BaseEntity, ITenantEntity
     [MaxLength(50)]
     public string Code { get; set; } = string.Empty;
 
+    [MaxLength(255)]
+    public string? Email { get; set; }
+
+    [MaxLength(20)]
+    public string? Phone { get; set; }
+
     [MaxLength(500)]
     public string? Address { get; set; }
+
+    [MaxLength(200)]
+    public string? CampusHeadName { get; set; }
 
     public bool IsActive { get; set; } = true;
 

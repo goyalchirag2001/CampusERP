@@ -1,4 +1,6 @@
-﻿public class CreateInstitutionRequest
+﻿namespace CampusERP.Contracts.Requests;
+
+public class CreateInstitutionRequest
 {
     public string Name { get; set; } = string.Empty;
 
@@ -25,6 +27,4 @@
     public string AdminLastName { get; set; } = string.Empty;
 
     public string AdminEmail { get; set; } = string.Empty;
-
-    public string CampusName { get; set; } = string.Empty;
 }

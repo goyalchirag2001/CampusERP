@@ -14,4 +14,6 @@ export interface CurrentUser {
   institutionSlug: string | null;
 
   roles: string[];
+
+  permissions: string[];
 }

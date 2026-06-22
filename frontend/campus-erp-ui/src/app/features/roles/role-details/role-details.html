@@ -1,0 +1,108 @@
+@if (role(); as role) {
+  <div class="role-details-page">
+    <mat-card class="hero-card">
+      <div class="hero-content">
+        <div class="hero-avatar">
+          <mat-icon>shield</mat-icon>
+        </div>
+
+        <div class="hero-info">
+          <h1>{{ role.name }}</h1>
+
+          <div class="hero-subtitle">
+            {{ role.isSystemRole ? 'System Role' : 'Custom Role' }}
+          </div>
+
+          <div class="hero-meta">
+            <span class="status-chip">
+              {{ role.isActive ? 'Active' : 'Inactive' }}
+            </span>
+
+            <span> {{ role.permissionCount }} Permissions </span>
+          </div>
+        </div>
+
+        @if (!role.isSystemRole) {
+          <div class="hero-actions">
+            <button mat-stroked-button (click)="edit()">
+              <mat-icon>edit</mat-icon>
+              Edit
+            </button>
+
+            @if (role.isActive) {
+              <button mat-flat-button (click)="deactivate()">
+                <mat-icon>block</mat-icon>
+                Deactivate
+              </button>
+            } @else {
+              <button mat-flat-button (click)="activate()">
+                <mat-icon>check_circle</mat-icon>
+                Activate
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </mat-card>
+
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <div class="stat-label">Role Type</div>
+
+        <div class="stat-value">
+          {{ role.isSystemRole ? 'System' : 'Custom' }}
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-label">Status</div>
+
+        <div class="stat-value">
+          {{ role.isActive ? 'Active' : 'Inactive' }}
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <div class="stat-label">Permissions</div>
+
+        <div class="stat-value">
+          {{ role.permissionCount }}
+        </div>
+      </mat-card>
+    </div>
+
+    @if (role.description) {
+      <mat-card>
+        <h2>Description</h2>
+
+        <p class="description">
+          {{ role.description }}
+        </p>
+      </mat-card>
+    }
+
+    <mat-card>
+      <h2>Permissions</h2>
+
+      @for (group of groupedPermissions(); track group[0]) {
+        <div class="permission-module">
+          <div class="module-header">
+            {{ group[0] }}
+          </div>
+
+          <div class="permission-list">
+            @for (permission of group[1]; track permission.id) {
+              <div class="permission-item">
+                <mat-icon> check_circle </mat-icon>
+
+                <span>
+                  {{ permission.name }}
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </mat-card>
+  </div>
+}

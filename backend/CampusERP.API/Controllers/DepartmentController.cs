@@ -8,7 +8,7 @@ namespace CampusERP.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = RoleConstants.PlatformAdmin)]
+[Authorize]
 public class DepartmentController : ControllerBase
 {
     private readonly IDepartmentService _departmentService;
@@ -18,22 +18,21 @@ public class DepartmentController : ControllerBase
         _departmentService = departmentService;
     }
 
+    [Authorize(Policy = PermissionConstants.DepartmentCreate)]
     [HttpPost]
     public async Task<IActionResult> Create(CreateDepartmentRequest request)
     {
-        var result = await _departmentService.CreateAsync(request);
-
-        return Ok(result);
+        return Ok(await _departmentService.CreateAsync(request));
     }
 
+    [Authorize(Policy = PermissionConstants.DepartmentView)]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var result = await _departmentService.GetAllAsync();
-
-        return Ok(result);
+        return Ok(await _departmentService.GetAllAsync());
     }
 
+    [Authorize(Policy = PermissionConstants.DepartmentView)]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -45,5 +44,37 @@ public class DepartmentController : ControllerBase
         }
 
         return Ok(result);
+    }
+
+    [Authorize(Policy = PermissionConstants.DepartmentEdit)]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateDepartmentRequest request)
+    {
+        return Ok(await _departmentService.UpdateAsync(id, request));
+    }
+
+    [Authorize(Policy = PermissionConstants.DepartmentActivate)]
+    [HttpPut("{id:guid}/activate")]
+    public async Task<IActionResult> Activate(Guid id)
+    {
+        await _departmentService.ActivateAsync(id);
+
+        return NoContent();
+    }
+
+    [Authorize(Policy = PermissionConstants.DepartmentDeactivate)]
+    [HttpPut("{id:guid}/deactivate")]
+    public async Task<IActionResult> Deactivate(Guid id)
+    {
+        await _departmentService.DeactivateAsync(id);
+
+        return NoContent();
+    }
+
+    [Authorize(Policy = PermissionConstants.DepartmentView)]
+    [HttpGet("lookup")]
+    public async Task<IActionResult> Lookup()
+    {
+        return Ok(await _departmentService.GetLookupAsync());
     }
 }

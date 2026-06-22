@@ -11,8 +11,7 @@ public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
 
-    public AuthController(
-        IAuthService authService)
+    public AuthController(IAuthService authService)
     {
         _authService = authService;
     }
@@ -26,8 +25,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken(
-        RefreshTokenRequest request)
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
     {
         var response = await _authService.RefreshTokenAsync(request);
 

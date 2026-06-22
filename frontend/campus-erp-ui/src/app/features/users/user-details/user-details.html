@@ -1,0 +1,80 @@
+@if (user(); as user) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="user-avatar">
+          {{ user.firstName.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ user.firstName }}
+            {{ user.lastName }}
+          </h1>
+
+          <p>
+            {{ user.email }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!user.isActive">
+            {{ user.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editUser()">Edit User</button>
+
+        <button mat-stroked-button (click)="resetPassword()">Reset Password</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ user.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>User Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Institution</label>
+
+          <p>{{ user.institutionName }}</p>
+        </div>
+
+        <div>
+          <label>Campus</label>
+
+          <p>{{ user.campusName }}</p>
+        </div>
+
+        <div>
+          <label>Email</label>
+
+          <p>{{ user.email }}</p>
+        </div>
+
+        <div>
+          <label>Phone</label>
+
+          <p>{{ user.phoneNumber || '-' }}</p>
+        </div>
+
+        <div>
+          <label>Roles</label>
+
+          <p>{{ user.roles.join(', ') }}</p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ user.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

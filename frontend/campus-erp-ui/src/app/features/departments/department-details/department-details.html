@@ -1,0 +1,63 @@
+@if (department(); as department) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ department.code.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ department.name }}
+          </h1>
+
+          <p>
+            {{ department.code }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!department.isActive">
+            {{ department.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editDepartment()">Edit Department</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ department.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Department Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Name</label>
+
+          <p>
+            {{ department.name }}
+          </p>
+        </div>
+
+        <div>
+          <label>Code</label>
+
+          <p>
+            {{ department.code }}
+          </p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ department.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

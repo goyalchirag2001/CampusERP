@@ -1,0 +1,49 @@
+.dialog-container {
+  padding: 24px;
+}
+
+.dialog-header {
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 16px;
+}
+
+.permissions-section {
+  margin-top: 24px;
+}
+
+.permissions-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  gap: 12px;
+
+  max-height: 350px;
+
+  overflow-y: auto;
+}
+
+.permission-item {
+  padding: 12px;
+
+  border-radius: 12px;
+
+  border: 1px solid var(--glass-border);
+}
+
+.actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 24px;
+}

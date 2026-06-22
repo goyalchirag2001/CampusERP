@@ -81,6 +81,11 @@ public class ApplicationDbContext : DbContext
 
             if (entry.State == EntityState.Deleted)
             {
+                if (entry.Entity is RolePermission ||  entry.Entity is UserRole)
+                {
+                    continue;
+                }
+
                 entity.IsDeleted = true;
 
                 entity.UpdatedAt = DateTime.UtcNow;

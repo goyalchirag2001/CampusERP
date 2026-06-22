@@ -98,6 +98,31 @@ body[data-theme='dark'] {
   --panel-bg: rgba(30, 41, 59, 0.85);
 
   --glass-border: rgba(255, 255, 255, 0.08);
+
+  .mat-mdc-input-element {
+    color: #ffffff !important;
+  }
+
+  .mat-mdc-select-value-text {
+    color: #ffffff !important;
+  }
+
+  .mat-mdc-select-value {
+    color: #ffffff !important;
+  }
+
+  .mdc-floating-label {
+    color: var(--muted) !important;
+  }
+
+  .mat-mdc-input-element::placeholder {
+    color: #94a3b8 !important;
+    opacity: 1;
+  }
+
+  .mdc-text-field__input {
+    color: #ffffff !important;
+  }
 }
 
 * {
@@ -183,4 +208,88 @@ body::after {
 
 .mat-mdc-text-field-wrapper {
   border-radius: 18px !important;
+}
+
+.success-snackbar {
+  --mdc-snackbar-container-color: #16a34a;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #dc2626;
+}
+
+.warning-snackbar {
+  --mdc-snackbar-container-color: #d97706;
+}
+
+.mat-mdc-card {
+  background: var(--card-bg) !important;
+
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle,
+.mat-mdc-card-content,
+.mat-mdc-card-header,
+.mat-mdc-header-cell {
+  color: inherit;
+}
+
+.mat-mdc-table {
+  background: var(--card-bg) !important;
+
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-header-row {
+  background: var(--card-bg) !important;
+}
+
+.mat-mdc-row {
+  background: var(--card-bg) !important;
+}
+
+.mat-mdc-header-cell {
+  color: var(--card-text) !important;
+
+  font-weight: 600;
+}
+
+.mat-mdc-cell {
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-footer-cell {
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-paginator {
+  background: var(--card-bg) !important;
+
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-paginator-page-size-label,
+.mat-mdc-paginator-range-label {
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-select-value,
+.mat-mdc-select-arrow {
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-icon-button {
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-dialog-surface {
+  background: var(--card-bg) !important;
+
+  color: var(--card-text) !important;
+}
+
+.mat-mdc-dialog-container {
+  color: var(--card-text) !important;
 }

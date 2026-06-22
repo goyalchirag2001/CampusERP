@@ -4,6 +4,8 @@ public class UpdateInstitutionRequest
 {
     public string Name { get; set; } = string.Empty;
 
+    public string Code { get; set; } = string.Empty;
+
     public string LoginSlug { get; set; } = string.Empty;
 
     public string? Email { get; set; }
@@ -20,5 +22,9 @@ public class UpdateInstitutionRequest
 
     public string? SecondaryColor { get; set; }
 
-    public bool IsActive { get; set; }
+    public string? AdminFirstName { get; set; }
+
+    public string? AdminLastName { get; set; }
+
+    public string? AdminEmail { get; set; }
 }

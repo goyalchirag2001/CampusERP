@@ -10,8 +10,7 @@ public class InstitutionDiscoveryController : ControllerBase
 {
     private readonly IInstitutionService _institutionService;
 
-    public InstitutionDiscoveryController(
-        IInstitutionService institutionService)
+    public InstitutionDiscoveryController(IInstitutionService institutionService)
     {
         _institutionService = institutionService;
     }

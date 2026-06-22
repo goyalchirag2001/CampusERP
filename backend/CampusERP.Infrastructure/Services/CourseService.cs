@@ -11,13 +11,19 @@ public class CourseService : ICourseService
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public CourseService(ApplicationDbContext dbContext)
+    private readonly IDataAccessScope _scope;
+
+    public CourseService(ApplicationDbContext dbContext, IDataAccessScope scope)
     {
         _dbContext = dbContext;
+
+        _scope = scope;
     }
 
     public async Task<CourseResponse> CreateAsync(CreateCourseRequest request)
     {
+        ValidateCreateScope(request.InstitutionId, request.CampusId);
+
         var departmentExists =
             await _dbContext.Departments
                 .AnyAsync(x =>
@@ -70,7 +76,9 @@ public class CourseService : ICourseService
 
             DurationYears = request.DurationYears,
 
-            TotalSemesters = request.TotalSemesters
+            TotalSemesters = request.TotalSemesters,
+
+            IsActive = true
         };
 
         _dbContext.Courses.Add(course);
@@ -85,22 +93,17 @@ public class CourseService : ICourseService
             {
                 Id = Guid.NewGuid(),
 
-                InstitutionId =
-                    course.InstitutionId,
+                InstitutionId = course.InstitutionId,
 
-                CampusId =
-                    course.CampusId,
+                CampusId = course.CampusId,
 
-                CourseId =
-                    course.Id,
+                CourseId = course.Id,
 
-                Name =
-                    $"Semester {i}",
+                Name = $"Semester {i}",
 
-                SequenceNumber =
-                    i,
+                SequenceNumber = i,
 
-                IsActive = true
+                IsActive = course.IsActive
             });
         }
 
@@ -124,83 +127,200 @@ public class CourseService : ICourseService
 
             DegreeType = course.DegreeType,
 
-            DurationYears =
-                course.DurationYears,
+            DurationYears = course.DurationYears,
 
-            TotalSemesters = course.TotalSemesters
+            TotalSemesters = course.TotalSemesters,
+
+            IsActive = course.IsActive
         };
     }
 
-    public async Task<List<CourseResponse>>
-        GetAllAsync()
+    public async Task<List<CourseResponse>> GetAllAsync()
     {
-        return await _dbContext.Courses
+        var query = ApplyCourseScope(_dbContext.Courses.AsQueryable());
+
+        return await query
             .Select(x =>
                 new CourseResponse
                 {
                     Id = x.Id,
 
-                    InstitutionId =
-                        x.InstitutionId,
+                    InstitutionId = x.InstitutionId,
 
-                    CampusId =
-                        x.CampusId,
+                    CampusId = x.CampusId,
 
-                    DepartmentId =
-                        x.DepartmentId,
+                    DepartmentId = x.DepartmentId,
 
-                    Name =
-                        x.Name,
+                    Name = x.Name,
 
-                    Code =
-                        x.Code,
+                    Code = x.Code,
 
-                    DegreeType =
-                        x.DegreeType,
+                    DegreeType = x.DegreeType,
 
-                    DurationYears =
-                        x.DurationYears,
+                    DurationYears = x.DurationYears,
 
-                    TotalSemesters =
-                        x.TotalSemesters
+                    TotalSemesters = x.TotalSemesters,
+
+                    IsActive = x.IsActive
                 })
             .ToListAsync();
     }
 
-    public async Task<CourseResponse?>
-        GetByIdAsync(Guid id)
+    public async Task<CourseResponse?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Courses
-            .Where(x => x.Id == id)
+        return await ApplyCourseScope(_dbContext.Courses.Where(x => x.Id == id))
+        .Select(x =>
+            new CourseResponse
+            {
+                    Id = x.Id,
+
+                    InstitutionId = x.InstitutionId,
+
+                    CampusId = x.CampusId,
+
+                    DepartmentId = x.DepartmentId,
+
+                    Name = x.Name,
+
+                    Code = x.Code,
+
+                    DegreeType = x.DegreeType,
+
+                    DurationYears = x.DurationYears,
+
+                    TotalSemesters = x.TotalSemesters,
+
+                    IsActive = x.IsActive
+                })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<CourseResponse> UpdateAsync(Guid id, UpdateCourseRequest request)
+    {
+        var course = await ApplyCourseScope(_dbContext.Courses.Where(x => x.Id == id)).FirstOrDefaultAsync();
+
+        if (course is null)
+        {
+            throw new Exception("Course not found.");
+        }
+
+        var departmentExists =
+            await _dbContext.Departments
+                .AnyAsync(x =>
+                    x.Id == request.DepartmentId &&
+                    x.CampusId == request.CampusId &&
+                    x.InstitutionId == request.InstitutionId);
+
+        if (!departmentExists)
+        {
+            throw new Exception("Department not found.");
+        }
+
+        var codeExists =
+            await _dbContext.Courses
+                .AnyAsync(x =>
+                    x.Id != id &&
+                    x.CampusId == request.CampusId &&
+                    x.Code == request.Code);
+
+        if (codeExists)
+        {
+            throw new Exception("Course code already exists.");
+        }
+
+        course.Name = request.Name;
+
+        course.Code = request.Code;
+
+        course.DegreeType = request.DegreeType;
+
+        course.DurationYears = request.DurationYears;
+
+        course.DepartmentId = request.DepartmentId;
+
+        await _dbContext.SaveChangesAsync();
+
+        return await GetByIdAsync(id) ?? throw new Exception();
+    }
+
+    public async Task ActivateAsync(Guid id)
+    {
+        var course = await ApplyCourseScope(_dbContext.Courses.Where(x => x.Id == id)).FirstOrDefaultAsync();
+
+        if (course is null)
+        {
+            throw new Exception("Course not found.");
+        }
+
+        course.IsActive = true;
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeactivateAsync(Guid id)
+    {
+        var course = await ApplyCourseScope(_dbContext.Courses.Where(x => x.Id == id)).FirstOrDefaultAsync();
+
+        if (course is null)
+        {
+            throw new Exception("Course not found.");
+        }
+
+        course.IsActive = false;
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<LookupResponse>> GetLookupAsync()
+    {
+        return await ApplyCourseScope(_dbContext.Courses.Where(x => x.IsActive))
+            .OrderBy(x => x.Name)
             .Select(x =>
-                new CourseResponse
+                new LookupResponse
                 {
                     Id = x.Id,
 
-                    InstitutionId =
-                        x.InstitutionId,
-
-                    CampusId =
-                        x.CampusId,
-
-                    DepartmentId =
-                        x.DepartmentId,
-
-                    Name =
-                        x.Name,
-
-                    Code =
-                        x.Code,
-
-                    DegreeType =
-                        x.DegreeType,
-
-                    DurationYears =
-                        x.DurationYears,
-
-                    TotalSemesters =
-                        x.TotalSemesters
+                    Name = x.Name
                 })
-            .FirstOrDefaultAsync();
+            .ToListAsync();
+    }
+
+    private IQueryable<Course> ApplyCourseScope(IQueryable<Course> query)
+    {
+        if (_scope.IsSuperAdmin() || _scope.IsPlatformAdmin())
+        {
+            return query;
+        }
+
+        if (_scope.IsInstitutionAdmin())
+        {
+            query = query.Where(x => x.InstitutionId == _scope.InstitutionId());
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            query = query.Where(x => x.CampusId == _scope.CampusId());
+        }
+
+        return query;
+    }
+
+    private void ValidateCreateScope(Guid institutionId, Guid campusId)
+    {
+        if (_scope.IsInstitutionAdmin())
+        {
+            if (institutionId != _scope.InstitutionId())
+            {
+                throw new Exception("Access denied.");
+            }
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            if (campusId != _scope.CampusId())
+            {
+                throw new Exception("Access denied.");
+            }
+        }
     }
 }

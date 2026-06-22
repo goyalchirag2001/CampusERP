@@ -1,4 +1,5 @@
-﻿using CampusERP.Application.Interfaces;
+﻿using CampusERP.Application.Authorization;
+using CampusERP.Application.Interfaces;
 using CampusERP.Contracts.Requests;
 using CampusERP.Shared.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace CampusERP.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = RoleConstants.PlatformAdmin)]
+[Authorize]
 public class TeacherAssignmentController : ControllerBase
 {
     private readonly ITeacherAssignmentService _teacherAssignmentService;
@@ -19,18 +20,25 @@ public class TeacherAssignmentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = PermissionConstants.TeacherAssignmentCreate)]
     public async Task<IActionResult> Assign(AssignTeacherRequest request)
     {
-        var result = await _teacherAssignmentService.AssignAsync(request);
-
-        return Ok(result);
+        return Ok(await _teacherAssignmentService.AssignAsync(request));
     }
 
     [HttpGet("teacher/{teacherId:guid}")]
+    [Authorize(Policy = PermissionConstants.TeacherAssignmentView)]
     public async Task<IActionResult> GetByTeacher(Guid teacherId)
     {
-        var result = await _teacherAssignmentService.GetByTeacherAsync(teacherId);
+        return Ok(await _teacherAssignmentService.GetByTeacherAsync(teacherId));
+    }
 
-        return Ok(result);
+    [HttpDelete("{id:guid}")]
+    [Authorize(Policy = PermissionConstants.TeacherAssignmentDelete)]
+    public async Task<IActionResult> Remove(Guid id)
+    {
+        await _teacherAssignmentService.RemoveAsync(id);
+
+        return NoContent();
     }
 }

@@ -2,6 +2,8 @@
 
 public static class RoleConstants
 {
+    public const string SuperAdmin = "SuperAdmin";
+
     public const string PlatformAdmin = "PlatformAdmin";
 
     public const string InstitutionAdmin = "InstitutionAdmin";

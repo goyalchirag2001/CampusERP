@@ -19,4 +19,6 @@ public class CourseResponse
     public int DurationYears { get; set; }
 
     public int TotalSemesters { get; set; }
+
+    public bool IsActive { get; set; }
 }

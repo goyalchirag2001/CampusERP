@@ -10,4 +10,12 @@ public interface IDepartmentService
     Task<List<DepartmentResponse>> GetAllAsync();
 
     Task<DepartmentResponse?> GetByIdAsync(Guid id);
+
+    Task<DepartmentResponse> UpdateAsync(Guid id, UpdateDepartmentRequest request);
+
+    Task ActivateAsync(Guid id);
+
+    Task DeactivateAsync(Guid id);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }
