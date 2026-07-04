@@ -10,6 +10,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
 import { InstitutionBrandingService } from '../../../core/services/institution-branding';
 import { InstitutionBranding } from '../../../core/models/institution-branding';
 import { NotificationService } from '../../../core/services/notification';
+import { UserContextService } from '../../../core/services/user-context';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,8 @@ export class Login implements OnInit {
   private readonly router = inject(Router);
 
   private readonly notificationService = inject(NotificationService);
+
+  private readonly userContextService = inject(UserContextService);
 
   readonly branding = signal<InstitutionBranding | null>(null);
 
@@ -97,13 +100,19 @@ export class Login implements OnInit {
             next: (user) => {
               this.currentUserService.setUser(user);
 
-              const slug = user.institutionSlug;
+              // Prevent previous user's profile from appearing
+              this.userContextService.clear();
 
-              if (slug) {
-                this.router.navigate(['/', slug, 'dashboard']);
-              } else {
-                this.router.navigate(['/platform/dashboard']);
-              }
+              // Load current user's profile
+              this.userContextService.refresh();
+
+              this.navigateAfterLogin();
+            },
+
+            error: (err) => {
+              console.error('ME API FAILED', err);
+
+              this.notificationService.error(err?.error?.message ?? 'Failed to load user profile.');
             },
           });
         },
@@ -119,5 +128,43 @@ export class Login implements OnInit {
           );
         },
       });
+  }
+
+  private navigateAfterLogin(): void {
+    const user = this.currentUserService.user();
+
+    if (!user) {
+      this.router.navigate(['/platform/login']);
+
+      return;
+    }
+
+    // Platform Admin
+
+    if (!user.institutionSlug) {
+      this.router.navigate(['/platform/dashboard']);
+
+      return;
+    }
+
+    // Student
+
+    if (this.currentUserService.isStudent()) {
+      this.router.navigate(['/', user.institutionSlug, 'profile']);
+
+      return;
+    }
+
+    // Teacher
+
+    if (this.currentUserService.isTeacher()) {
+      this.router.navigate(['/', user.institutionSlug, 'profile']);
+
+      return;
+    }
+
+    // Institution Admin / Campus Admin
+
+    this.router.navigate(['/', user.institutionSlug, 'dashboard']);
   }
 }

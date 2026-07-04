@@ -1,0 +1,281 @@
+@if (loading()) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else if (profile(); as profile) {
+  <div class="profile-page">
+    <div class="profile-layout">
+      <!-- LEFT PANEL -->
+
+      <div class="left-panel">
+        <mat-card class="profile-summary">
+          @if (hasProfilePhoto()) {
+            <img class="profile-image" [src]="profilePhoto()" [alt]="profile.fullName" />
+          } @else {
+            <div class="avatar-placeholder">
+              {{ avatarInitials() }}
+            </div>
+          }
+
+          <h2>
+            {{ profile.fullName }}
+          </h2>
+
+          <div class="role-chip">
+            {{ profile.role }}
+          </div>
+
+          <div class="summary-item">
+            <mat-icon>account_balance</mat-icon>
+
+            <span>
+              {{ profile.institutionName }}
+            </span>
+          </div>
+
+          <div class="summary-item">
+            <mat-icon>location_city</mat-icon>
+
+            <span>
+              {{ profile.campusName }}
+            </span>
+          </div>
+
+          <div class="summary-actions">
+            <button mat-stroked-button color="primary" disabled>
+              <mat-icon> photo_camera </mat-icon>
+
+              Change Photo
+            </button>
+
+            <button mat-stroked-button color="primary" (click)="changePassword()">
+              <mat-icon> lock </mat-icon>
+
+              Change Password
+            </button>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- RIGHT PANEL -->
+
+      <div class="right-panel">
+        <!-- PERSONAL INFORMATION -->
+
+        <mat-card class="info-card">
+          <div class="card-header">
+            <div class="card-title">Personal Information</div>
+
+            @if (!editing()) {
+              <button mat-flat-button color="primary" (click)="startEditing()">
+                <mat-icon> edit </mat-icon>
+
+                Edit
+              </button>
+            }
+          </div>
+
+          <mat-card-content>
+            @if (!editing()) {
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Email</label>
+
+                  <span>
+                    {{ profile.email }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Phone Number</label>
+
+                  <span>
+                    {{ profile.phoneNumber }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Last Login</label>
+
+                  <span>
+                    @if (profile.lastLoginAt) {
+                      {{ profile.lastLoginAt | date: 'medium' }}
+                    } @else {
+                      -
+                    }
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Status</label>
+
+                  <span>
+                    @if (profile.isActive) {
+                      Active
+                    } @else {
+                      Inactive
+                    }
+                  </span>
+                </div>
+              </div>
+            } @else {
+              <form class="edit-form" [formGroup]="form">
+                <mat-form-field appearance="outline">
+                  <mat-label> Phone Number </mat-label>
+
+                  <input matInput formControlName="phoneNumber" />
+                </mat-form-field>
+
+                <div class="button-row">
+                  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+                    Save
+                  </button>
+
+                  <button mat-button type="button" (click)="cancelEditing()">Cancel</button>
+                </div>
+              </form>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- STUDENT -->
+
+        @if (isStudent()) {
+          <mat-card class="info-card">
+            <div class="card-header">
+              <div class="card-title">Academic Information</div>
+            </div>
+
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Admission Number</label>
+
+                  <span>
+                    {{ profile.admissionNumber }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Roll Number</label>
+
+                  <span>
+                    {{ profile.rollNumber }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Course</label>
+
+                  <span>
+                    {{ profile.courseName }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Department</label>
+
+                  <span>
+                    {{ profile.departmentName }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Semester</label>
+
+                  <span>
+                    {{ profile.semesterName }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Section</label>
+
+                  <span>
+                    {{ profile.sectionName }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Academic Session</label>
+
+                  <span>
+                    {{ profile.academicSession }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label> Enrollment Status </label>
+
+                  <span class="status-badge" [ngClass]="getStatusClass(profile.enrollmentStatus)">
+                    {{ profile.enrollmentStatusName }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <!-- TEACHER -->
+
+        @if (isTeacher()) {
+          <mat-card class="info-card">
+            <div class="card-header">
+              <div class="card-title">Professional Information</div>
+            </div>
+
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Employee Code</label>
+
+                  <span>
+                    {{ profile.employeeCode }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Designation</label>
+
+                  <span>
+                    {{ profile.designation }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <!-- ADMIN -->
+
+        @if (isAdmin()) {
+          <mat-card class="info-card">
+            <div class="card-header">
+              <div class="card-title">Administration</div>
+            </div>
+
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Institution</label>
+
+                  <span>
+                    {{ profile.institutionName }}
+                  </span>
+                </div>
+
+                <div class="info-item">
+                  <label>Campus</label>
+
+                  <span>
+                    {{ profile.campusName }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </div>
+  </div>
+}

@@ -18,4 +18,44 @@ public class PasswordService : IPasswordService
 
         return result != PasswordVerificationResult.Failed;
     }
+
+    public void ValidatePasswordPolicy(string password)
+    {
+        var errors = new List<string>();
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            errors.Add("Password is required.");
+        }
+
+        if (password.Length < 8 || password.Length > 16)
+        {
+            errors.Add("Password must be between 8 and 16 characters.");
+        }
+
+        if (!password.Any(char.IsUpper))
+        {
+            errors.Add("At least one uppercase letter is required.");
+        }
+
+        if (!password.Any(char.IsLower))
+        {
+            errors.Add("At least one lowercase letter is required.");
+        }
+
+        if (!password.Any(char.IsDigit))
+        {
+            errors.Add("At least one number is required.");
+        }
+
+        if (!password.Any(ch => !char.IsLetterOrDigit(ch)))
+        {
+            errors.Add("At least one special character is required.");
+        }
+
+        if (errors.Any())
+        {
+            throw new Exception(string.Join(Environment.NewLine, errors));
+        }
+    }
 }

@@ -1,0 +1,35 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding-top: 8px;
+}
+
+.two-column {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-content {
+  min-width: 650px;
+}
+
+@media (max-width: 768px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  mat-dialog-content {
+    min-width: auto;
+    width: 100%;
+  }
+}

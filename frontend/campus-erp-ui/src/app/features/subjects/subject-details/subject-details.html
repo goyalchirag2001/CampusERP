@@ -1,0 +1,115 @@
+@if (subject(); as subject) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ subject.code.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ subject.name }}
+          </h1>
+
+          <p>
+            {{ subject.code }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!subject.isActive">
+            {{ subject.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editSubject()">Edit Subject</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ subject.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Subject Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Subject Name</label>
+
+          <p>
+            {{ subject.name }}
+          </p>
+        </div>
+
+        <div>
+          <label>Subject Code</label>
+
+          <p>
+            {{ subject.code }}
+          </p>
+        </div>
+
+        <div>
+          <label>Credits</label>
+
+          <p>
+            {{ subject.credits }}
+          </p>
+        </div>
+
+        <div>
+          <label>Subject Type</label>
+
+          <p>
+            {{ getTypeName(subject.subjectType) }}
+          </p>
+        </div>
+
+        @if (subject.campusName) {
+          <div>
+            <label>Campus</label>
+
+            <p>
+              {{ subject.campusName }}
+            </p>
+          </div>
+        }
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ subject.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span>Credits</span>
+
+        <h3>
+          {{ subject.credits }}
+        </h3>
+      </div>
+
+      <div class="stat-card">
+        <span>Type</span>
+
+        <h3>
+          {{ getTypeName(subject.subjectType) }}
+        </h3>
+      </div>
+
+      <div class="stat-card">
+        <span>Status</span>
+
+        <h3>
+          {{ subject.isActive ? 'Active' : 'Inactive' }}
+        </h3>
+      </div>
+    </div>
+  </div>
+}

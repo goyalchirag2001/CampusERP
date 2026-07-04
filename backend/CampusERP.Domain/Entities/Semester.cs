@@ -26,4 +26,6 @@ public class Semester : BaseEntity, ITenantEntity
     public Course Course { get; set; } = null!;
 
     public ICollection<SemesterSubject> SemesterSubjects { get; set; } = new List<SemesterSubject>();
+
+    public ICollection<Section> Sections { get; set; } = new List<Section>();
 }

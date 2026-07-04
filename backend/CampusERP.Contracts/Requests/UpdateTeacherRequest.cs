@@ -1,4 +1,6 @@
-﻿public class UpdateTeacherRequest
+﻿namespace CampusERP.Contracts.Requests;
+
+public class UpdateTeacherRequest
 {
     public Guid InstitutionId { get; set; }
 

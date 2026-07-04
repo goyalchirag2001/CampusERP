@@ -99,6 +99,22 @@ public static class PermissionConstants
     public const string SemesterSubjectAssign = "SemesterSubject.Assign";
     public const string SemesterSubjectRemove = "SemesterSubject.Remove";
 
+    // Section
+
+    public const string SectionView = "Section.View";
+    public const string SectionCreate = "Section.Create";
+    public const string SectionEdit = "Section.Edit";
+    public const string SectionActivate = "Section.Activate";
+    public const string SectionDeactivate = "Section.Deactivate";
+
+    // Academic Session
+
+    public const string AcademicSessionView = "Academic-Session.View";
+    public const string AcademicSessionCreate = "Academic-Session.Create";
+    public const string AcademicSessionEdit = "Academic-Session.Edit";
+    public const string AcademicSessionActivate = "Academic-Session.Activate";
+    public const string AcademicSessionDeactivate = "Academic-Session.Deactivate";
+
     public static readonly List<string> All =
     [
         AdminDashboardView,
@@ -170,6 +186,18 @@ public static class PermissionConstants
 
         SemesterSubjectView,
         SemesterSubjectAssign,
-        SemesterSubjectRemove
+        SemesterSubjectRemove,
+
+        SectionView,
+        SectionCreate,
+        SectionEdit,
+        SectionActivate,
+        SectionDeactivate,
+
+        AcademicSessionView,
+        AcademicSessionCreate,
+        AcademicSessionEdit,
+        AcademicSessionActivate,
+        AcademicSessionDeactivate
     ];
 }

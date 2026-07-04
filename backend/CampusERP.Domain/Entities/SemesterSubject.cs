@@ -8,9 +8,12 @@ public class SemesterSubject : BaseEntity
 
     public Guid SubjectId { get; set; }
 
+    public int DisplayOrder { get; set; }
+
     public Semester Semester { get; set; } = null!;
 
     public Subject Subject { get; set; } = null!;
 
-    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } =
+        new List<TeacherAssignment>();
 }

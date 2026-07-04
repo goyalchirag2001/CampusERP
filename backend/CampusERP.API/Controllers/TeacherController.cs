@@ -77,4 +77,11 @@ public class TeacherController : ControllerBase
     {
         return Ok(await _teacherService.GetLookupAsync());
     }
+
+    [HttpGet("lookup-department")]
+    [Authorize(Policy = PermissionConstants.TeacherView)]
+    public async Task<IActionResult> LookupWithDepartment()
+    {
+        return Ok(await _teacherService.GetLookupWithDepartmentAsync());
+    }
 }

@@ -1,0 +1,202 @@
+:host {
+  display: block;
+}
+
+.user-trigger {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 240px;
+
+  padding: 8px 18px;
+
+  border-radius: 18px;
+
+  background: transparent;
+
+  width: 260px;
+  max-width: 260px;
+  border-radius: 20px;
+  transition: background 0.25s ease;
+}
+
+.user-trigger:hover {
+  background: var(--surface);
+}
+
+.trigger-avatar,
+.menu-avatar {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.trigger-avatar {
+  width: 46px;
+
+  height: 46px;
+
+  border-radius: 14px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  overflow: hidden;
+}
+
+.trigger-avatar img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.trigger-content {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  flex: 1;
+
+  overflow: hidden;
+}
+
+.trigger-name {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.trigger-role {
+  font-size: 12px;
+
+  color: var(--muted);
+}
+
+.menu-profile {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 18px 20px;
+}
+
+.menu-avatar {
+  width: 58px;
+
+  height: 58px;
+
+  border-radius: 16px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  color: white;
+
+  font-weight: 700;
+
+  font-size: 22px;
+
+  overflow: hidden;
+}
+
+.menu-avatar img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.menu-user {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.menu-name {
+  font-size: 17px;
+
+  font-weight: 700;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: var(--card-text);
+}
+
+::ng-deep .mat-mdc-menu-item-text {
+  color: var(--card-text);
+}
+
+.menu-role {
+  font-size: 13px;
+
+  color: var(--muted);
+
+  margin-top: 4px;
+}
+
+.mat-mdc-menu-item {
+  height: 50px;
+
+  border-radius: 12px;
+
+  margin: 4px 8px;
+
+  width: calc(100% - 16px);
+}
+
+.mat-mdc-menu-item:hover {
+  background: var(--surface);
+}
+
+.mat-mdc-menu-item mat-icon {
+  color: var(--primary);
+
+  margin-right: 12px;
+}
+
+::ng-deep .user-menu .mat-mdc-menu-content {
+  padding: 8px;
+  background: var(--card-bg);
+  color: var(--card-text);
+}
+
+::ng-deep .user-menu {
+  border-radius: 24px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-premium);
+  border: 1px solid var(--glass-border);
+  background: var(--card-bg);
+  color: var(--card-text);
+}

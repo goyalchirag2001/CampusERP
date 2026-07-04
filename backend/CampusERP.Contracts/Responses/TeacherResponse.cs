@@ -12,6 +12,10 @@ public class TeacherResponse
 
     public Guid DepartmentId { get; set; }
 
+    public string DepartmentName { get; set; } = string.Empty;
+
+    public string CampusName { get; set; } = string.Empty;
+
     public string EmployeeCode { get; set; } = string.Empty;
 
     public string Designation { get; set; } = string.Empty;
@@ -25,4 +29,6 @@ public class TeacherResponse
     public string? PhoneNumber { get; set; }
 
     public bool IsActive { get; set; }
+
+    public string? TemporaryPassword { get; set; }
 }

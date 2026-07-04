@@ -58,6 +58,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<SemesterSubject> SemesterSubjects => Set<SemesterSubject>();
 
     public DbSet<TeacherAssignment> TeacherAssignments => Set<TeacherAssignment>();
+
+    public DbSet<AcademicSession> AcademicSessions => Set<AcademicSession>();
+
+    public DbSet<StudentEnrollment> StudentEnrollments => Set<StudentEnrollment>();
+
+    public DbSet<Section> Sections => Set<Section>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -6,6 +6,7 @@ import { Department } from '../models/department';
 import { CreateDepartmentRequest } from '../models/create-department-request';
 import { UpdateDepartmentRequest } from '../models/update-department-request';
 import { Lookup } from '../../../core/models/lookup';
+import { DepartmentLookup } from '../../../core/models/department-lookup';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +40,9 @@ export class DepartmentService {
 
   getLookup(): Observable<Lookup[]> {
     return this.http.get<Lookup[]>(`${environment.apiUrl}/department/lookup`);
+  }
+
+  getLookupWithCampus(): Observable<DepartmentLookup[]> {
+    return this.http.get<DepartmentLookup[]>(`${environment.apiUrl}/department/lookup-campus`);
   }
 }

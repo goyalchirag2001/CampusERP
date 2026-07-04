@@ -9,5 +9,11 @@ public interface ISemesterSubjectService
 
     Task<List<SemesterSubjectResponse>> GetBySemesterAsync(Guid semesterId);
 
+    Task<List<CourseSemesterSubjectResponse>> GetByCourseAsync(Guid courseId);
+
     Task RemoveAsync(Guid id);
+
+    Task MoveUpAsync(Guid id);
+
+    Task MoveDownAsync(Guid id);
 }

@@ -1,0 +1,112 @@
+@if (student(); as student) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ student.firstName.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ student.firstName }}
+            {{ student.lastName }}
+          </h1>
+
+          <p>
+            {{ student.rollNumber }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!student.isActive">
+            {{ student.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editStudent()">Edit Student</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ student.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Student Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Roll Number</label>
+
+          <p>
+            {{ student.rollNumber }}
+          </p>
+        </div>
+
+        <div>
+          <label>Batch</label>
+
+          <p>
+            {{ student.batch }}
+          </p>
+        </div>
+
+        <div>
+          <label>Admission Date</label>
+
+          <p>
+            {{ student.admissionDate | date: 'dd MMM yyyy' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Email</label>
+
+          <p>
+            {{ student.email }}
+          </p>
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+
+          <p>
+            {{ student.phoneNumber || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Campus</label>
+
+          <p>
+            {{ student.campusName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Department</label>
+
+          <p>
+            {{ student.departmentName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Course</label>
+
+          <p>
+            {{ student.courseName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ student.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

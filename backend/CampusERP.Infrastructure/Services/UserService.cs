@@ -466,6 +466,11 @@ public class UserService : IUserService
 
         await ValidateTargetUserAsync(user);
 
+        if (_passwordService.VerifyPassword(newPassword, user.PasswordHash))
+        {
+            throw new Exception("The new password must be different from the current password.");
+        }
+
         user.PasswordHash = _passwordService.HashPassword(newPassword);
 
         await _dbContext.SaveChangesAsync();

@@ -33,6 +33,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.IsActive)
             .IsRequired();
 
+        builder.Property(x => x.ProfilePhotoUrl)
+            .HasMaxLength(500);
+
         builder.HasOne(x => x.Institution)
             .WithMany(x => x.Users)
             .HasForeignKey(x => x.InstitutionId)

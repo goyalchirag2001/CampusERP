@@ -23,15 +23,40 @@
     <div class="permissions-section">
       <h3>Permissions</h3>
 
-      <div class="permissions-grid">
-        @for (permission of permissions(); track permission.id) {
-          <div class="permission-item">
-            <mat-checkbox
-              [checked]="isSelected(permission.id)"
-              (change)="togglePermission(permission.id, $event.checked)"
-            >
-              {{ permission.name }}
-            </mat-checkbox>
+      <div class="permission-actions">
+        <button mat-stroked-button type="button" (click)="selectAllPermissions()">
+          Select All
+        </button>
+
+        <button mat-stroked-button type="button" (click)="clearAllPermissions()">Clear All</button>
+      </div>
+
+      <div class="permission-groups">
+        @for (group of groupedPermissions(); track group.module) {
+          <div class="permission-group">
+            <div class="module-header">
+              <h3>
+                {{ group.module }}
+              </h3>
+
+              <mat-checkbox
+                [checked]="isModuleSelected(group.module)"
+                (change)="toggleModulePermissions(group.module, $event.checked)"
+              >
+                Select All
+              </mat-checkbox>
+            </div>
+
+            <div class="permission-grid">
+              @for (permission of group.permissions; track permission.id) {
+                <mat-checkbox
+                  [checked]="isSelected(permission.id)"
+                  (change)="togglePermission(permission.id, $event.checked)"
+                >
+                  {{ permission.name }}
+                </mat-checkbox>
+              }
+            </div>
           </div>
         }
       </div>

@@ -70,24 +70,7 @@ public class SubjectService : ISubjectService
 
         await _dbContext.SaveChangesAsync();
 
-        return new SubjectResponse
-        {
-            Id = subject.Id,
-
-            InstitutionId = subject.InstitutionId,
-
-            CampusId = subject.CampusId,
-
-            Code = subject.Code,
-
-            Name = subject.Name,
-
-            Credits = subject.Credits,
-
-            SubjectType = (SubjectTypeDto)subject.SubjectType,
-
-            IsActive = subject.IsActive
-        };
+        return await GetByIdAsync(subject.Id) ?? throw new Exception();
     }
 
     public async Task<List<SubjectResponse>> GetAllAsync()
@@ -101,6 +84,8 @@ public class SubjectService : ISubjectService
                     InstitutionId = x.InstitutionId,
 
                     CampusId = x.CampusId,
+
+                    CampusName = x.Campus.Name,
 
                     Code = x.Code,
 
@@ -127,6 +112,8 @@ public class SubjectService : ISubjectService
                     InstitutionId = x.InstitutionId,
 
                     CampusId = x.CampusId,
+
+                    CampusName = x.Campus.Name,
 
                     Code = x.Code,
 

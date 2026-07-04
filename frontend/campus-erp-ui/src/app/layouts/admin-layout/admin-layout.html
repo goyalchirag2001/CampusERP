@@ -33,29 +33,12 @@
         </a>
       }
     </nav>
-
-    <div class="user-card">
-      <div class="avatar">
-        {{ user()?.firstName?.charAt(0) }}
-      </div>
-
-      <div>
-        <strong>
-          {{ user()?.firstName }}
-          {{ user()?.lastName }}
-        </strong>
-
-        <p>
-          {{ user()?.roles?.[0] }}
-        </p>
-      </div>
-    </div>
   </aside>
 
   <main class="main-content">
     <header class="header">
       <h3>
-        {{ branding()?.name || 'CampusERP' }}
+        {{ 'CampusERP' }}
       </h3>
 
       <div class="header-actions">
@@ -63,12 +46,7 @@
           <mat-icon> contrast </mat-icon>
         </button>
 
-        <span>
-          {{ user()?.firstName }}
-          {{ user()?.lastName }}
-        </span>
-
-        <button mat-button (click)="logout()">Logout</button>
+        <app-user-menu></app-user-menu>
       </div>
     </header>
 

@@ -77,4 +77,11 @@ public class DepartmentController : ControllerBase
     {
         return Ok(await _departmentService.GetLookupAsync());
     }
+
+    [HttpGet("lookup-campus")]
+    [Authorize(Policy = PermissionConstants.DepartmentView)]
+    public async Task<IActionResult> LookupWithCampus()
+    {
+        return Ok(await _departmentService.GetLookupWithCampusAsync());
+    }
 }

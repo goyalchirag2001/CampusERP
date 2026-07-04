@@ -22,11 +22,24 @@ import { permissionGuard } from './core/guards/permission-guard';
 import { Permissions } from './core/constants/permissions';
 import { DepartmentList } from './features/departments/department-list/department-list';
 import { DepartmentDetails } from './features/departments/department-details/department-details';
+import { CourseList } from './features/courses/course-list/course-list';
+import { CourseDetails } from './features/courses/course-details/course-details';
+import { SubjectDetails } from './features/subjects/subject-details/subject-details';
+import { TeacherDetails } from './features/teachers/teacher-details/teacher-details';
+import { StudentDetails } from './features/students/student-details/student-details';
+import { ProfileComponent } from './features/profile/profile/profile';
+import { ForbiddenComponent } from './shared/pages/forbidden/forbidden';
+import { NotFoundComponent } from './shared/pages/not-found/not-found';
 
 export const routes: Routes = [
   {
     path: 'platform/login',
     component: Login,
+  },
+
+  {
+    path: 'access-denied',
+    component: ForbiddenComponent,
   },
 
   {
@@ -112,6 +125,11 @@ export const routes: Routes = [
         component: RoleDetails,
         canActivate: [permissionGuard(Permissions.RoleView)],
       },
+
+      {
+        path: 'profile',
+        component: ProfileComponent,
+      },
     ],
   },
 
@@ -133,8 +151,20 @@ export const routes: Routes = [
       },
 
       {
+        path: 'students/:id',
+        component: StudentDetails,
+        canActivate: [permissionGuard(Permissions.StudentView)],
+      },
+
+      {
         path: 'teachers',
         component: TeacherList,
+        canActivate: [permissionGuard(Permissions.TeacherView)],
+      },
+
+      {
+        path: 'teachers/:id',
+        component: TeacherDetails,
         canActivate: [permissionGuard(Permissions.TeacherView)],
       },
 
@@ -142,6 +172,15 @@ export const routes: Routes = [
         path: 'subjects',
         component: SubjectList,
         canActivate: [permissionGuard(Permissions.SubjectView)],
+      },
+
+      {
+        path: 'subjects/:id',
+        component: SubjectDetails,
+        canActivate: [permissionGuard],
+        data: {
+          permission: Permissions.SubjectView,
+        },
       },
 
       {
@@ -184,17 +223,36 @@ export const routes: Routes = [
       {
         path: 'departments',
         component: DepartmentList,
+        canActivate: [permissionGuard(Permissions.DepartmentView)],
       },
 
       {
         path: 'departments/:id',
         component: DepartmentDetails,
+        canActivate: [permissionGuard(Permissions.DepartmentView)],
+      },
+
+      {
+        path: 'courses',
+        component: CourseList,
+        canActivate: [permissionGuard(Permissions.CourseView)],
+      },
+
+      {
+        path: 'courses/:id',
+        component: CourseDetails,
+        canActivate: [permissionGuard(Permissions.CourseView)],
+      },
+
+      {
+        path: 'profile',
+        component: ProfileComponent,
       },
     ],
   },
 
   {
     path: '**',
-    redirectTo: 'dashboard',
+    component: NotFoundComponent,
   },
 ];

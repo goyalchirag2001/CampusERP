@@ -1,0 +1,96 @@
+@if (teacher(); as teacher) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ teacher.firstName.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ teacher.firstName }}
+            {{ teacher.lastName }}
+          </h1>
+
+          <p>
+            {{ teacher.designation }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!teacher.isActive">
+            {{ teacher.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editTeacher()">Edit Teacher</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ teacher.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Teacher Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Employee Code</label>
+
+          <p>
+            {{ teacher.employeeCode }}
+          </p>
+        </div>
+
+        <div>
+          <label>Designation</label>
+
+          <p>
+            {{ teacher.designation }}
+          </p>
+        </div>
+
+        <div>
+          <label>Email</label>
+
+          <p>
+            {{ teacher.email }}
+          </p>
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+
+          <p>
+            {{ teacher.phoneNumber || '-' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Campus</label>
+
+          <p>
+            {{ teacher.campusName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Department</label>
+
+          <p>
+            {{ teacher.departmentName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ teacher.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

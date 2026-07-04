@@ -1,8 +1,5 @@
 import { inject } from '@angular/core';
-
-import { CanActivateFn } from '@angular/router';
-
-import { Router } from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 
 import { PermissionService } from '../services/permission';
 
@@ -17,7 +14,7 @@ export const permissionGuard =
       return true;
     }
 
-    router.navigate(['/']);
+    router.navigate(['/access-denied']);
 
     return false;
   };

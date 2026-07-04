@@ -1,0 +1,78 @@
+<div class="semester-card">
+  <div class="semester-header">
+    <div>
+      <h2>{{ semester.name }}</h2>
+
+      <span class="subject-count">
+        {{ assignedSubjects().length }}
+        Subject{{ assignedSubjects().length === 1 ? '' : 's' }}
+      </span>
+    </div>
+  </div>
+
+  <div class="assign-section">
+    <h3>Assign Subject</h3>
+
+    <div class="assign-grid">
+      <button mat-flat-button color="primary" type="button" (click)="selectAndAssignSubject()">
+        <mat-icon> add </mat-icon>
+
+        Select & Assign Subject
+      </button>
+    </div>
+  </div>
+
+  @if (assignedSubjects().length === 0) {
+    <div class="empty-state">
+      <mat-icon> menu_book </mat-icon>
+
+      <p>No subjects assigned yet.</p>
+    </div>
+  } @else {
+    <table class="subject-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+
+          <th>Code</th>
+
+          <th>Subject</th>
+
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (subject of assignedSubjects(); track subject.id) {
+          <tr>
+            <td class="order-buttons">
+              <button mat-icon-button (click)="moveUp(subject.id)">
+                <mat-icon> keyboard_arrow_up </mat-icon>
+              </button>
+
+              <button mat-icon-button (click)="moveDown(subject.id)">
+                <mat-icon> keyboard_arrow_down </mat-icon>
+              </button>
+            </td>
+
+            <td>
+              {{ subject.displayOrder }}
+            </td>
+
+            <td>
+              {{ subject.subjectCode }}
+            </td>
+
+            <td>
+              {{ subject.subjectName }}
+            </td>
+
+            <td>
+              <button mat-button color="warn" (click)="remove(subject.id)">Remove</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

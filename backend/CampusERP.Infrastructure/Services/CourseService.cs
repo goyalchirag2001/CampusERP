@@ -24,12 +24,11 @@ public class CourseService : ICourseService
     {
         ValidateCreateScope(request.InstitutionId, request.CampusId);
 
-        var departmentExists =
-            await _dbContext.Departments
-                .AnyAsync(x =>
-                    x.Id == request.DepartmentId &&
-                    x.CampusId == request.CampusId &&
-                    x.InstitutionId == request.InstitutionId);
+        var departmentExists = await _dbContext.Departments
+                                .AnyAsync(x =>
+                                    x.Id == request.DepartmentId &&
+                                    x.CampusId == request.CampusId &&
+                                    x.InstitutionId == request.InstitutionId);
 
         if (!departmentExists)
         {
@@ -161,6 +160,10 @@ public class CourseService : ICourseService
 
                     TotalSemesters = x.TotalSemesters,
 
+                    DepartmentName = x.Department.Name,
+
+                    CampusName = x.Campus.Name,
+
                     IsActive = x.IsActive
                 })
             .ToListAsync();
@@ -168,7 +171,9 @@ public class CourseService : ICourseService
 
     public async Task<CourseResponse?> GetByIdAsync(Guid id)
     {
-        return await ApplyCourseScope(_dbContext.Courses.Where(x => x.Id == id))
+        return await ApplyCourseScope(_dbContext.Courses
+        .Include(x => x.Semesters)
+        .Where(x => x.Id == id))
         .Select(x =>
             new CourseResponse
             {
@@ -190,8 +195,24 @@ public class CourseService : ICourseService
 
                     TotalSemesters = x.TotalSemesters,
 
-                    IsActive = x.IsActive
-                })
+                    DepartmentName = x.Department.Name,
+
+                    CampusName = x.Campus.Name,
+
+                    IsActive = x.IsActive,
+
+                    Semesters = x.Semesters
+                    .OrderBy(x => x.SequenceNumber)
+                    .Select(x => new SemesterLookupResponse
+                    {
+                        Id = x.Id,
+
+                        Name = x.Name,
+
+                        SequenceNumber = x.SequenceNumber
+                    })
+                    .ToList()
+            })
             .FirstOrDefaultAsync();
     }
 

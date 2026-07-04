@@ -32,11 +32,36 @@ public class SemesterSubjectController : ControllerBase
         return Ok(await _semesterSubjectService.GetBySemesterAsync(semesterId));
     }
 
+    [Authorize(Policy = PermissionConstants.SemesterSubjectView)]
+    [HttpGet("course/{courseId:guid}")]
+    public async Task<IActionResult> GetByCourse(Guid courseId)
+    {
+        return Ok(await _semesterSubjectService.GetByCourseAsync(courseId));
+    }
+
     [Authorize(Policy = PermissionConstants.SemesterSubjectRemove)]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Remove(Guid id)
     {
         await _semesterSubjectService.RemoveAsync(id);
+
+        return NoContent();
+    }
+
+    [Authorize(Policy = PermissionConstants.SemesterSubjectAssign)]
+    [HttpPut("{id:guid}/move-up")]
+    public async Task<IActionResult> MoveUp(Guid id)
+    {
+        await _semesterSubjectService.MoveUpAsync(id);
+
+        return NoContent();
+    }
+
+    [Authorize(Policy = PermissionConstants.SemesterSubjectAssign)]
+    [HttpPut("{id:guid}/move-down")]
+    public async Task<IActionResult> MoveDown(Guid id)
+    {
+        await _semesterSubjectService.MoveDownAsync(id);
 
         return NoContent();
     }

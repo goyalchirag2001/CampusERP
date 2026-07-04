@@ -1,9 +1,16 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
+
 import { CurrentUserService } from '../services/current-user';
 
-export const roleGuard = (p0: RouterStateSnapshot | ActivatedRouteSnapshot, roles: string[]) => {
-  return () => {
+export const roleGuard =
+  (roles: string[]): CanActivateFn =>
+  () => {
     const currentUser = inject(CurrentUserService);
 
     const router = inject(Router);
@@ -12,16 +19,17 @@ export const roleGuard = (p0: RouterStateSnapshot | ActivatedRouteSnapshot, role
 
     if (!user) {
       router.navigate(['/platform/login']);
+
       return false;
     }
 
     const allowed = roles.some((role) => user.roles.includes(role));
 
     if (!allowed) {
-      router.navigate(['/']);
+      router.navigate(['/access-denied']);
+
       return false;
     }
 
     return true;
   };
-};

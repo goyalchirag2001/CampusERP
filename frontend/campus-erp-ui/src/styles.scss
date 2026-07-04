@@ -78,6 +78,11 @@ html {
   --danger: #ef4444;
 
   --info: #3b82f6;
+
+  --avatar-gradient: linear-gradient(135deg, var(--primary), var(--primary-light));
+  --card-radius: 24px;
+  --menu-radius: 24px;
+  --button-radius: 12px;
 }
 
 body[data-theme='dark'] {

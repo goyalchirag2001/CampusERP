@@ -1,10 +1,10 @@
-﻿namespace CampusERP.Contracts.Requests;
+﻿using CampusERP.Contracts.Enums;
+
+namespace CampusERP.Contracts.Requests;
 
 public class UpdateStudentRequest
 {
-    public Guid DepartmentId { get; set; }
-
-    public Guid CourseId { get; set; }
+    public string AdmissionNumber { get; set; } = string.Empty;
 
     public string RollNumber { get; set; } = string.Empty;
 

@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Edit Course</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Department</mat-label>
+
+      <mat-select formControlName="departmentId">
+        @for (department of departments(); track department.id) {
+          <mat-option [value]="department.id">
+            {{ department.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Course Name</mat-label>
+
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Course Code</mat-label>
+
+      <input matInput formControlName="code" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Degree Type</mat-label>
+
+      <mat-select formControlName="degreeType">
+        <mat-option value="B.Tech">B.Tech</mat-option>
+        <mat-option value="BCA">BCA</mat-option>
+        <mat-option value="MBA">MBA</mat-option>
+        <mat-option value="MCA">MCA</mat-option>
+        <mat-option value="M.Tech">M.Tech</mat-option>
+        <mat-option value="B.Sc">B.Sc</mat-option>
+        <mat-option value="M.Sc">M.Sc</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Duration (Years)</mat-label>
+
+      <input matInput type="number" formControlName="durationYears" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Total Semesters</mat-label>
+
+      <input matInput type="number" formControlName="totalSemesters" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

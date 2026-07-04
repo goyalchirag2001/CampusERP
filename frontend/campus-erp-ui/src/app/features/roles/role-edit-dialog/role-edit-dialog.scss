@@ -47,3 +47,55 @@
 
   margin-top: 24px;
 }
+
+.permission-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.permission-group {
+  padding: 20px;
+
+  border: 1px solid var(--glass-border);
+
+  border-radius: 16px;
+
+  background: var(--surface);
+}
+
+.permission-group h3 {
+  margin-bottom: 16px;
+
+  color: var(--primary);
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.permission-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+  gap: 12px;
+}
+
+.permission-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-bottom: 24px;
+}
+
+.module-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 16px;
+}

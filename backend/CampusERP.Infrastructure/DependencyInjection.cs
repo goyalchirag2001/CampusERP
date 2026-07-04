@@ -58,6 +58,14 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
+        services.AddScoped<ISectionService, SectionService>();
+
+        services.AddScoped<IProfileService, ProfileService>();
+
+        services.AddScoped<IAcademicSessionService, AcademicSessionService>();
+
+        services.AddScoped<ISemesterService, SemesterService>();
+
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));

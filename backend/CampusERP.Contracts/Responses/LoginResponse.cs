@@ -17,4 +17,8 @@ public class LoginResponse
     public string RefreshToken { get; set; } = string.Empty;
 
     public DateTime ExpiresAt { get; set; }
+
+    public DateTime? LastLoginAt { get; set; }
+
+    public DateTime? CurrentLoginAt { get; set; }
 }

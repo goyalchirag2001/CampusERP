@@ -131,9 +131,14 @@ public class AuthService : IAuthService
 
         if (!isValid)
         {
-            throw new UnauthorizedException("Invalid email or password."
-            );
+            throw new UnauthorizedException("Invalid email or password.");
         }
+
+        var responseLastLoginAt = user.CurrentLoginAt;
+        var responseCurrentLoginAt = DateTime.UtcNow;
+
+        user.LastLoginAt = user.CurrentLoginAt;
+        user.CurrentLoginAt = responseCurrentLoginAt;
 
         string? institutionSlug = null;
 
@@ -182,7 +187,11 @@ public class AuthService : IAuthService
 
             RefreshToken = refreshTokenValue,
 
-            ExpiresAt = DateTime.UtcNow.AddHours(1)
+            ExpiresAt = DateTime.UtcNow.AddHours(1),
+
+            LastLoginAt = responseLastLoginAt,
+
+            CurrentLoginAt = responseCurrentLoginAt
         };
     }
 

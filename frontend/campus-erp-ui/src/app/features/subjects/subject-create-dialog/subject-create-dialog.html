@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>Create Subject</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    @if (!isCampusAdmin()) {
+      <mat-form-field appearance="outline">
+        <mat-label>Campus</mat-label>
+
+        <mat-select formControlName="campusId">
+          @for (campus of campuses(); track campus.id) {
+            <mat-option [value]="campus.id">
+              {{ campus.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline">
+      <mat-label>Subject Code</mat-label>
+
+      <input matInput formControlName="code" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Subject Name</mat-label>
+
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Credits</mat-label>
+
+      <input matInput type="number" formControlName="credits" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Subject Type</mat-label>
+
+      <mat-select formControlName="subjectType">
+        @for (type of subjectTypes; track type.value) {
+          <mat-option [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">Create</button>
+</mat-dialog-actions>

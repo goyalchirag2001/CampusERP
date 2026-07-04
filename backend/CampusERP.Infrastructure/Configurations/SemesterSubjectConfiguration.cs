@@ -4,11 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CampusERP.Infrastructure.Configurations;
 
-public class SemesterSubjectConfiguration
-    : IEntityTypeConfiguration<SemesterSubject>
+public class SemesterSubjectConfiguration: IEntityTypeConfiguration<SemesterSubject>
 {
-    public void Configure(
-        EntityTypeBuilder<SemesterSubject> builder)
+    public void Configure(EntityTypeBuilder<SemesterSubject> builder)
     {
         builder.ToTable("SemesterSubjects");
 

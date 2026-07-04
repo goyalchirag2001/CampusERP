@@ -4,6 +4,7 @@ using CampusERP.Contracts.Responses;
 using CampusERP.Domain.Entities;
 using CampusERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using CampusERP.Shared.Utilities;
 
 namespace CampusERP.Infrastructure.Services;
 
@@ -59,6 +60,8 @@ public class TeacherService : ITeacherService
             throw new Exception("Employee code already exists.");
         }
 
+        var password = PasswordGenerator.Generate();
+
         var user = new User
         {
             Id = Guid.NewGuid(),
@@ -71,7 +74,7 @@ public class TeacherService : ITeacherService
 
             PhoneNumber = request.PhoneNumber,
 
-            PasswordHash = _passwordService.HashPassword(request.Password),
+            PasswordHash = _passwordService.HashPassword(password),
 
             InstitutionId = request.InstitutionId,
 
@@ -112,11 +115,13 @@ public class TeacherService : ITeacherService
         };
 
         _dbContext.Teachers.Add(teacher);
-
         await _dbContext.SaveChangesAsync();
 
-        return await GetByIdAsync(teacher.Id)
-               ?? throw new Exception();
+        var response = await GetByIdAsync(teacher.Id) ?? throw new Exception();
+
+        response.TemporaryPassword = password;
+
+        return response;
     }
 
     public async Task<List<TeacherResponse>> GetAllAsync()
@@ -135,6 +140,10 @@ public class TeacherService : ITeacherService
                     CampusId = x.CampusId,
 
                     DepartmentId = x.DepartmentId,
+
+                    DepartmentName = x.Department.Name,
+
+                    CampusName = x.Campus.Name,
 
                     EmployeeCode = x.EmployeeCode,
 
@@ -170,6 +179,10 @@ public class TeacherService : ITeacherService
                     CampusId = x.CampusId,
 
                     DepartmentId = x.DepartmentId,
+
+                    DepartmentName = x.Department.Name,
+
+                    CampusName = x.Campus.Name,
 
                     EmployeeCode = x.EmployeeCode,
 
@@ -314,8 +327,28 @@ public class TeacherService : ITeacherService
             .ToListAsync();
     }
 
-    private IQueryable<Teacher> ApplyScope(
-        IQueryable<Teacher> query)
+    public async Task<List<TeacherLookupResponse>> GetLookupWithDepartmentAsync()
+    {
+        return await ApplyScope(_dbContext.Teachers)
+            .Include(x => x.User)
+            .Where(x => x.User.IsActive)
+            .OrderBy(x => x.User.FirstName)
+            .Select(x =>
+                new TeacherLookupResponse
+                {
+                    Id = x.Id,
+
+                    DepartmentId = x.DepartmentId,
+
+                    Name =
+                        x.User.FirstName +
+                        " " +
+                        x.User.LastName
+                })
+            .ToListAsync();
+    }
+
+    private IQueryable<Teacher> ApplyScope(IQueryable<Teacher> query)
     {
         if (_scope.IsSuperAdmin() ||
             _scope.IsPlatformAdmin())

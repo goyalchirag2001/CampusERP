@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>Edit Teacher</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Campus</mat-label>
+
+      <mat-select formControlName="campusId">
+        @for (campus of campuses(); track campus.id) {
+          <mat-option [value]="campus.id">
+            {{ campus.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Department</mat-label>
+
+      <mat-select formControlName="departmentId">
+        @for (department of filteredDepartments(); track department.id) {
+          <mat-option [value]="department.id">
+            {{ department.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+
+        <input matInput formControlName="firstName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+
+        <input matInput formControlName="lastName" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+
+      <input matInput formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+
+      <input matInput formControlName="phoneNumber" />
+    </mat-form-field>
+
+    <div class="two-column">
+      <mat-form-field appearance="outline">
+        <mat-label>Employee Code</mat-label>
+
+        <input matInput formControlName="employeeCode" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Designation</mat-label>
+
+        <input matInput formControlName="designation" />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" (click)="save()">Save</button>
+</mat-dialog-actions>

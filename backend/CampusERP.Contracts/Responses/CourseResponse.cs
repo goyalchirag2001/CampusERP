@@ -20,5 +20,11 @@ public class CourseResponse
 
     public int TotalSemesters { get; set; }
 
+    public string DepartmentName { get; set; } = string.Empty;
+
+    public string CampusName { get; set; } = string.Empty;
+
     public bool IsActive { get; set; }
+
+    public List<SemesterLookupResponse> Semesters { get; set; } = [];
 }

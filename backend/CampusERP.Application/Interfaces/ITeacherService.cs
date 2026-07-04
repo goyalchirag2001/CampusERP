@@ -18,4 +18,6 @@ public interface ITeacherService
     Task DeactivateAsync(Guid id);
 
     Task<List<LookupResponse>> GetLookupAsync();
+
+    Task<List<TeacherLookupResponse>> GetLookupWithDepartmentAsync();
 }

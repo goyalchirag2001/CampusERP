@@ -13,13 +13,17 @@ public class Student : BaseEntity, ITenantEntity
 
     public Institution Institution { get; set; } = null!;
 
+    public Campus Campus { get; set; } = null!;
+
+    public User User { get; set; } = null!;
+
+    [Required]
+    [MaxLength(30)]
+    public string AdmissionNumber { get; set; } = string.Empty;
+
     [Required]
     [MaxLength(20)]
     public string RollNumber { get; set; } = string.Empty;
-
-    public Guid CourseId { get; set; }
-
-    public Guid DepartmentId { get; set; }
 
     [Required]
     [MaxLength(20)]
@@ -27,13 +31,7 @@ public class Student : BaseEntity, ITenantEntity
 
     public DateTime AdmissionDate { get; set; }
 
-    public User User { get; set; } = null!;
-
-    public Campus Campus { get; set; } = null!;
-
-    public Course Course { get; set; } = null!;
-
-    public Department Department { get; set; } = null!;
-
     public bool IsActive { get; set; } = true;
+
+    public ICollection<StudentEnrollment> Enrollments { get; set; } = new List<StudentEnrollment>();
 }

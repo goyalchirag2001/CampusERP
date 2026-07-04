@@ -8,6 +8,8 @@ public class SemesterSubjectResponse
 
     public Guid SubjectId { get; set; }
 
+    public int DisplayOrder { get; set; }
+
     public string SemesterName { get; set; } = string.Empty;
 
     public string SubjectCode { get; set; } = string.Empty;

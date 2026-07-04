@@ -244,4 +244,20 @@ public class DepartmentService: IDepartmentService
             }
         }
     }
+
+    public async Task<List<DepartmentLookupResponse>> GetLookupWithCampusAsync()
+    {
+        return await ApplyDepartmentScope(
+                _dbContext.Departments.Where(x => x.IsActive))
+            .OrderBy(x => x.Name)
+            .Select(x => new DepartmentLookupResponse
+            {
+                Id = x.Id,
+
+                CampusId = x.CampusId,
+
+                Name = x.Name
+            })
+            .ToListAsync();
+    }
 }

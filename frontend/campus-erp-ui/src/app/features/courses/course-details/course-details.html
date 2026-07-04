@@ -1,0 +1,89 @@
+@if (course(); as course) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ course.code.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ course.name }}
+          </h1>
+
+          <p>
+            {{ course.code }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!course.isActive">
+            {{ course.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="editCourse()">Edit Course</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ course.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Course Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Department</label>
+
+          <p>
+            {{ course.departmentName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Campus</label>
+
+          <p>
+            {{ course.campusName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Degree Type</label>
+
+          <p>
+            {{ course.degreeType }}
+          </p>
+        </div>
+
+        <div>
+          <label>Duration</label>
+
+          <p>{{ course.durationYears }} Years</p>
+        </div>
+
+        <div>
+          <label>Total Semesters</label>
+
+          <p>
+            {{ course.totalSemesters }}
+          </p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ course.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    @for (semester of course.semesters; track semester.id) {
+      <app-semester-card [semester]="semester" [subjects]="subjects()"> </app-semester-card>
+    }
+  </div>
+}

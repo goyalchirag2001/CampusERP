@@ -15,6 +15,8 @@ import { CurrentUserService } from '../../core/services/current-user';
 import { NavigationService } from '../../core/services/navigation';
 import { AuthService } from '../../core/services/auth';
 import { InstitutionBranding } from '../../core/models/institution-branding';
+import { UserMenuComponent } from '../../core/layout/user-menu/user-menu';
+import { UserContextService } from '../../core/services/user-context';
 
 @Component({
   selector: 'app-admin-layout',
@@ -26,6 +28,7 @@ import { InstitutionBranding } from '../../core/models/institution-branding';
     MatListModule,
     MatIconModule,
     MatButtonModule,
+    UserMenuComponent,
   ],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',
@@ -43,18 +46,18 @@ export class AdminLayout implements OnInit {
 
   private readonly institutionBrandingService = inject(InstitutionBrandingService);
 
+  private readonly userContext = inject(UserContextService);
+
   ngOnInit(): void {
     const slug = this.user()?.institutionSlug;
 
-    if (!slug) {
-      return;
+    if (slug) {
+      this.institutionBrandingService.getBySlug(slug).subscribe({
+        next: (branding) => this.branding.set(branding),
+      });
     }
 
-    this.institutionBrandingService.getBySlug(slug).subscribe({
-      next: (data) => {
-        this.branding.set(data);
-      },
-    });
+    this.userContext.refresh();
   }
 
   readonly user = this.currentUserService.user;

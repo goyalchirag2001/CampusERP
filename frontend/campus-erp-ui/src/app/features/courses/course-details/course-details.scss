@@ -1,0 +1,13 @@
+@import '../../../../styles/entity-details.scss';
+
+:host {
+  display: block;
+}
+
+.details-page {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+}

@@ -23,6 +23,11 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.Property(x => x.AdmissionDate)
             .IsRequired();
 
+
+        builder.Property(x => x.AdmissionNumber)
+            .HasMaxLength(30)
+            .IsRequired();
+
         builder.HasOne(x => x.Institution)
             .WithMany(x => x.Students)
             .HasForeignKey(x => x.InstitutionId)
@@ -38,14 +43,9 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasForeignKey<Student>(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.Course)
-            .WithMany(x => x.Students)
-            .HasForeignKey(x => x.CourseId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne(x => x.Department)
-            .WithMany(x => x.Students)
-            .HasForeignKey(x => x.DepartmentId)
+        builder.HasMany(x => x.Enrollments)
+            .WithOne(x => x.Student)
+            .HasForeignKey(x => x.StudentId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(x => new

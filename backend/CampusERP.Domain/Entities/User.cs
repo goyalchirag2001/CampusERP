@@ -40,4 +40,11 @@ public class User : BaseEntity, ITenantEntity
     public Student? Student { get; set; }
 
     public Teacher? Teacher { get; set; }
+
+    [MaxLength(500)]
+    public string? ProfilePhotoUrl { get; set; }
+
+    public DateTime? LastLoginAt { get; set; }
+
+    public DateTime? CurrentLoginAt { get; set; }
 }

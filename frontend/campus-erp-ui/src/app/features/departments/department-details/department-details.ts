@@ -1,17 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-
 import { ActivatedRoute } from '@angular/router';
-
 import { MatButtonModule } from '@angular/material/button';
-
 import { MatDialog } from '@angular/material/dialog';
-
 import { DepartmentService } from '../services/department';
-
 import { Department } from '../models/department';
-
 import { DepartmentEditDialog } from '../department-edit-dialog/department-edit-dialog';
-
 import { NotificationService } from '../../../core/services/notification';
 
 @Component({

@@ -1,27 +1,28 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { MatCardModule } from '@angular/material/card';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-
-import { StudentService } from '../../../core/services/student';
-import { StudentResponse } from '../../../core/models/student-response';
-import { StudentDrawer } from '../student-drawer/student-drawer';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CurrentUserService } from '../../../core/services/current-user';
+import { Student } from '../models/student';
+import { StudentService } from '../services/student';
+import { StudentCreateDialog } from '../student-create-dialog/student-create-dialog';
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
-    MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatInputModule,
-    StudentDrawer,
+    MatTableModule,
+    MatPaginatorModule,
+    MatDialogModule,
   ],
   templateUrl: './student-list.html',
   styleUrl: './student-list.scss',
@@ -29,51 +30,73 @@ import { StudentDrawer } from '../student-drawer/student-drawer';
 export class StudentList implements OnInit {
   private readonly studentService = inject(StudentService);
 
-  students: StudentResponse[] = [];
+  private readonly router = inject(Router);
 
-  filteredStudents: StudentResponse[] = [];
+  private readonly dialog = inject(MatDialog);
 
-  searchText = '';
+  private readonly currentUserService = inject(CurrentUserService);
 
-  ngOnInit(): void {
-    this.loadStudents();
+  readonly students = signal<Student[]>([]);
+
+  readonly search = signal('');
+
+  readonly pageSize = signal(10);
+
+  readonly pageIndex = signal(0);
+
+  displayedColumns = ['name', 'rollNumber', 'course', 'status', 'actions'];
+
+  private get baseRoute(): string {
+    const slug = this.currentUserService.user()?.institutionSlug;
+
+    return slug ? `/${slug}` : '/platform';
   }
 
-  loadStudents(): void {
-    this.studentService.getAll().subscribe({
-      next: (students) => {
-        this.students = students;
+  readonly filteredStudents = computed(() =>
+    this.students().filter(
+      (x) =>
+        `${x.firstName} ${x.lastName}`.toLowerCase().includes(this.search().toLowerCase()) ||
+        x.rollNumber.toLowerCase().includes(this.search().toLowerCase()),
+    ),
+  );
 
-        this.filteredStudents = students;
-      },
+  readonly pagedStudents = computed(() => {
+    const start = this.pageIndex() * this.pageSize();
+
+    return this.filteredStudents().slice(start, start + this.pageSize());
+  });
+
+  ngOnInit(): void {
+    this.load();
+  }
+
+  load(): void {
+    this.studentService.getAll().subscribe((data) => {
+      this.students.set(data);
     });
   }
 
-  onSearch(): void {
-    const search = this.searchText.toLowerCase();
-
-    this.filteredStudents = this.students.filter(
-      (x) =>
-        x.firstName.toLowerCase().includes(search) ||
-        x.lastName.toLowerCase().includes(search) ||
-        x.email.toLowerCase().includes(search) ||
-        x.rollNumber.toLowerCase().includes(search),
-    );
+  createStudent(): void {
+    this.dialog
+      .open(StudentCreateDialog, {
+        width: '800px',
+        maxWidth: '95vw',
+      })
+      .afterClosed()
+      .subscribe((created) => {
+        if (created) {
+          this.load();
+        }
+      });
   }
 
-  isDrawerOpen = false;
-
-  openDrawer(): void {
-    this.isDrawerOpen = true;
+  openStudent(id: string): void {
+    this.router.navigate([this.baseRoute, 'students', id]);
   }
 
-  closeDrawer(): void {
-    this.isDrawerOpen = false;
-  }
+  onPageChange(event: PageEvent): void {
+    this.pageIndex.set(event.pageIndex);
 
-  onStudentSaved(): void {
-    this.loadStudents();
-
-    this.closeDrawer();
+    this.pageSize.set(event.pageSize);
   }
 }
