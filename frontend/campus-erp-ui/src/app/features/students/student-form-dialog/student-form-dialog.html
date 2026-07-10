@@ -1,0 +1,207 @@
+<h2 mat-dialog-title>
+  {{ isEdit() ? 'Edit Student' : 'Create Student' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-accordion multi>
+      <!-- ===================================================== -->
+      <!-- Academic Information -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Academic Information </mat-panel-title>
+
+          <mat-panel-description> Campus, Course & Enrollment </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          @if (!isCampusAdmin()) {
+            <mat-form-field appearance="outline">
+              <mat-label>Campus</mat-label>
+
+              <mat-select formControlName="campusId">
+                @for (campus of campuses(); track campus.id) {
+                  <mat-option [value]="campus.id">
+                    {{ campus.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+
+            <mat-select formControlName="departmentId">
+              @for (department of filteredDepartments(); track department.id) {
+                <mat-option [value]="department.id">
+                  {{ department.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Course</mat-label>
+
+            <mat-select formControlName="courseId">
+              @for (course of filteredCourses(); track course.id) {
+                <mat-option [value]="course.id">
+                  {{ course.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Semester</mat-label>
+
+            <mat-select formControlName="semesterId">
+              @for (semester of semesters(); track semester.id) {
+                <mat-option [value]="semester.id">
+                  {{ semester.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Section</mat-label>
+
+            <mat-select formControlName="sectionId">
+              @for (section of sections(); track section.id) {
+                <mat-option [value]="section.id">
+                  {{ section.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Session</mat-label>
+
+            <mat-select formControlName="academicSessionId">
+              @for (session of academicSessions(); track session.id) {
+                <mat-option [value]="session.id">
+                  {{ session.name }}
+
+                  @if (session.isCurrent) {
+                    (Current)
+                  }
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Enrollment Status</mat-label>
+
+            <mat-select formControlName="enrollmentStatus">
+              <mat-option [value]="1">Active</mat-option>
+
+              <mat-option [value]="2">Detained</mat-option>
+
+              <mat-option [value]="3">Completed</mat-option>
+
+              <mat-option [value]="4">Withdrawn</mat-option>
+
+              <mat-option [value]="5">Graduated</mat-option>
+
+              <mat-option [value]="6">Cancelled</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ===================================================== -->
+      <!-- Admission Information -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Admission Information </mat-panel-title>
+
+          <mat-panel-description> Admission & Batch Details </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Admission Number</mat-label>
+
+            <input matInput formControlName="admissionNumber" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Roll Number</mat-label>
+
+            <input matInput formControlName="rollNumber" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Admission Date</mat-label>
+
+            <input matInput readonly [matDatepicker]="picker" formControlName="admissionDate" />
+
+            <mat-datepicker-toggle matSuffix [for]="picker"> </mat-datepicker-toggle>
+
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Batch</mat-label>
+
+            <input matInput readonly formControlName="batch" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ===================================================== -->
+      <!-- Personal Information -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Personal Information </mat-panel-title>
+
+          <mat-panel-description> Student Contact Details </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+
+            <input matInput formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+
+            <input matInput formControlName="phoneNumber" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+    {{ isEdit() ? 'Save Changes' : 'Create Student' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,107 @@
+<h2 mat-dialog-title>
+  {{ isEdit() ? 'Edit Section' : 'Create Section' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-accordion multi>
+      <!-- ========================================================= -->
+      <!-- Academic Information -->
+      <!-- ========================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Academic Information </mat-panel-title>
+
+          <mat-panel-description> Campus, Department & Course </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          @if (!isCampusAdmin()) {
+            <mat-form-field appearance="outline">
+              <mat-label>Campus</mat-label>
+
+              <mat-select formControlName="campusId">
+                @for (campus of campuses(); track campus.id) {
+                  <mat-option [value]="campus.id">
+                    {{ campus.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+
+            <mat-select formControlName="departmentId">
+              @for (department of filteredDepartments(); track department.id) {
+                <mat-option [value]="department.id">
+                  {{ department.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Course</mat-label>
+
+            <mat-select formControlName="courseId">
+              @for (course of filteredCourses(); track course.id) {
+                <mat-option [value]="course.id">
+                  {{ course.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Semester</mat-label>
+
+            <mat-select formControlName="semesterId">
+              @for (semester of semesters(); track semester.id) {
+                <mat-option [value]="semester.id">
+                  {{ semester.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ========================================================= -->
+      <!-- Section Information -->
+      <!-- ========================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Section Information </mat-panel-title>
+
+          <mat-panel-description> Section Details </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Section Name</mat-label>
+
+            <input matInput maxlength="20" formControlName="name" placeholder="A" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Capacity</mat-label>
+
+            <input matInput type="number" formControlName="capacity" placeholder="60" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+    {{ isEdit() ? 'Save Changes' : 'Create Section' }}
+  </button>
+</mat-dialog-actions>

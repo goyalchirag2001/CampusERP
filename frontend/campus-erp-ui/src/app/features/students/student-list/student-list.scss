@@ -1,1 +1,102 @@
 @import '../../campuses/campus-list/campus-list.scss';
+
+.student-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.student-name {
+  font-weight: 600;
+}
+
+.student-email {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 72px;
+  padding: 4px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  color: #2e7d32;
+  background: rgba(46, 125, 50, 0.12);
+
+  &.inactive {
+    color: #c62828;
+    background: rgba(198, 40, 40, 0.12);
+  }
+}
+
+.header-actions {
+  display: flex;
+
+  gap: 12px;
+
+  align-items: center;
+}
+
+.import-btn {
+  height: 48px;
+
+  border-radius: 14px;
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .header-actions button {
+    width: 100%;
+  }
+}
+
+.sortable {
+  cursor: pointer;
+
+  user-select: none;
+
+  transition: background-color .2s;
+}
+
+.sortable:hover {
+  background: rgba(79, 70, 229, .06);
+}
+
+.header-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.sort-icon {
+  width: 18px;
+
+  height: 18px;
+
+  font-size: 18px;
+
+  color: var(--muted);
+
+  transition: .2s;
+}
+
+.sortable:hover .sort-icon {
+  color: var(--primary);
+}

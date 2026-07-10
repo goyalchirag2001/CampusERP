@@ -30,6 +30,10 @@ import { StudentDetails } from './features/students/student-details/student-deta
 import { ProfileComponent } from './features/profile/profile/profile';
 import { ForbiddenComponent } from './shared/pages/forbidden/forbidden';
 import { NotFoundComponent } from './shared/pages/not-found/not-found';
+import { AcademicSessionList } from './features/academic-sessions/academic-session-list/academic-session-list';
+import { AcademicSessionDetails } from './features/academic-sessions/academic-session-details/academic-session-details';
+import { SectionList } from './features/sections/section-list/section-list';
+import { SectionDetails } from './features/sections/section-details/section-details';
 
 export const routes: Routes = [
   {
@@ -242,6 +246,30 @@ export const routes: Routes = [
         path: 'courses/:id',
         component: CourseDetails,
         canActivate: [permissionGuard(Permissions.CourseView)],
+      },
+
+      {
+        path: 'academic-sessions',
+        component: AcademicSessionList,
+        canActivate: [permissionGuard(Permissions.AcademicSessionView)],
+      },
+
+      {
+        path: 'academic-sessions/:id',
+        component: AcademicSessionDetails,
+        canActivate: [permissionGuard(Permissions.AcademicSessionView)],
+      },
+
+      {
+        path: 'sections',
+        component: SectionList,
+        canActivate: [permissionGuard(Permissions.SectionView)],
+      },
+
+      {
+        path: 'sections/:id',
+        component: SectionDetails,
+        canActivate: [permissionGuard(Permissions.SectionView)],
       },
 
       {

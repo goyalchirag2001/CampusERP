@@ -77,6 +77,22 @@ export class NavigationService {
       },
 
       {
+        label: 'Academic Sessions',
+        icon: 'calendar_month',
+        route: slug ? `/${slug}/academic-sessions` : '/platform/academic-sessions',
+        permission: Permissions.AcademicSessionView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
+        label: 'Sections',
+        icon: 'view_module',
+        route: slug ? `/${slug}/sections` : '/platform/sections',
+        permission: Permissions.SectionView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
         label: 'Subjects',
         icon: 'library_books',
         route: slug ? `/${slug}/subjects` : '/platform/subjects',

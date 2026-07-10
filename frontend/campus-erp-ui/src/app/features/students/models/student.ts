@@ -15,6 +15,8 @@ export interface Student {
 
   sectionId: string;
 
+  academicSessionId: string;
+
   admissionNumber: string;
 
   rollNumber: string;
@@ -48,6 +50,8 @@ export interface Student {
   enrollmentStatus: number;
 
   enrollmentStatusName: string;
+
+  promotionStatus: number;
 
   temporaryPassword: string;
 }

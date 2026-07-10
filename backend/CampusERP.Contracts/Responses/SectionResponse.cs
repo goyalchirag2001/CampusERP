@@ -4,6 +4,10 @@
 
     public Guid SemesterId { get; set; }
 
+    public Guid CampusId { get; set; }
+
+    public string CampusName { get; set; } = string.Empty;
+
     public Guid CourseId { get; set; }
 
     public Guid DepartmentId { get; set; }

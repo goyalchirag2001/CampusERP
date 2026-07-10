@@ -50,6 +50,12 @@ public class AcademicSessionController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("lookup/campus/{campusId:guid}")]
+    public async Task<IActionResult> LookupByCampus(Guid campusId)
+    {
+        return Ok(await _academicSessionService.GetLookupByCampusAsync(campusId));
+    }
+
     [Authorize(Policy = PermissionConstants.AcademicSessionView)]
     [HttpGet("current")]
     public async Task<IActionResult> Current()

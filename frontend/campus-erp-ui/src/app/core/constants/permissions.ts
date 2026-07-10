@@ -59,4 +59,16 @@ export const Permissions = {
   TeacherAssignmentCreate: 'TeacherAssignment.Create',
   TeacherAssignmentEdit: 'TeacherAssignment.Edit',
   TeacherAssignmentDeactivate: 'TeacherAssignment.Deactivate',
+
+  SectionView: 'Section.View',
+  SectionCreate: 'Section.Create',
+  SectionEdit: 'Section.Edit',
+  SectionActivate: 'Section.Activate',
+  SectionDeactivate: 'Section.Deactivate',
+
+  AcademicSessionView: 'Academic-Session.View',
+  AcademicSessionCreate: 'Academic-Session.Create',
+  AcademicSessionEdit: 'Academic-Session.Edit',
+  AcademicSessionActivate: 'Academic-Session.Activate',
+  AcademicSessionDeactivate: 'Academic-Session.Deactivate',
 } as const;

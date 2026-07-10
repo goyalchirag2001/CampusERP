@@ -1,0 +1,33 @@
+@import '../../campuses/campus-list/campus-list.scss';
+
+.current-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  background: rgba(34, 197, 94, 0.15);
+
+  color: #16a34a;
+}
+
+.current-badge::before {
+  content: '✔';
+}
+
+td .mat-mdc-icon-button {
+  margin-right: 4px;
+}
+
+td .mat-mdc-icon-button:last-child {
+  margin-right: 0;
+}

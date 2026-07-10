@@ -10,7 +10,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CurrentUserService } from '../../../core/services/current-user';
 import { Student } from '../models/student';
 import { StudentService } from '../services/student';
-import { StudentCreateDialog } from '../student-create-dialog/student-create-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { StudentFormDialog } from '../student-form-dialog/student-form-dialog';
+import { StudentImportDialog } from '../student-import-dialog/student-import-dialog';
 
 @Component({
   selector: 'app-student-list',
@@ -23,6 +25,7 @@ import { StudentCreateDialog } from '../student-create-dialog/student-create-dia
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule,
   ],
   templateUrl: './student-list.html',
   styleUrl: './student-list.scss',
@@ -44,7 +47,20 @@ export class StudentList implements OnInit {
 
   readonly pageIndex = signal(0);
 
-  displayedColumns = ['name', 'rollNumber', 'course', 'status', 'actions'];
+  readonly sortColumn = signal<string>('rollNumber');
+
+  readonly sortDirection = signal<'asc' | 'desc'>('asc');
+
+  displayedColumns = [
+    'name',
+    'admissionNumber',
+    'rollNumber',
+    'course',
+    'semester',
+    'section',
+    'status',
+    'actions',
+  ];
 
   private get baseRoute(): string {
     const slug = this.currentUserService.user()?.institutionSlug;
@@ -52,20 +68,87 @@ export class StudentList implements OnInit {
     return slug ? `/${slug}` : '/platform';
   }
 
-  readonly filteredStudents = computed(() =>
-    this.students().filter(
-      (x) =>
-        `${x.firstName} ${x.lastName}`.toLowerCase().includes(this.search().toLowerCase()) ||
-        x.rollNumber.toLowerCase().includes(this.search().toLowerCase()),
-    ),
-  );
+  readonly filteredStudents = computed(() => {
+    const search = this.search().trim().toLowerCase();
 
-  readonly pagedStudents = computed(() => {
-    const start = this.pageIndex() * this.pageSize();
+    if (!search) {
+      return this.students();
+    }
 
-    return this.filteredStudents().slice(start, start + this.pageSize());
+    return this.students().filter((student) =>
+      [
+        student.firstName,
+        student.lastName,
+        student.email,
+        student.admissionNumber,
+        student.rollNumber,
+        student.courseName,
+        student.departmentName,
+        student.semesterName,
+        student.sectionName,
+      ]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(search)),
+    );
   });
 
+  readonly pagedStudents = computed(() => {
+    const students = [...this.filteredStudents()];
+
+    const direction = this.sortDirection() === 'asc' ? 1 : -1;
+
+    students.sort((a, b) => {
+      switch (this.sortColumn()) {
+        case 'name': {
+          const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
+
+          const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
+
+          return nameA.localeCompare(nameB) * direction;
+        }
+
+        case 'admissionNumber':
+          return (
+            a.admissionNumber.localeCompare(b.admissionNumber, undefined, {
+              numeric: true,
+              sensitivity: 'base',
+            }) * direction
+          );
+
+        case 'rollNumber':
+          return (
+            a.rollNumber.localeCompare(b.rollNumber, undefined, {
+              numeric: true,
+              sensitivity: 'base',
+            }) * direction
+          );
+
+        case 'course':
+          return a.courseName.localeCompare(b.courseName) * direction;
+
+        case 'semester':
+          return (
+            a.semesterName.localeCompare(b.semesterName, undefined, {
+              numeric: true,
+            }) * direction
+          );
+
+        case 'section':
+          return a.sectionName.localeCompare(b.sectionName) * direction;
+
+        case 'status':
+          return (Number(a.isActive) - Number(b.isActive)) * direction;
+
+        default:
+          return 0;
+      }
+    });
+
+    const start = this.pageIndex() * this.pageSize();
+
+    return students.slice(start, start + this.pageSize());
+  });
+  
   ngOnInit(): void {
     this.load();
   }
@@ -78,13 +161,31 @@ export class StudentList implements OnInit {
 
   createStudent(): void {
     this.dialog
-      .open(StudentCreateDialog, {
-        width: '800px',
+      .open(StudentFormDialog, {
+        width: '950px',
         maxWidth: '95vw',
+        data: {
+          mode: 'create',
+        },
       })
       .afterClosed()
-      .subscribe((created) => {
-        if (created) {
+      .subscribe((saved) => {
+        if (saved) {
+          this.load();
+        }
+      });
+  }
+
+  importStudents(): void {
+    this.dialog
+      .open(StudentImportDialog, {
+        width: '1200px',
+        maxWidth: '95vw',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((imported) => {
+        if (imported) {
           this.load();
         }
       });
@@ -98,5 +199,15 @@ export class StudentList implements OnInit {
     this.pageIndex.set(event.pageIndex);
 
     this.pageSize.set(event.pageSize);
+  }
+
+  sort(column: string): void {
+    if (this.sortColumn() === column) {
+      this.sortDirection.set(this.sortDirection() === 'asc' ? 'desc' : 'asc');
+    } else {
+      this.sortColumn.set(column);
+
+      this.sortDirection.set('asc');
+    }
   }
 }

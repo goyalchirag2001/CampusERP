@@ -11,6 +11,7 @@ import { TeacherService } from '../services/teacher';
 import { Teacher } from '../models/teacher';
 import { TeacherCreateDialog } from '../teacher-create-dialog/teacher-create-dialog';
 import { CurrentUserService } from '../../../core/services/current-user';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-teacher-list',
@@ -23,6 +24,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule
   ],
   templateUrl: './teacher-list.html',
   styleUrl: './teacher-list.scss',

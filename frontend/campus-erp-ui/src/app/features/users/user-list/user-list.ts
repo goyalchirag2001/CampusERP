@@ -10,6 +10,7 @@ import { UserService } from '../services/user';
 import { User } from '../../../core/models/user';
 import { CurrentUserService } from '../../../core/services/current-user';
 import { NotificationService } from '../../../core/services/notification';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user-list',
@@ -21,6 +22,7 @@ import { NotificationService } from '../../../core/services/notification';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltipModule,
   ],
   templateUrl: './user-list.html',
   styleUrl: './user-list.scss',

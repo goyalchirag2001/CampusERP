@@ -1,20 +1,15 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-
 import { Router } from '@angular/router';
-
 import { FormsModule } from '@angular/forms';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-
 import { CurrentUserService } from '../../../core/services/current-user';
-
 import { CampusService } from '../services/campus';
-
 import { Campus } from '../models/campus';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-campus-list',
@@ -26,6 +21,7 @@ import { Campus } from '../models/campus';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltipModule
   ],
   templateUrl: './campus-list.html',
   styleUrl: './campus-list.scss',

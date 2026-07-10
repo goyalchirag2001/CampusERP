@@ -1,24 +1,15 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-
 import { Router } from '@angular/router';
-
 import { FormsModule } from '@angular/forms';
-
 import { MatButtonModule } from '@angular/material/button';
-
 import { MatIconModule } from '@angular/material/icon';
-
 import { MatInputModule } from '@angular/material/input';
-
 import { MatTableModule } from '@angular/material/table';
-
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-
 import { RoleService } from '../services/role';
-
 import { Role } from '../../../core/models/role';
-
 import { CurrentUserService } from '../../../core/services/current-user';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-role-list',
@@ -30,6 +21,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltipModule
   ],
   templateUrl: './role-list.html',
   styleUrl: './role-list.scss',

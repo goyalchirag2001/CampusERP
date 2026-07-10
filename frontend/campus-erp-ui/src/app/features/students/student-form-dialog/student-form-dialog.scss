@@ -1,0 +1,214 @@
+:host {
+  display: block;
+}
+
+h2[mat-dialog-title] {
+  margin: 0;
+  padding: 24px 28px 12px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--card-text);
+}
+
+mat-dialog-content {
+  width: 900px;
+  max-width: 95vw;
+  max-height: 80vh;
+
+  padding: 0 24px 12px;
+
+  overflow: auto;
+}
+
+mat-dialog-actions {
+  padding: 20px 24px 24px;
+
+  border-top: 1px solid var(--glass-border);
+
+  background: var(--card-bg);
+
+  position: sticky;
+  bottom: 0;
+}
+
+mat-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ======================================================= */
+/* Expansion Panels */
+/* ======================================================= */
+
+mat-expansion-panel {
+  border-radius: 22px !important;
+
+  overflow: hidden;
+
+  background: var(--surface) !important;
+
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-premium);
+
+  transition: all 0.25s ease;
+}
+
+mat-expansion-panel:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+}
+
+mat-expansion-panel-header {
+  height: 72px !important;
+
+  padding: 0 24px;
+
+  transition: background 0.25s ease;
+}
+
+body[data-theme='light'] mat-expansion-panel-header {
+  background: rgba(79, 70, 229, 0.05);
+}
+
+body[data-theme='dark'] mat-expansion-panel-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+mat-expansion-panel-header.mat-expanded {
+  background: rgba(79, 70, 229, 0.12);
+}
+
+.mat-expansion-panel-header-title {
+  font-size: 17px;
+
+  font-weight: 600;
+
+  color: var(--card-text);
+}
+
+.mat-expansion-panel-header-description {
+  color: var(--muted);
+
+  justify-content: flex-end;
+
+  font-size: 13px;
+}
+
+.mat-expansion-panel-body {
+  padding-top: 24px !important;
+}
+
+/* ======================================================= */
+/* Form */
+/* ======================================================= */
+
+.dialog-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Make some fields full width if needed later */
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ======================================================= */
+/* Material */
+/* ======================================================= */
+
+.mat-mdc-form-field-subscript-wrapper {
+  min-height: 18px;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: 16px !important;
+}
+
+/* ======================================================= */
+/* Buttons */
+/* ======================================================= */
+
+mat-dialog-actions button {
+  min-width: 130px;
+
+  height: 46px;
+
+  border-radius: 12px;
+
+  font-weight: 600;
+}
+
+/* ======================================================= */
+/* Scrollbar */
+/* ======================================================= */
+
+mat-dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+mat-dialog-content::-webkit-scrollbar-thumb {
+  background: rgba(100, 100, 100, 0.35);
+
+  border-radius: 999px;
+}
+
+body[data-theme='dark'] mat-dialog-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ======================================================= */
+/* Responsive */
+/* ======================================================= */
+
+@media (max-width: 900px) {
+  mat-dialog-content {
+    width: auto;
+  }
+
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+
+  mat-expansion-panel-header {
+    height: auto !important;
+
+    padding: 18px 20px;
+  }
+
+  .mat-expansion-panel-header-description {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  h2[mat-dialog-title] {
+    font-size: 22px;
+
+    padding: 20px 20px 8px;
+  }
+
+  mat-dialog-content {
+    padding: 0 16px 8px;
+  }
+
+  mat-dialog-actions {
+    padding: 16px;
+  }
+
+  mat-dialog-actions button {
+    flex: 1;
+  }
+}

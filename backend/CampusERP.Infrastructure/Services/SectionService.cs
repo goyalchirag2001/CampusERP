@@ -32,6 +32,10 @@ public class SectionService : ISectionService
 
                 SemesterId = x.SemesterId,
 
+                CampusId = x.CampusId,
+
+                CampusName = x.Campus.Name,
+
                 CourseId = x.CourseId,
 
                 DepartmentId = x.DepartmentId,
@@ -59,6 +63,10 @@ public class SectionService : ISectionService
                 Id = x.Id,
 
                 SemesterId = x.SemesterId,
+                
+                CampusId = x.CampusId,
+
+                CampusName = x.Campus.Name,
 
                 CourseId = x.CourseId,
 

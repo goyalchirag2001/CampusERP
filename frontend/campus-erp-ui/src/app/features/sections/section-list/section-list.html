@@ -1,0 +1,146 @@
+<div class="campus-page">
+  <div class="page-header">
+    <div>
+      <h1>Sections</h1>
+
+      <p>Manage sections</p>
+    </div>
+
+    <button mat-flat-button class="create-btn" (click)="create()">
+      <mat-icon>add</mat-icon>
+
+      Add Section
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+
+      <input
+        placeholder="Search sections..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+      />
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table mat-table [dataSource]="pagedSections()">
+      <!-- ========================================================= -->
+      <!-- Section -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Section</th>
+
+        <td mat-cell *matCellDef="let section">
+          {{ section.name }}
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Semester -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="semester">
+        <th mat-header-cell *matHeaderCellDef>Semester</th>
+
+        <td mat-cell *matCellDef="let section">
+          {{ section.semesterName }}
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Course -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="course">
+        <th mat-header-cell *matHeaderCellDef>Course</th>
+
+        <td mat-cell *matCellDef="let section">
+          {{ section.courseName }}
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Department -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="department">
+        <th mat-header-cell *matHeaderCellDef>Department</th>
+
+        <td mat-cell *matCellDef="let section">
+          {{ section.departmentName }}
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Capacity -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="capacity">
+        <th mat-header-cell *matHeaderCellDef>Capacity</th>
+
+        <td mat-cell *matCellDef="let section">
+          {{ section.capacity }}
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Status -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+
+        <td mat-cell *matCellDef="let section">
+          <span class="status-badge" [class.inactive]="!section.isActive">
+            {{ section.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- ========================================================= -->
+      <!-- Actions -->
+      <!-- ========================================================= -->
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+        <td mat-cell *matCellDef="let section">
+          <button mat-icon-button color="primary" matTooltip="View" (click)="open(section.id)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+
+          <button mat-icon-button color="primary" matTooltip="Edit" (click)="edit(section)">
+            <mat-icon>edit</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            [color]="section.isActive ? 'warn' : 'primary'"
+            [matTooltip]="section.isActive ? 'Deactivate' : 'Activate'"
+            (click)="toggleStatus(section)"
+          >
+            <mat-icon>
+              {{ section.isActive ? 'block' : 'check_circle' }}
+            </mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="filteredSections().length"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      (page)="onPageChange($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>

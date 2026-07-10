@@ -11,6 +11,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
 import { CourseService } from '../services/course';
 import { Course } from '../models/course';
 import { CourseCreateDialog } from '../course-create-dialog/course-create-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-course-list',
@@ -23,6 +24,7 @@ import { CourseCreateDialog } from '../course-create-dialog/course-create-dialog
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule
   ],
   templateUrl: './course-list.html',
   styleUrl: './course-list.scss',

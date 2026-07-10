@@ -121,8 +121,7 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            throw new UnauthorizedException("Invalid email or password."
-            );
+            throw new UnauthorizedException("Invalid email or password.");
         }
 
         var isValid = _passwordService.VerifyPassword(
@@ -197,7 +196,82 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        throw new NotImplementedException();
+        var refreshToken = await _dbContext.RefreshTokens
+            .Include(x => x.User)
+                .ThenInclude(x => x!.Institution)
+            .Include(x => x.User)
+                .ThenInclude(x => x!.UserRoles)
+                    .ThenInclude(x => x.Role)
+            .FirstOrDefaultAsync(x =>
+                x.Token == request.RefreshToken);
+
+        if (refreshToken is null)
+        {
+            throw new UnauthorizedException("Invalid refresh token.");
+        }
+
+        if (refreshToken.RevokedAt != null)
+        {
+            throw new UnauthorizedException("Refresh token has been revoked.");
+        }
+
+        if (refreshToken.ExpiresAt <= DateTime.UtcNow)
+        {
+            throw new UnauthorizedException("Refresh token has expired.");
+        }
+
+        var user = refreshToken.User!;
+
+        string? institutionSlug = null;
+
+        if (user.InstitutionId != SeedData.PlatformInstitutionId)
+        {
+            institutionSlug = user.Institution.LoginSlug;
+        }
+
+        var roles = user.UserRoles
+            .Select(x => x.Role.Name)
+            .ToList();
+
+        var accessToken = _jwtService.GenerateAccessToken(user, roles, institutionSlug);
+
+        var newRefreshTokenValue = _jwtService.GenerateRefreshToken();
+
+        refreshToken.RevokedAt = DateTime.UtcNow;
+
+        var newRefreshToken = new RefreshToken
+        {
+            Id = Guid.NewGuid(),
+
+            UserId = user.Id,
+
+            Token = newRefreshTokenValue,
+
+            ExpiresAt = DateTime.UtcNow.AddDays(30)
+        };
+
+        _dbContext.RefreshTokens.Add(newRefreshToken);
+
+        await _dbContext.SaveChangesAsync();
+
+        return new LoginResponse
+        {
+            UserId = user.Id,
+
+            FirstName = user.FirstName,
+
+            LastName = user.LastName,
+
+            Email = user.Email,
+
+            InstitutionSlug = institutionSlug,
+
+            AccessToken = accessToken,
+
+            RefreshToken = newRefreshTokenValue,
+
+            ExpiresAt = DateTime.UtcNow.AddHours(1)
+        };
     }
 
     public async Task<CurrentUserResponse> GetCurrentUserAsync()

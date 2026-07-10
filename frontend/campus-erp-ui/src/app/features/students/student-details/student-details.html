@@ -12,9 +12,7 @@
             {{ student.lastName }}
           </h1>
 
-          <p>
-            {{ student.rollNumber }}
-          </p>
+          <p>{{ student.rollNumber }}</p>
 
           <span class="status-chip" [class.inactive]="!student.isActive">
             {{ student.isActive ? 'Active' : 'Inactive' }}
@@ -31,24 +29,62 @@
       </div>
     </div>
 
+    <!-- Personal Information -->
+
     <div class="info-card">
-      <h2>Student Information</h2>
+      <h2>Personal Information</h2>
 
       <div class="info-grid">
         <div>
-          <label>Roll Number</label>
+          <label>First Name</label>
 
-          <p>
-            {{ student.rollNumber }}
-          </p>
+          <p>{{ student.firstName }}</p>
         </div>
 
         <div>
-          <label>Batch</label>
+          <label>Last Name</label>
+
+          <p>{{ student.lastName }}</p>
+        </div>
+
+        <div>
+          <label>Email</label>
+
+          <p>{{ student.email }}</p>
+        </div>
+
+        <div>
+          <label>Phone Number</label>
+
+          <p>{{ student.phoneNumber || '-' }}</p>
+        </div>
+
+        <div>
+          <label>Status</label>
 
           <p>
-            {{ student.batch }}
+            {{ student.isActive ? 'Active' : 'Inactive' }}
           </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admission -->
+
+    <div class="info-card">
+      <h2>Admission Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Admission Number</label>
+
+          <p>{{ student.admissionNumber }}</p>
+        </div>
+
+        <div>
+          <label>Roll Number</label>
+
+          <p>{{ student.rollNumber }}</p>
         </div>
 
         <div>
@@ -60,51 +96,59 @@
         </div>
 
         <div>
-          <label>Email</label>
+          <label>Batch</label>
 
-          <p>
-            {{ student.email }}
-          </p>
+          <p>{{ student.batch }}</p>
         </div>
+      </div>
+    </div>
 
-        <div>
-          <label>Phone Number</label>
+    <!-- Current Enrollment -->
 
-          <p>
-            {{ student.phoneNumber || '-' }}
-          </p>
-        </div>
+    <div class="info-card">
+      <h2>Current Enrollment</h2>
 
+      <div class="info-grid">
         <div>
           <label>Campus</label>
 
-          <p>
-            {{ student.campusName }}
-          </p>
+          <p>{{ student.campusName }}</p>
         </div>
 
         <div>
           <label>Department</label>
 
-          <p>
-            {{ student.departmentName }}
-          </p>
+          <p>{{ student.departmentName }}</p>
         </div>
 
         <div>
           <label>Course</label>
 
-          <p>
-            {{ student.courseName }}
-          </p>
+          <p>{{ student.courseName }}</p>
         </div>
 
         <div>
-          <label>Status</label>
+          <label>Academic Session</label>
 
-          <p>
-            {{ student.isActive ? 'Active' : 'Inactive' }}
-          </p>
+          <p>{{ student.academicSessionName }}</p>
+        </div>
+
+        <div>
+          <label>Semester</label>
+
+          <p>{{ student.semesterName }}</p>
+        </div>
+
+        <div>
+          <label>Section</label>
+
+          <p>{{ student.sectionName }}</p>
+        </div>
+
+        <div>
+          <label>Enrollment Status</label>
+
+          <p>{{ student.enrollmentStatusName }}</p>
         </div>
       </div>
     </div>

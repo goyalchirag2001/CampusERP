@@ -4,9 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { StudentService } from '../services/student';
 import { Student } from '../models/student';
-import { StudentEditDialog } from '../student-edit-dialog/student-edit-dialog';
 import { NotificationService } from '../../../core/services/notification';
 import { DatePipe } from '@angular/common';
+import { StudentFormDialog } from '../student-form-dialog/student-form-dialog';
 
 @Component({
   selector: 'app-student-details',
@@ -45,18 +45,14 @@ export class StudentDetails implements OnInit {
       return;
     }
 
-    this.dialog
-      .open(StudentEditDialog, {
-        width: '700px',
-        maxWidth: '95vw',
-        data: student,
-      })
-      .afterClosed()
-      .subscribe((updated) => {
-        if (updated) {
-          this.student.set(updated);
-        }
-      });
+    this.dialog.open(StudentFormDialog, {
+      width: '900px',
+      maxWidth: '95vw',
+      data: {
+        mode: 'edit',
+        student,
+      },
+    });
   }
 
   toggleStatus(): void {

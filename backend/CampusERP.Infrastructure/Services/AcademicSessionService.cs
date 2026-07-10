@@ -140,6 +140,23 @@ public class AcademicSessionService : IAcademicSessionService
             .ToListAsync();
     }
 
+    public async Task<List<AcademicSessionLookup>> GetLookupByCampusAsync(Guid campusId)
+    {
+        return await ApplyScope(_dbContext.AcademicSessions
+            .Where(x =>
+                x.IsActive &&
+                x.CampusId == campusId))
+            .OrderByDescending(x => x.IsCurrent)
+            .ThenByDescending(x => x.StartDate)
+            .Select(x => new AcademicSessionLookup
+            {
+                Id = x.Id,
+                Name = x.Name,
+                IsCurrent = x.IsCurrent
+            })
+            .ToListAsync();
+    }
+
     public async Task<AcademicSessionLookup?> GetCurrentAsync()
     {
         return await ApplyScope(_dbContext.AcademicSessions

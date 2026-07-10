@@ -12,6 +12,7 @@ import { Department } from '../models/department';
 import { DepartmentCreateDialog } from '../department-create/department-create-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-department-list',
@@ -24,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule
   ],
   templateUrl: './department-list.html',
   styleUrl: './department-list.scss',

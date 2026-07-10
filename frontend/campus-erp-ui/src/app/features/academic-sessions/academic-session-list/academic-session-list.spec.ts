@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudentCreateDialog } from './student-create-dialog';
+import { AcademicSessionList } from './academic-session-list';
 
-describe('StudentCreateDialog', () => {
-  let component: StudentCreateDialog;
-  let fixture: ComponentFixture<StudentCreateDialog>;
+describe('AcademicSessionList', () => {
+  let component: AcademicSessionList;
+  let fixture: ComponentFixture<AcademicSessionList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StudentCreateDialog],
+      imports: [AcademicSessionList],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(StudentCreateDialog);
+    fixture = TestBed.createComponent(AcademicSessionList);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -1,0 +1,69 @@
+@if (section(); as section) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ section.name.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>Section {{ section.name }}</h1>
+
+          <p>
+            {{ section.courseName }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!section.isActive">
+            {{ section.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="edit()">Edit Section</button>
+
+        <button mat-flat-button color="warn" (click)="toggleStatus()">
+          {{ section.isActive ? 'Deactivate' : 'Activate' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Section Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Section Name</label>
+          <p>{{ section.name }}</p>
+        </div>
+
+        <div>
+          <label>Capacity</label>
+          <p>{{ section.capacity }}</p>
+        </div>
+
+        <div>
+          <label>Department</label>
+          <p>{{ section.departmentName }}</p>
+        </div>
+
+        <div>
+          <label>Course</label>
+          <p>{{ section.courseName }}</p>
+        </div>
+
+        <div>
+          <label>Semester</label>
+          <p>{{ section.semesterName }}</p>
+        </div>
+
+        <div>
+          <label>Status</label>
+          <p>
+            {{ section.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

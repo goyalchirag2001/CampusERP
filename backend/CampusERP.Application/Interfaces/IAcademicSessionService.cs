@@ -11,6 +11,8 @@ public interface IAcademicSessionService
 
     Task<List<AcademicSessionLookup>> GetLookupAsync();
 
+    Task<List<AcademicSessionLookup>> GetLookupByCampusAsync(Guid campusId);
+
     Task<AcademicSessionLookup?> GetCurrentAsync();
 
     Task<AcademicSessionResponse> CreateAsync(CreateAcademicSessionRequest request);

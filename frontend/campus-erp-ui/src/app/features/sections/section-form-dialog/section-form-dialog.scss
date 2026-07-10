@@ -1,0 +1,105 @@
+mat-dialog-content {
+  width: 900px;
+
+  max-width: 95vw;
+
+  max-height: 80vh;
+
+  padding-top: 8px;
+}
+
+mat-accordion {
+  display: block;
+}
+
+.dialog-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+
+  padding-top: 12px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  padding-top: 20px;
+}
+
+mat-expansion-panel {
+  margin-bottom: 18px !important;
+
+  border-radius: 18px !important;
+
+  overflow: hidden;
+
+  background: var(--card-bg) !important;
+
+  color: var(--card-text) !important;
+
+  border: 1px solid var(--glass-border);
+
+  box-shadow: var(--shadow-premium);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+mat-expansion-panel:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+mat-expansion-panel-header {
+  background: rgba(79, 70, 229, 0.06) !important;
+
+  min-height: 64px !important;
+
+  transition: background 0.25s ease;
+}
+
+body[data-theme='dark'] mat-expansion-panel-header {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+mat-expansion-panel-header:hover {
+  background: rgba(79, 70, 229, 0.12) !important;
+}
+
+body[data-theme='dark'] mat-expansion-panel-header:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.mat-expansion-panel-header-title {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: var(--card-text);
+}
+
+.mat-expansion-panel-header-description {
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding-top: 22px !important;
+}
+
+@media (max-width: 900px) {
+  mat-dialog-content {
+    width: auto;
+  }
+
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+}

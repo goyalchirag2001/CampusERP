@@ -1,15 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
 import { Observable } from 'rxjs';
-
 import { environment } from '../../../environments/environment';
-
 import { LoginRequest } from '../models/login-request';
-
 import { AuthResponse } from '../models/auth-response';
-
 import { CurrentUser } from '../models/current-user';
 
 @Injectable({
@@ -20,6 +14,12 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${environment.apiUrl}/Auth/login`, request);
+  }
+
+  refreshToken(): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/Auth/refresh-token`, {
+      refreshToken: this.getRefreshToken(),
+    });
   }
 
   getCurrentUser(): Observable<CurrentUser> {
@@ -40,6 +40,10 @@ export class AuthService {
 
   getAccessToken(): string | null {
     return localStorage.getItem('accessToken');
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem('refreshToken');
   }
 
   isLoggedIn(): boolean {

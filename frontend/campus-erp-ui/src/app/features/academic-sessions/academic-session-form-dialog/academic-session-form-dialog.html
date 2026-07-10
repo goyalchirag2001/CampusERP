@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>
+  {{ isEdit() ? 'Edit Academic Session' : 'Create Academic Session' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-accordion multi>
+      <!-- ========================================================= -->
+      <!-- General Information -->
+      <!-- ========================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> General Information </mat-panel-title>
+
+          <mat-panel-description> Session Name & Campus </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          @if (!isCampusAdmin()) {
+            <mat-form-field appearance="outline">
+              <mat-label>Campus</mat-label>
+
+              <mat-select formControlName="campusId">
+                @for (campus of campuses(); track campus.id) {
+                  <mat-option [value]="campus.id">
+                    {{ campus.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Session Name</mat-label>
+
+            <input matInput formControlName="name" placeholder="Example: 2026-2027" />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ========================================================= -->
+      <!-- Session Duration -->
+      <!-- ========================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Session Duration </mat-panel-title>
+
+          <mat-panel-description> Academic Calendar </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+
+            <input matInput readonly [matDatepicker]="startPicker" formControlName="startDate" />
+
+            <mat-datepicker-toggle matSuffix [for]="startPicker"> </mat-datepicker-toggle>
+
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+
+            <input matInput readonly [matDatepicker]="endPicker" formControlName="endDate" />
+
+            <mat-datepicker-toggle matSuffix [for]="endPicker"> </mat-datepicker-toggle>
+
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ========================================================= -->
+      <!-- Configuration -->
+      <!-- ========================================================= -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Configuration </mat-panel-title>
+
+          <mat-panel-description> Current Academic Session </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="config-section">
+          <mat-checkbox formControlName="isCurrent"> Set as Current Academic Session </mat-checkbox>
+
+          <div class="hint">
+            Only one academic session can remain current at a time. Saving this session as current
+            will automatically remove the current flag from any existing session.
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+    {{ isEdit() ? 'Save Changes' : 'Create Academic Session' }}
+  </button>
+</mat-dialog-actions>

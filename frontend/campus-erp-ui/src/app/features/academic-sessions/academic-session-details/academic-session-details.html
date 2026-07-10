@@ -1,0 +1,83 @@
+@if (session(); as session) {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          {{ session.name.charAt(0) }}
+        </div>
+
+        <div class="header-content">
+          <h1>{{ session.name }}</h1>
+
+          <p>{{ session.campusName }}</p>
+
+          <div class="chips">
+            <span class="status-chip" [class.inactive]="!session.isActive">
+              {{ session.isActive ? 'Active' : 'Inactive' }}
+            </span>
+
+            @if (session.isCurrent) {
+              <span class="current-chip"> Current Session </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="edit()">Edit</button>
+
+        @if (!session.isCurrent) {
+          <button mat-flat-button color="accent" (click)="makeCurrent()">Set Current</button>
+        }
+
+        @if (session.isActive) {
+          <button mat-flat-button color="warn" (click)="deactivate()">Deactivate</button>
+        } @else {
+          <button mat-flat-button color="primary" (click)="activate()">Activate</button>
+        }
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h2>Academic Session Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Campus</label>
+
+          <p>{{ session.campusName }}</p>
+        </div>
+
+        <div>
+          <label>Session Name</label>
+
+          <p>{{ session.name }}</p>
+        </div>
+
+        <div>
+          <label>Start Date</label>
+
+          <p>{{ session.startDate | date: 'dd MMM yyyy' }}</p>
+        </div>
+
+        <div>
+          <label>End Date</label>
+
+          <p>{{ session.endDate | date: 'dd MMM yyyy' }}</p>
+        </div>
+
+        <div>
+          <label>Current Session</label>
+
+          <p>{{ session.isCurrent ? 'Yes' : 'No' }}</p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>{{ session.isActive ? 'Active' : 'Inactive' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -10,6 +10,7 @@ import { Institution } from '../../../core/models/institution';
 import { CurrentUserService } from '../../../core/services/current-user';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-institution-list',
@@ -21,6 +22,7 @@ import { PageEvent } from '@angular/material/paginator';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
+    MatTooltipModule
   ],
   templateUrl: './institution-list.html',
   styleUrl: './institution-list.scss',

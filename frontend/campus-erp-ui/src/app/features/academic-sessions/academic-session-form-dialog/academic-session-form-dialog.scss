@@ -1,0 +1,121 @@
+mat-dialog-content {
+  width: 900px;
+
+  max-width: 95vw;
+
+  max-height: 80vh;
+
+  overflow: auto;
+}
+
+mat-accordion {
+  display: block;
+}
+
+.dialog-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 20px;
+
+  padding-top: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.config-section {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 8px 4px;
+}
+
+.hint {
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: var(--muted);
+
+  padding-left: 4px;
+}
+
+mat-dialog-actions {
+  padding-top: 20px;
+}
+
+/* ===========================================================
+   Premium Expansion Panels
+   =========================================================== */
+
+mat-expansion-panel {
+  margin-bottom: 18px;
+
+  overflow: hidden;
+
+  border-radius: var(--card-radius) !important;
+
+  background: var(--surface);
+
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(24px);
+
+  box-shadow: var(--shadow-premium);
+
+  transition: all 0.25s ease;
+}
+
+mat-expansion-panel:hover {
+  transform: translateY(-2px);
+}
+
+mat-expansion-panel-header {
+  transition: background 0.25s ease;
+}
+
+body[data-theme='light'] mat-expansion-panel-header {
+  background: rgba(79, 70, 229, 0.05);
+}
+
+body[data-theme='dark'] mat-expansion-panel-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mat-expansion-panel-header-title {
+  font-weight: 600;
+
+  color: var(--card-text);
+}
+
+.mat-expansion-panel-header-description {
+  color: var(--card-secondary);
+}
+
+.mat-expansion-panel-body {
+  padding-top: 20px !important;
+}
+
+.mat-mdc-checkbox {
+  margin-top: 4px;
+}
+
+/* ===========================================================
+   Mobile
+   =========================================================== */
+
+@media (max-width: 768px) {
+  mat-dialog-content {
+    width: auto;
+  }
+
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+}

@@ -11,6 +11,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
 import { SubjectService } from '../services/subject';
 import { Subject } from '../models/subject';
 import { SubjectCreateDialog } from '../subject-create-dialog/subject-create-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-subject-list',
@@ -23,6 +24,7 @@ import { SubjectCreateDialog } from '../subject-create-dialog/subject-create-dia
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
+    MatTooltipModule
   ],
   templateUrl: './subject-list.html',
   styleUrl: './subject-list.scss',

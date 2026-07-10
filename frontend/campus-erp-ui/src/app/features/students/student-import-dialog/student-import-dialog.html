@@ -1,0 +1,203 @@
+<h2 mat-dialog-title>Bulk Import Students</h2>
+
+<mat-dialog-content class="dialog-content">
+  <!-- ========================================== -->
+  <!-- Download Template -->
+  <!-- ========================================== -->
+
+  <div class="action-card">
+    <div class="action-content">
+      <mat-icon>download</mat-icon>
+
+      <div>
+        <h3>Download Excel Template</h3>
+
+        <p>Download the latest template and fill student details before uploading.</p>
+      </div>
+    </div>
+
+    <button mat-flat-button color="primary" (click)="downloadTemplate()" [disabled]="loading()">
+      Download
+    </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Upload -->
+  <!-- ========================================== -->
+
+  <div class="upload-card">
+    <mat-icon class="upload-icon"> upload_file </mat-icon>
+
+    <h3>Upload Student Excel</h3>
+
+    <p>Supported format: .xlsx</p>
+
+    <input hidden #fileInput type="file" accept=".xlsx" (change)="chooseFile($event)" />
+
+    <button mat-stroked-button (click)="fileInput.click()">Choose Excel File</button>
+
+    @if (selectedFile(); as file) {
+      <div class="selected-file">
+        <mat-icon>description</mat-icon>
+
+        <span>
+          {{ file.name }}
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Validate -->
+  <!-- ========================================== -->
+
+  <div class="button-row">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="validate()"
+      [disabled]="!selectedFile() || validating()"
+    >
+      @if (validating()) {
+        <mat-spinner diameter="18"></mat-spinner>
+      } @else {
+        Validate Excel
+      }
+    </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- Validation Summary -->
+  <!-- ========================================== -->
+
+  @if (validation(); as result) {
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span>Total Rows</span>
+
+        <h2>{{ result.totalRows }}</h2>
+      </div>
+
+      <div class="summary-card success">
+        <span>Valid Rows</span>
+
+        <h2>{{ result.validRows }}</h2>
+      </div>
+
+      <div class="summary-card danger">
+        <span>Invalid Rows</span>
+
+        <h2>{{ result.invalidRows }}</h2>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Preview -->
+    <!-- ========================================== -->
+
+    <div class="table-card">
+      <h3>Preview</h3>
+
+      <table class="preview-table">
+        <thead>
+          <tr>
+            <th>#</th>
+
+            <th>Admission</th>
+
+            <th>Student</th>
+
+            <th>Department</th>
+
+            <th>Course</th>
+
+            <th>Semester</th>
+
+            <th>Section</th>
+
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (row of result.preview; track row.rowNumber) {
+            <tr>
+              <td>{{ row.rowNumber }}</td>
+
+              <td>{{ row.admissionNumber }}</td>
+
+              <td>{{ row.studentName }}</td>
+
+              <td>{{ row.department }}</td>
+
+              <td>{{ row.course }}</td>
+
+              <td>{{ row.semester }}</td>
+
+              <td>{{ row.section }}</td>
+
+              <td>
+                @if (row.isValid) {
+                  <span class="status valid"> Valid </span>
+                } @else {
+                  <span class="status invalid"> Invalid </span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Errors -->
+    <!-- ========================================== -->
+
+    @if (result.errors.length) {
+      <div class="table-card error-card">
+        <h3>Validation Errors</h3>
+
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>Row</th>
+
+              <th>Column</th>
+
+              <th>Error</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (error of result.errors; track $index) {
+              <tr>
+                <td>{{ error.rowNumber }}</td>
+
+                <td>{{ error.column }}</td>
+
+                <td>{{ error.message }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="import()"
+    [disabled]="!validation()?.canImport || importing()"
+  >
+    @if (importing()) {
+      <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+      Import Students
+    }
+  </button>
+</mat-dialog-actions>
