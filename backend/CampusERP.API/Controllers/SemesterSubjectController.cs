@@ -39,6 +39,13 @@ public class SemesterSubjectController : ControllerBase
         return Ok(await _semesterSubjectService.GetByCourseAsync(courseId));
     }
 
+    [Authorize(Policy = PermissionConstants.SemesterSubjectView)]
+    [HttpGet("lookup/section/{sectionId:guid}")]
+    public async Task<IActionResult> Lookup(Guid sectionId)
+    {
+        return Ok(await _semesterSubjectService.GetLookupBySectionAsync(sectionId));
+    }
+
     [Authorize(Policy = PermissionConstants.SemesterSubjectRemove)]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Remove(Guid id)

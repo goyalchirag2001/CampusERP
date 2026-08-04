@@ -91,6 +91,7 @@ export class AcademicSessionList implements OnInit {
       .open(AcademicSessionFormDialog, {
         width: '900px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
       })
       .afterClosed()
       .subscribe((created) => {
@@ -105,6 +106,7 @@ export class AcademicSessionList implements OnInit {
       .open(AcademicSessionFormDialog, {
         width: '900px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: {
           isEdit: true,
           academicSession: session,

@@ -193,6 +193,20 @@ public class SemesterSubjectService : ISemesterSubjectService
             .ToList();
     }
 
+    public async Task<List<LookupResponse>> GetLookupBySectionAsync(Guid sectionId)
+    {
+        return await ApplySemesterSubjectScope(
+                _dbContext.SemesterSubjects
+                    .Where(x => x.Semester.Sections.Any(s => s.Id == sectionId)))
+            .OrderBy(x => x.DisplayOrder)
+            .Select(x => new LookupResponse
+            {
+                Id = x.Id,
+                Name = x.Subject.Name
+            })
+            .ToListAsync();
+    }
+
     public async Task RemoveAsync(Guid id)
     {
         var semesterSubject =

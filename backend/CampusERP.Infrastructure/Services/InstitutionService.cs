@@ -92,6 +92,25 @@ public class InstitutionService : IInstitutionService
 
             _dbContext.Campuses.Add(campus);
 
+            _dbContext.AcademicConfigurations.Add(new AcademicConfiguration
+                            {
+                                Id = Guid.NewGuid(),
+
+                                InstitutionId = institution.Id,
+
+                                CampusId = null,
+
+                                AcademicTermsPerSession = 2,
+
+                                AutoPromoteEnabled = true,
+
+                                MinimumAttendancePercentage = 75,
+
+                                AllowAttendanceEditing = true,
+
+                                AttendanceEditWindowDays = 7
+                            });
+
             var temporaryPassword = $"Admin@{DateTime.UtcNow.Year}";
 
             var adminUser =

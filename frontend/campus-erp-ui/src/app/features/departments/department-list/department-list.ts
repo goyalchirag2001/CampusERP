@@ -92,6 +92,7 @@ export class DepartmentList implements OnInit {
       .open(DepartmentCreateDialog, {
         width: '600px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
       })
       .afterClosed()
       .subscribe((created) => {

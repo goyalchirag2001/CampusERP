@@ -1,5 +1,5 @@
 ﻿using CampusERP.Domain.Common;
-using CampusERP.Domain.Enums;
+using CampusERP.Shared.Enums;
 
 namespace CampusERP.Domain.Entities;
 

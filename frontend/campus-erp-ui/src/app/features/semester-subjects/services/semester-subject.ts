@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { SemesterSubject } from '../models/semester-subject';
 import { AssignSemesterSubjectRequest } from '../models/assign-semester-subject-request';
+import { Lookup } from '../../../core/models/lookup';
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,11 @@ export class SemesterSubjectService {
 
   moveDown(id: string): Observable<void> {
     return this.http.put<void>(`${environment.apiUrl}/SemesterSubject/${id}/move-down`, {});
+  }
+
+  getLookupBySection(sectionId: string): Observable<Lookup[]> {
+    return this.http.get<Lookup[]>(
+      `${environment.apiUrl}/SemesterSubject/lookup/section/${sectionId}`,
+    );
   }
 }

@@ -1,0 +1,77 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+mat-card {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+mat-card-title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.filters mat-form-field {
+  min-width: 280px;
+  flex: 1;
+}
+
+.assignment-table {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.assignment-table th {
+  font-weight: 600;
+}
+
+.assignment-table td,
+.assignment-table th {
+  padding: 16px;
+}
+
+.teacher-select {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 250px;
+}
+
+.empty-state {
+  padding: 60px 24px;
+  text-align: center;
+  color: gray;
+  font-size: 16px;
+}
+
+.unsaved-indicator {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #d97706;
+  font-weight: 500;
+}
+
+button[mat-raised-button] {
+  min-width: 170px;
+}

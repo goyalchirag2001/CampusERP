@@ -46,6 +46,7 @@ export class DepartmentDetails implements OnInit {
       .open(DepartmentEditDialog, {
         width: '600px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: department,
       })
       .afterClosed()

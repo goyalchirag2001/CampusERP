@@ -44,6 +44,8 @@ export class CampusDetails implements OnInit {
     this.dialog
       .open(CampusEditDialog, {
         width: '700px',
+        maxWidth: '95vw',
+        maxHeight: '90vh',
         data: campus,
       })
       .afterClosed()

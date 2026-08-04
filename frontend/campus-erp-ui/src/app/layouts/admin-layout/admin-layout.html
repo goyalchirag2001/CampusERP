@@ -1,5 +1,16 @@
-<div class="app-shell">
-  <aside class="sidebar">
+<mat-sidenav-container class="app-shell">
+  <!-- ========================================================= -->
+  <!-- Sidebar -->
+  <!-- ========================================================= -->
+
+  <mat-sidenav
+    #drawer
+    class="sidebar"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+    [fixedInViewport]="isMobile()"
+    [autoFocus]="false"
+  >
     <div class="sidebar-top">
       @if (branding()?.logoUrl) {
         <img class="sidebar-logo-image" [src]="branding()?.logoUrl" [alt]="branding()?.name" />
@@ -22,7 +33,11 @@
 
     <nav class="sidebar-nav">
       @for (item of menuItems(); track item.route) {
-        <a [routerLink]="item.route" routerLinkActive="active-link">
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          (click)="isMobile() ? drawer.close() : null"
+        >
           <mat-icon>
             {{ item.icon }}
           </mat-icon>
@@ -33,25 +48,45 @@
         </a>
       }
     </nav>
-  </aside>
+  </mat-sidenav>
 
-  <main class="main-content">
-    <header class="header">
-      <h3>
-        {{ 'CampusERP' }}
-      </h3>
+  <!-- ========================================================= -->
+  <!-- Content -->
+  <!-- ========================================================= -->
 
-      <div class="header-actions">
-        <button mat-icon-button (click)="toggleTheme()">
-          <mat-icon> contrast </mat-icon>
-        </button>
+  <mat-sidenav-content>
+    <main class="main-content">
+      <!-- ===================================================== -->
+      <!-- Header -->
+      <!-- ===================================================== -->
 
-        <app-user-menu></app-user-menu>
-      </div>
-    </header>
+      <header class="header">
+        <div class="header-left">
+          @if (isMobile()) {
+            <button mat-icon-button class="menu-button" (click)="drawer.toggle()">
+              <mat-icon>menu</mat-icon>
+            </button>
+          }
 
-    <section class="page-content">
-      <router-outlet />
-    </section>
-  </main>
-</div>
+          <h3>CampusERP</h3>
+        </div>
+
+        <div class="header-actions">
+          <button mat-icon-button (click)="toggleTheme()">
+            <mat-icon>contrast</mat-icon>
+          </button>
+
+          <app-user-menu></app-user-menu>
+        </div>
+      </header>
+
+      <!-- ===================================================== -->
+      <!-- Routed Pages -->
+      <!-- ===================================================== -->
+
+      <section class="page-content">
+        <router-outlet />
+      </section>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

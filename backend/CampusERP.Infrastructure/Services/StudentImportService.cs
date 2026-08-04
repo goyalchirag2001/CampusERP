@@ -3,7 +3,7 @@ using CampusERP.Contracts.Imports;
 using CampusERP.Contracts.Requests;
 using CampusERP.Contracts.Responses;
 using CampusERP.Domain.Entities;
-using CampusERP.Domain.Enums;
+using CampusERP.Shared.Enums;
 using CampusERP.Infrastructure.Data;
 using CampusERP.Shared.Utilities;
 using ClosedXML.Excel;

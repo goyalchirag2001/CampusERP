@@ -32,4 +32,12 @@ public class Teacher : BaseEntity, ITenantEntity
     public bool IsActive { get; set; }
 
     public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
+
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
+    public ICollection<LectureOverride> OriginalLectureOverrides { get; set; } = new List<LectureOverride>();
+
+    public ICollection<LectureOverride> NewLectureOverrides { get; set; } = new List<LectureOverride>();
+
+    public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
 }

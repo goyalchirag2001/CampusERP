@@ -88,15 +88,6 @@ body[data-theme='dark'] mat-expansion-panel-header {
   background: rgba(255, 255, 255, 0.03);
 }
 
-.mat-expansion-panel-header-title {
-  font-weight: 600;
-
-  color: var(--card-text);
-}
-
-.mat-expansion-panel-header-description {
-  color: var(--card-secondary);
-}
 
 .mat-expansion-panel-body {
   padding-top: 20px !important;

@@ -1,0 +1,316 @@
+@if (event(); as event) {
+  <div class="details-page">
+    <!-- ===================================================== -->
+    <!-- Header -->
+    <!-- ===================================================== -->
+
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          <mat-icon>
+            {{ getEventIcon(event.eventType) }}
+          </mat-icon>
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ event.title }}
+          </h1>
+
+          <p>
+            {{ getEventTypeName(event.eventType) }}
+          </p>
+
+          <span class="status-chip" [class.inactive]="!event.isActive">
+            {{ event.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-stroked-button (click)="back()">
+          <mat-icon>arrow_back</mat-icon>
+
+          Back
+        </button>
+
+        <button mat-flat-button color="primary" (click)="edit()">
+          <mat-icon>edit</mat-icon>
+
+          Edit
+        </button>
+
+        @if (event.isActive) {
+          <button mat-flat-button color="warn" (click)="deactivate()">
+            <mat-icon>block</mat-icon>
+
+            Deactivate
+          </button>
+        } @else {
+          <button mat-flat-button color="primary" (click)="activate()">
+            <mat-icon>check_circle</mat-icon>
+
+            Activate
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- Basic Information -->
+    <!-- ===================================================== -->
+
+    <mat-card class="info-card">
+      <h2>Basic Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Title</label>
+
+          <p>
+            {{ event.title }}
+          </p>
+        </div>
+
+        <div>
+          <label>Event Type</label>
+
+          <p>
+            {{ getEventTypeName(event.eventType) }}
+          </p>
+        </div>
+
+        <div>
+          <label>Priority</label>
+
+          <p>
+            {{ event.priority }}
+          </p>
+        </div>
+
+        <div>
+          <label>Status</label>
+
+          <p>
+            {{ event.isActive ? 'Active' : 'Inactive' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Affects Timetable</label>
+
+          <p>
+            {{ event.affectsTimetable ? 'Yes' : 'No' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Full Day Event</label>
+
+          <p>
+            {{ event.isFullDay ? 'Yes' : 'No' }}
+          </p>
+        </div>
+
+        <div class="full-width">
+          <label>Description</label>
+
+          <p>
+            {{ event.description || 'No description provided.' }}
+          </p>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- ===================================================== -->
+    <!-- Schedule -->
+    <!-- ===================================================== -->
+
+    <mat-card class="info-card">
+      <h2>Schedule</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Start Date</label>
+
+          <p>
+            {{ event.startDate | date: 'dd MMM yyyy' }}
+          </p>
+        </div>
+
+        <div>
+          <label>End Date</label>
+
+          <p>
+            {{ event.endDate | date: 'dd MMM yyyy' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Start Time</label>
+
+          <p>
+            {{ event.isFullDay ? 'Full Day' : event.startTime || 'Not Specified' }}
+          </p>
+        </div>
+
+        <div>
+          <label>End Time</label>
+
+          <p>
+            {{ event.isFullDay ? 'Full Day' : event.endTime || 'Not Specified' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Duration</label>
+
+          <p>
+            {{ getDuration() }}
+          </p>
+        </div>
+
+        <div>
+          <label>Recurring Event</label>
+
+          <p>
+            {{ event.isRecurring ? 'Yes' : 'No' }}
+          </p>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- ===================================================== -->
+    <!-- Academic Scope -->
+    <!-- ===================================================== -->
+
+    <mat-card class="info-card">
+      <h2>Academic Scope</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Campus</label>
+
+          <p>
+            {{ event.campusName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Academic Session</label>
+
+          <p>
+            {{ event.academicSessionName }}
+          </p>
+        </div>
+
+        <div>
+          <label>Department</label>
+
+          <p>
+            {{ getScope(event.departmentName, 'Departments') }}
+          </p>
+        </div>
+
+        <div>
+          <label>Course</label>
+
+          <p>
+            {{ getScope(event.courseName, 'Courses') }}
+          </p>
+        </div>
+
+        <div>
+          <label>Semester</label>
+
+          <p>
+            {{ getScope(event.semesterName, 'Semesters') }}
+          </p>
+        </div>
+
+        <div>
+          <label>Section</label>
+
+          <p>
+            {{ getScope(event.sectionName, 'Sections') }}
+          </p>
+        </div>
+
+        <div>
+          <label>Teacher</label>
+
+          <p>
+            {{ getScope(event.teacherName, 'Teachers') }}
+          </p>
+        </div>
+
+        <div>
+          <label>Room</label>
+
+          <p>
+            {{ getScope(event.roomName, 'Rooms') }}
+          </p>
+        </div>
+      </div>
+    </mat-card>
+    <!-- ===================================================== -->
+    <!-- Recurrence & Timetable -->
+    <!-- ===================================================== -->
+
+    <mat-card class="info-card">
+      <h2>Recurrence & Timetable</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Recurring Event</label>
+
+          <p>
+            {{ event.isRecurring ? 'Yes' : 'No' }}
+          </p>
+        </div>
+
+        <div>
+          <label>Affects Timetable</label>
+
+          <p>
+            {{ event.affectsTimetable ? 'Yes' : 'No' }}
+          </p>
+        </div>
+
+        <div class="full-width">
+          <label>Recurrence Rule</label>
+
+          <p>
+            @if (event.isRecurring) {
+              {{ event.recurrenceRule || 'Not Specified' }}
+            } @else {
+              Not Applicable
+            }
+          </p>
+        </div>
+
+        <div>
+          <label>Priority</label>
+
+          <p>
+            <span class="priority-chip">
+              {{ event.priority }}
+            </span>
+          </p>
+        </div>
+
+        <div>
+          <label>Timetable Impact</label>
+
+          <p>
+            @if (event.affectsTimetable) {
+              This event will override timetable generation where applicable.
+            } @else {
+              This event is informational only and will not affect timetable generation.
+            }
+          </p>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+}

@@ -55,7 +55,7 @@ export class UserMenuComponent {
   changePassword(): void {
     const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {
       width: '500px',
-      
+      maxHeight: '90vh',
       maxWidth: '95vw',
 
       disableClose: true,

@@ -70,11 +70,11 @@
 
   user-select: none;
 
-  transition: background-color .2s;
+  transition: background-color 0.2s;
 }
 
 .sortable:hover {
-  background: rgba(79, 70, 229, .06);
+  background: rgba(79, 70, 229, 0.06);
 }
 
 .header-content {
@@ -94,9 +94,64 @@
 
   color: var(--muted);
 
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .sortable:hover .sort-icon {
   color: var(--primary);
+}
+
+.table-container {
+  overflow-x: auto;
+  overflow-y: visible;
+
+  border-radius: 28px;
+
+  background: var(--card-bg);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table,
+.table-scroll .mat-mdc-table {
+  width: 100%;
+  min-width: 1100px;
+}
+
+table {
+  width: 100%;
+  min-width: 950px; // adjust as needed
+}
+
+.mat-mdc-table {
+  width: 100%;
+  min-width: 950px;
+}
+
+.mat-mdc-header-cell,
+.mat-mdc-cell {
+  white-space: nowrap;
+}
+
+.student-cell {
+  min-width: 220px;
+}
+
+.student-email {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-container .mat-mdc-table {
+  width: 100%;
 }

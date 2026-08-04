@@ -1,4 +1,4 @@
-﻿using CampusERP.Contracts.Enums;
+﻿using CampusERP.Shared.Enums;
 
 namespace CampusERP.Contracts.Requests;
 

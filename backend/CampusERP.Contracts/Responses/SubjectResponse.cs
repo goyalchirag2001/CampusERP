@@ -1,4 +1,4 @@
-﻿using CampusERP.Contracts.Enums;
+﻿using CampusERP.Shared.Enums;
 
 namespace CampusERP.Contracts.Responses;
 
@@ -20,5 +20,5 @@ public class SubjectResponse
 
     public bool IsActive { get; set; }
 
-    public SubjectTypeDto SubjectType { get; set; }
+    public SubjectType SubjectType { get; set; }
 }

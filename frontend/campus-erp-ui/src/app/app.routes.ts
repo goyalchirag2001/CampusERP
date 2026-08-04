@@ -34,6 +34,12 @@ import { AcademicSessionList } from './features/academic-sessions/academic-sessi
 import { AcademicSessionDetails } from './features/academic-sessions/academic-session-details/academic-session-details';
 import { SectionList } from './features/sections/section-list/section-list';
 import { SectionDetails } from './features/sections/section-details/section-details';
+import { AcademicSettingsComponent } from './features/academic-settings/academic-settings.component';
+import { TeacherAssignmentComponent } from './features/teacher-assignments/teacher-assignment';
+import { CalendarEventListComponent } from './features/calendar-events/calendar-event-list/calendar-event-list';
+import { CalendarEventDetails } from './features/calendar-events/calendar-event-details/calendar-event-details';
+import { TimetableList } from './features/timetables/timetable-list/timetable-list';
+import { TimetableDetails } from './features/timetables/timetable-details/timetable-details';
 
 export const routes: Routes = [
   {
@@ -261,6 +267,12 @@ export const routes: Routes = [
       },
 
       {
+        path: 'academic-settings',
+        component: AcademicSettingsComponent,
+        canActivate: [permissionGuard(Permissions.AcademicSettingsView)],
+      },
+
+      {
         path: 'sections',
         component: SectionList,
         canActivate: [permissionGuard(Permissions.SectionView)],
@@ -270,6 +282,35 @@ export const routes: Routes = [
         path: 'sections/:id',
         component: SectionDetails,
         canActivate: [permissionGuard(Permissions.SectionView)],
+      },
+
+      {
+        path: 'teacher-assignments',
+        component: TeacherAssignmentComponent,
+        canActivate: [permissionGuard(Permissions.TeacherAssignmentView)],
+      },
+
+      {
+        path: 'calendar-events',
+        component: CalendarEventListComponent,
+        canActivate: [permissionGuard(Permissions.CalendarView)],
+      },
+
+      {
+        path: 'calendar-events/:id',
+        component: CalendarEventDetails,
+        canActivate: [permissionGuard(Permissions.CalendarView)],
+      },
+
+      {
+        path: 'timetables',
+        component: TimetableList,
+        //canActivate: [permissionGuard(Permissions.TimetableView)],
+      },
+      {
+        path: 'timetables/:id',
+        component: TimetableDetails,
+        //canActivate: [permissionGuard(Permissions.TimetableView)],
       },
 
       {

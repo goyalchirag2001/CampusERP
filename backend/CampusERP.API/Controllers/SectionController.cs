@@ -70,4 +70,11 @@ public class SectionController : ControllerBase
     {
         return Ok(await _sectionService.GetLookupBySemesterAsync(semesterId));
     }
+
+    [Authorize(Policy = PermissionConstants.SectionView)]
+    [HttpGet("lookup")]
+    public async Task<IActionResult> Lookup()
+    {
+        return Ok(await _sectionService.GetLookupAsync());
+    }
 }

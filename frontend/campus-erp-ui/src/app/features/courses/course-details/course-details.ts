@@ -72,6 +72,7 @@ export class CourseDetails implements OnInit {
       .open(CourseEditDialog, {
         width: '750px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: course,
       })
       .afterClosed()

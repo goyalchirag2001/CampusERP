@@ -99,6 +99,7 @@ export class CourseList implements OnInit {
       .open(CourseCreateDialog, {
         width: '700px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
       })
       .afterClosed()
       .subscribe((created) => {

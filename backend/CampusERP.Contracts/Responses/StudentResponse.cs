@@ -1,4 +1,4 @@
-﻿using CampusERP.Contracts.Enums;
+﻿using CampusERP.Shared.Enums;
 
 namespace CampusERP.Contracts.Responses;
 
@@ -52,11 +52,11 @@ public class StudentResponse
 
     public string AcademicSessionName { get; set; } = string.Empty;
 
-    public EnrollmentStatusDto EnrollmentStatus { get; set; }
+    public EnrollmentStatus EnrollmentStatus { get; set; }
 
     public string EnrollmentStatusName { get; set; } = string.Empty;
 
-    public PromotionStatusDto PromotionStatus { get; set; }
+    public PromotionStatus PromotionStatus { get; set; }
 
     public string PromotionStatusName { get; set; } = string.Empty;
 

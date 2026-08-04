@@ -89,6 +89,29 @@ public static class PermissionSeedData
     public static readonly Guid AcademicSessionActivatePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000067");
     public static readonly Guid AcademicSessionDeactivatePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000068");
 
+    public static readonly Guid StudentPromotionViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000069");
+    public static readonly Guid StudentPromotionCreatePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000070");
+
+    public static readonly Guid AcademicSettingsViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000071");
+    public static readonly Guid AcademicSettingsEditPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000072");
+
+    public static readonly Guid TeacherAssignmentEditPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000073");
+
+    public static readonly Guid RoomViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000074");
+    public static readonly Guid RoomCreatePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000075");
+    public static readonly Guid RoomEditPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000076");
+    public static readonly Guid RoomDeletePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000077");
+
+    public static readonly Guid CalendarViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000078");
+    public static readonly Guid CalendarManagePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000079");
+
+    public static readonly Guid AttendanceCorrectionViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000080");
+    public static readonly Guid AttendanceCorrectionCreatePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000081");
+    public static readonly Guid AttendanceCorrectionApprovePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000082");
+
+    public static readonly Guid TimetableTemplateViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000083");
+    public static readonly Guid TimetableTemplateManagePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000084");
+
     public static readonly List<Permission> Permissions =
     [
         // Admin Dashboard
@@ -546,6 +569,14 @@ public static class PermissionSeedData
 
         new()
         {
+            Id = TeacherAssignmentEditPermissionId,
+            Code = PermissionConstants.TeacherAssignmentEdit,
+            Name = "Edit Teacher Assignments",
+            Module = "TeacherAssignment"
+        },
+
+        new()
+        {
             Id = TeacherAssignmentDeletePermissionId,
             Code = PermissionConstants.TeacherAssignmentDelete,
             Name = "Delete Teacher Assignments",
@@ -571,7 +602,7 @@ public static class PermissionSeedData
         },
 
         new()
-        { 
+        {
             Id = SemesterSubjectRemovePermissionId,
             Code = PermissionConstants.SemesterSubjectRemove,
             Name = "Remove Semester Subjects",
@@ -656,6 +687,124 @@ public static class PermissionSeedData
             Code = PermissionConstants.AcademicSessionDeactivate,
             Name = "Deactivate Academic Sessions",
             Module = "AcademicSession"
+        },
+
+        // Student Promotion
+        new()
+        {
+            Id = StudentPromotionViewPermissionId,
+            Code = PermissionConstants.StudentPromotionView,
+            Name = "View Student Promotions",
+            Module = "StudentPromotion"
+        },
+        new()
+        {
+            Id = StudentPromotionCreatePermissionId,
+            Code = PermissionConstants.StudentPromotionCreate,
+            Name = "Create Student Promotions",
+            Module = "StudentPromotion"
+        },
+
+        // Academic Configuration
+        new()
+        {
+            Id = AcademicSettingsViewPermissionId,
+            Code = PermissionConstants.AcademicSettingsView,
+            Name = "View Academic Settings",
+            Module = "AcademicSettings"
+        },
+        new()
+        {
+            Id = AcademicSettingsEditPermissionId,
+            Code = PermissionConstants.AcademicSettingsEdit,
+            Name = "Edit Academic Settings",
+            Module = "AcademicSettings"
+        },
+
+        // Room
+
+        new()
+        {
+            Id = RoomViewPermissionId,
+            Code = PermissionConstants.RoomView,
+            Name = "View Rooms",
+            Module = "Room"
+        },
+        new()
+        {
+            Id = RoomCreatePermissionId,
+            Code = PermissionConstants.RoomCreate,
+            Name = "Create Rooms",
+            Module = "Room"
+        }, 
+        new()
+        {
+            Id = RoomEditPermissionId,
+            Code = PermissionConstants.RoomEdit,
+            Name = "Edit Rooms",
+            Module = "Room"
+        },
+        new()
+        {
+            Id = RoomDeletePermissionId,
+            Code = PermissionConstants.RoomDelete,
+            Name = "Delete Rooms",
+            Module = "Room"
+        },
+
+        // Calendar
+        new()
+        {
+            Id = CalendarViewPermissionId,
+            Code = PermissionConstants.CalendarView,
+            Name = "View Calendar",
+            Module = "Calendar"
+        },
+        new()
+        {
+            Id = CalendarManagePermissionId,
+            Code = PermissionConstants.CalendarManage,
+            Name = "Manage Calendar",
+            Module = "Calendar"
+        },
+
+        // Attendance Correction
+        new()
+        {
+            Id = AttendanceCorrectionViewPermissionId,
+            Code = PermissionConstants.AttendanceCorrectionView,
+            Name = "View Attendance Corrections",
+            Module = "AttendanceCorrection"
+        },
+        new()
+        {
+            Id = AttendanceCorrectionCreatePermissionId,
+            Code = PermissionConstants.AttendanceCorrectionCreate,
+            Name = "Create Attendance Corrections",
+            Module = "AttendanceCorrection"
+        },
+        new()
+        {
+            Id = AttendanceCorrectionApprovePermissionId,
+            Code = PermissionConstants.AttendanceCorrectionApprove,
+            Name = "Approve Attendance Corrections",
+            Module = "AttendanceCorrection"
+        },
+
+        // Timetable Template
+        new()
+        {
+            Id = TimetableTemplateViewPermissionId,
+            Code = PermissionConstants.TimetableTemplateView,
+            Name = "View Timetable Templates",
+            Module = "TimetableTemplate"
+        },
+        new()
+        {
+            Id = TimetableTemplateManagePermissionId,
+            Code = PermissionConstants.TimetableTemplateManage,
+            Name = "Manage Timetable Templates",
+            Module = "TimetableTemplate"
         }
     ];
 }

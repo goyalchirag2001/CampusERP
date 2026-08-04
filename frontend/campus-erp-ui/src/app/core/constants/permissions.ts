@@ -71,4 +71,14 @@ export const Permissions = {
   AcademicSessionEdit: 'Academic-Session.Edit',
   AcademicSessionActivate: 'Academic-Session.Activate',
   AcademicSessionDeactivate: 'Academic-Session.Deactivate',
+
+  AcademicSettingsView: 'AcademicSettings.View',
+  AcademicSettingsEdit: 'AcademicSettings.Edit',
+
+  CalendarView: 'Calendar.View',
+  CalendarManage: 'Calendar.Manage',
+
+  AttendanceCorrectionView: 'Attendance-Correction.View',
+  AttendanceCorrectionCreate: 'Attendance-Correction.Create',
+  AttendanceCorrectionApprove: 'Attendance-Correction.Approve',
 } as const;

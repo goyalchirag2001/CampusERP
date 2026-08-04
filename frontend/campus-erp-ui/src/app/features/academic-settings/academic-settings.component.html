@@ -1,0 +1,267 @@
+@if (loading()) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else {
+  <div class="details-page">
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          <mat-icon>tune</mat-icon>
+        </div>
+
+        <div class="header-content">
+          <h1>Academic & Attendance Configuration</h1>
+
+          <p>Configure academic structure, attendance rules and promotion settings.</p>
+
+          <span class="status-chip"> Institution Configuration </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        @if (canEdit()) {
+          <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+            @if (saving()) {
+              <mat-spinner diameter="18"></mat-spinner>
+            } @else {
+              <mat-icon>save</mat-icon>
+            }
+
+            Save Changes
+          </button>
+
+          <button mat-stroked-button [disabled]="saving()" (click)="reset()">
+            <mat-icon>restart_alt</mat-icon>
+
+            Reset
+          </button>
+        } @else {
+          <button mat-flat-button disabled>
+            <mat-icon>visibility</mat-icon>
+
+            Read Only
+          </button>
+        }
+      </div>
+    </div>
+
+    <form [formGroup]="form">
+      <!-- Academic Structure -->
+
+      <div class="info-card">
+        <h2>Academic Structure</h2>
+
+        <div class="info-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Term Type</mat-label>
+
+            <mat-select formControlName="academicTermType">
+              @for (term of academicTermTypes; track term.value) {
+                <mat-option [value]="term.value">
+                  {{ term.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Terms Per Session</mat-label>
+
+            <input matInput type="number" formControlName="academicTermsPerSession" />
+
+            @if (form.controls.academicTermsPerSession.hasError('required')) {
+              <mat-error> Academic terms are required. </mat-error>
+            }
+
+            @if (form.controls.academicTermsPerSession.hasError('min')) {
+              <mat-error> Value must be at least 1. </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Attendance Rules -->
+
+      <div class="info-card">
+        <h2>Attendance Rules</h2>
+
+        <div class="info-grid">
+          <mat-form-field appearance="outline">
+            <mat-label> Minimum Attendance Percentage </mat-label>
+
+            <input matInput type="number" formControlName="minimumAttendancePercentage" />
+
+            @if (form.controls.minimumAttendancePercentage.hasError('required')) {
+              <mat-error> Attendance percentage is required. </mat-error>
+            }
+
+            @if (
+              form.controls.minimumAttendancePercentage.hasError('min') ||
+              form.controls.minimumAttendancePercentage.hasError('max')
+            ) {
+              <mat-error> Value must be between 0 and 100. </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label> Attendance Edit Window (Days) </mat-label>
+
+            <input matInput type="number" formControlName="attendanceEditWindowDays" />
+
+            @if (form.controls.attendanceEditWindowDays.hasError('required')) {
+              <mat-error> Attendance edit window is required. </mat-error>
+            }
+
+            @if (form.controls.attendanceEditWindowDays.hasError('min')) {
+              <mat-error> Value cannot be negative. </mat-error>
+            }
+          </mat-form-field>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="allowAttendanceEditing">
+              Allow Attendance Editing
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance Automation -->
+
+      <div class="info-card">
+        <h2>Attendance Automation</h2>
+
+        <div class="info-grid">
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="autoGenerateAttendanceSessions">
+              Automatically Generate Attendance Sessions
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Attendance sessions will be automatically created from the timetable.
+            </div>
+          </div>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="autoGenerateAttendanceRecords">
+              Automatically Generate Student Attendance Records
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Creates attendance records for all enrolled students whenever a session is generated.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance Lock -->
+      <div class="info-card">
+        <h2>Attendance Lock</h2>
+
+        <div class="info-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Attendance Lock After (Days)</mat-label>
+
+            <input matInput type="number" formControlName="attendanceLockAfterDays" />
+
+            @if (form.controls.attendanceLockAfterDays.hasError('required')) {
+              <mat-error> Attendance lock period is required. </mat-error>
+            }
+
+            @if (form.controls.attendanceLockAfterDays.hasError('min')) {
+              <mat-error> Value cannot be negative. </mat-error>
+            }
+          </mat-form-field>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="allowTeacherAttendanceUnlock">
+              Allow Teachers to Unlock Attendance
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Teachers can reopen locked attendance sessions within their permitted access.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance Behaviour -->
+
+      <div class="info-card">
+        <h2>Attendance Behaviour</h2>
+
+        <div class="info-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Late Threshold (Minutes)</mat-label>
+
+            <input matInput type="number" formControlName="lateThresholdMinutes" />
+
+            @if (form.controls.lateThresholdMinutes.hasError('required')) {
+              <mat-error> Late threshold is required. </mat-error>
+            }
+
+            @if (form.controls.lateThresholdMinutes.hasError('min')) {
+              <mat-error> Value cannot be negative. </mat-error>
+            }
+          </mat-form-field>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="medicalLeaveCountsAsPresent">
+              Medical Leave Counts as Present
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Approved medical leave contributes to attendance percentage.
+            </div>
+          </div>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="onDutyCountsAsPresent">
+              On Duty Counts as Present
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Students on approved university duty are treated as present.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Requests -->
+
+      <div class="info-card">
+        <h2>Student Attendance Requests</h2>
+
+        <div class="info-grid">
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="allowStudentAttendanceCorrection">
+              Allow Students to Request Attendance Corrections
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Students can submit attendance correction requests for teacher approval.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promotion Rules -->
+
+      <div class="info-card">
+        <h2>Promotion Rules</h2>
+
+        <div class="info-grid">
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="autoPromoteEnabled">
+              Enable Automatic Promotion
+            </mat-slide-toggle>
+
+            <div class="field-description">
+              Eligible students will be promoted automatically at the end of the academic session.
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+}

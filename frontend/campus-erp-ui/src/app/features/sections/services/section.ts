@@ -43,6 +43,10 @@ export class SectionService {
     return this.http.put<void>(`${this.baseUrl}/${id}/deactivate`, {});
   }
 
+  getLookup(): Observable<Lookup[]> {
+    return this.http.get<Lookup[]>(`${this.baseUrl}/lookup`);
+  }
+
   getLookupBySemester(semesterId: string): Observable<Lookup[]> {
     return this.http.get<Lookup[]>(`${this.baseUrl}/lookup/semester/${semesterId}`);
   }

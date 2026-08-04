@@ -18,4 +18,6 @@ public interface ISectionService
     Task DeactivateAsync(Guid id);
 
     Task<List<LookupResponse>> GetLookupBySemesterAsync(Guid semesterId);
+
+    Task<List<LookupResponse>> GetLookupAsync();
 }

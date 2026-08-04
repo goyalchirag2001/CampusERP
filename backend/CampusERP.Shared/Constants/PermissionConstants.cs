@@ -91,6 +91,7 @@ public static class PermissionConstants
 
     public const string TeacherAssignmentView = "TeacherAssignment.View";
     public const string TeacherAssignmentCreate = "TeacherAssignment.Create";
+    public const string TeacherAssignmentEdit = "TeacherAssignment.Edit";
     public const string TeacherAssignmentDelete = "TeacherAssignment.Delete";
 
     // Semester Subject Assignment
@@ -114,6 +115,39 @@ public static class PermissionConstants
     public const string AcademicSessionEdit = "Academic-Session.Edit";
     public const string AcademicSessionActivate = "Academic-Session.Activate";
     public const string AcademicSessionDeactivate = "Academic-Session.Deactivate";
+
+    // Student Promotion
+
+    public const string StudentPromotionView = "StudentPromotion.View";
+    public const string StudentPromotionCreate = "StudentPromotion.Create";
+
+    // Academic Settings
+
+    public const string AcademicSettingsView = "AcademicSettings.View";
+    public const string AcademicSettingsEdit = "AcademicSettings.Edit";
+
+    // Room
+
+    public const string RoomView = "Room.View";
+    public const string RoomCreate = "Room.Create";
+    public const string RoomEdit = "Room.Edit";
+    public const string RoomDelete = "Room.Delete";
+
+    // Calendar
+
+    public const string CalendarView = "Calendar.View";
+    public const string CalendarManage = "Calendar.Manage";
+
+    // Attendance Correction
+
+    public const string AttendanceCorrectionView = "Attendance-Correction.View";
+    public const string AttendanceCorrectionCreate = "Attendance-Correction.Create";
+    public const string AttendanceCorrectionApprove = "Attendance-Correction.Approve";
+
+    // Timetable Templates
+
+    public const string TimetableTemplateView = "TimetableTemplate.View";
+    public const string TimetableTemplateManage = "TimetableTemplate.Manage";
 
     public static readonly List<string> All =
     [
@@ -182,6 +216,7 @@ public static class PermissionConstants
 
         TeacherAssignmentView,
         TeacherAssignmentCreate,
+        TeacherAssignmentEdit,
         TeacherAssignmentDelete,
 
         SemesterSubjectView,
@@ -198,6 +233,27 @@ public static class PermissionConstants
         AcademicSessionCreate,
         AcademicSessionEdit,
         AcademicSessionActivate,
-        AcademicSessionDeactivate
+        AcademicSessionDeactivate,
+
+        StudentPromotionView,
+        StudentPromotionCreate,
+
+        AcademicSettingsView,
+        AcademicSettingsEdit,
+
+        RoomView,
+        RoomCreate,
+        RoomEdit,
+        RoomDelete,
+
+        CalendarView,
+        CalendarManage,
+
+        AttendanceCorrectionView,
+        AttendanceCorrectionCreate,
+        AttendanceCorrectionApprove,
+
+        TimetableTemplateView,
+        TimetableTemplateManage,
     ];
 }

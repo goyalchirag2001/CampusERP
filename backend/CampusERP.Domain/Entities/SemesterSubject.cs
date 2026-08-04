@@ -14,6 +14,7 @@ public class SemesterSubject : BaseEntity
 
     public Subject Subject { get; set; } = null!;
 
-    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } =
-        new List<TeacherAssignment>();
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
+
+    public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
 }

@@ -48,6 +48,7 @@ export class TeacherDetails implements OnInit {
       .open(TeacherEditDialog, {
         width: '700px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: teacher,
       })
       .afterClosed()

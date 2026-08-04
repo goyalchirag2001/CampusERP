@@ -25,13 +25,11 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponse> RegisterAsync(RegisterRequest request)
     {
-        var existingUser = await _dbContext.Users
-                .FirstOrDefaultAsync(x =>
-                    x.Email == request.Email);
+        var existingUser = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
         if (existingUser is not null)
         {
-            throw new Exception("Email already exists.");
+            throw new ConflictException(ErrorCodes.EmailAlreadyExists, "Email already exists.");
         }
 
         var user = new User
@@ -61,7 +59,20 @@ public class AuthService : IAuthService
 
         var accessToken = _jwtService.GenerateAccessToken(user,roles, null);
 
-        var refreshToken = _jwtService.GenerateRefreshToken();
+        var refreshTokenValue = _jwtService.GenerateRefreshToken();
+
+        _dbContext.RefreshTokens.Add(new RefreshToken
+        {
+            Id = Guid.NewGuid(),
+
+            UserId = user.Id,
+
+            Token = refreshTokenValue,
+
+            ExpiresAt = DateTime.UtcNow.AddDays(30)
+        });
+
+        await _dbContext.SaveChangesAsync();
 
         return new LoginResponse
         {
@@ -75,7 +86,7 @@ public class AuthService : IAuthService
 
             AccessToken = accessToken,
 
-            RefreshToken = refreshToken,
+            RefreshToken = refreshTokenValue,
 
             ExpiresAt = DateTime.UtcNow.AddHours(1)
         };
@@ -106,8 +117,7 @@ public class AuthService : IAuthService
 
             if (institution is null)
             {
-                throw new UnauthorizedException("Institution does not exist or is inactive."
-                );
+                throw new UnauthorizedException(ErrorCodes.InstitutionNotFound, "Institution does not exist or is inactive.");
             }
 
             user = await _dbContext.Users
@@ -121,7 +131,7 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            throw new UnauthorizedException("Invalid email or password.");
+            throw new UnauthorizedException(ErrorCodes.InvalidCredentials, "Invalid email or password.");
         }
 
         var isValid = _passwordService.VerifyPassword(
@@ -130,7 +140,7 @@ public class AuthService : IAuthService
 
         if (!isValid)
         {
-            throw new UnauthorizedException("Invalid email or password.");
+            throw new UnauthorizedException(ErrorCodes.InvalidCredentials, "Invalid email or password.");
         }
 
         var responseLastLoginAt = user.CurrentLoginAt;
@@ -207,17 +217,17 @@ public class AuthService : IAuthService
 
         if (refreshToken is null)
         {
-            throw new UnauthorizedException("Invalid refresh token.");
+            throw new UnauthorizedException(ErrorCodes.RefreshTokenInvalid, "Invalid refresh token.");
         }
 
         if (refreshToken.RevokedAt != null)
         {
-            throw new UnauthorizedException("Refresh token has been revoked.");
+            throw new UnauthorizedException(ErrorCodes.RefreshTokenRevoked, "Refresh token has been revoked.");
         }
 
         if (refreshToken.ExpiresAt <= DateTime.UtcNow)
         {
-            throw new UnauthorizedException("Refresh token has expired.");
+            throw new UnauthorizedException(ErrorCodes.RefreshTokenExpired, "Refresh token has expired.");
         }
 
         var user = refreshToken.User!;
@@ -280,7 +290,7 @@ public class AuthService : IAuthService
 
         if (userId is null)
         {
-            throw new Exception("User not found.");
+            throw new UnauthorizedException(ErrorCodes.CurrentUserNotFound, "Current user could not be determined.");
         }
 
         var user = await _dbContext.Users
@@ -291,7 +301,7 @@ public class AuthService : IAuthService
 
         if (user is null)
         {
-            throw new Exception("User not found.");
+            throw new NotFoundException(ErrorCodes.CurrentUserNotFound, "User not found.");
         }
 
         string? institutionSlug = null;

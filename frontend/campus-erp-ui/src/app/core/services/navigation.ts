@@ -85,10 +85,42 @@ export class NavigationService {
       },
 
       {
+        label: 'Academic Settings',
+        icon: 'tune',
+        route: slug ? `/${slug}/academic-settings` : '/platform/academic-settings',
+        permission: Permissions.AcademicSettingsView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
+        label: 'Academic Calendar',
+        icon: 'event',
+        route: slug ? `/${slug}/calendar-events` : '/platform/calendar-events',
+        permission: Permissions.CalendarView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
+        label: 'Attendance Corrections',
+        icon: 'fact_check',
+        route: slug ? `/${slug}/attendance-corrections` : '/platform/attendance-corrections',
+        permission: Permissions.AttendanceCorrectionView,
+        roles: ['InstitutionAdmin', 'CampusAdmin', 'Teacher'],
+      },
+
+      {
         label: 'Sections',
         icon: 'view_module',
         route: slug ? `/${slug}/sections` : '/platform/sections',
         permission: Permissions.SectionView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
+        label: 'Teacher Assignments',
+        icon: 'assignment_ind',
+        route: slug ? `/${slug}/teacher-assignments` : '/platform/teacher-assignments',
+        permission: Permissions.TeacherAssignmentView,
         roles: ['InstitutionAdmin', 'CampusAdmin'],
       },
 

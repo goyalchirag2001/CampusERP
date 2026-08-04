@@ -47,4 +47,6 @@ public class User : BaseEntity, ITenantEntity
     public DateTime? LastLoginAt { get; set; }
 
     public DateTime? CurrentLoginAt { get; set; }
+
+    public ICollection<AttendanceCorrectionRequest> ReviewedAttendanceCorrectionRequests { get; set; } = new List<AttendanceCorrectionRequest>();
 }

@@ -1,8 +1,10 @@
-﻿namespace CampusERP.Application.Common.Exceptions;
+﻿using System.Net;
 
-public class UnauthorizedException : Exception
+namespace CampusERP.Application.Common.Exceptions;
+
+public sealed class UnauthorizedException : AppException
 {
-    public UnauthorizedException(string message): base(message)
+    public UnauthorizedException(string code, string message): base(code, message, HttpStatusCode.Unauthorized)
     {
     }
 }

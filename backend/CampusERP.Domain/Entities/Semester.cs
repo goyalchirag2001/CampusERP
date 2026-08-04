@@ -17,6 +17,8 @@ public class Semester : BaseEntity, ITenantEntity
 
     public int SequenceNumber { get; set; }
 
+    public int YearNumber { get; set; }
+
     public bool IsActive { get; set; } = true;
 
     public Institution Institution { get; set; } = null!;
@@ -28,4 +30,6 @@ public class Semester : BaseEntity, ITenantEntity
     public ICollection<SemesterSubject> SemesterSubjects { get; set; } = new List<SemesterSubject>();
 
     public ICollection<Section> Sections { get; set; } = new List<Section>();
+
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
 }

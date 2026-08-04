@@ -94,6 +94,7 @@ export class TeacherList implements OnInit {
       .open(TeacherCreateDialog, {
         width: '700px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
       })
       .afterClosed()
       .subscribe((created) => {

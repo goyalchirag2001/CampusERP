@@ -64,9 +64,23 @@ public static class DependencyInjection
 
         services.AddScoped<IAcademicSessionService, AcademicSessionService>();
 
+        services.AddScoped<IAcademicConfigurationService, AcademicConfigurationService>();
+
         services.AddScoped<ISemesterService, SemesterService>();
 
         services.AddScoped<IStudentImportService, StudentImportService>();
+
+        services.AddScoped<IStudentPromotionService, StudentPromotionService>();
+
+        services.AddScoped<IRoomService, RoomService>();
+
+        services.AddScoped<IAttendanceCorrectionRequestService, AttendanceCorrectionRequestService>();
+
+        services.AddScoped<ICalendarEventService, CalendarEventService>();
+
+        services.AddScoped<ISchedulingEngineService, SchedulingEngineService>();
+
+        services.AddScoped<ITimetableTemplateService, TimetableTemplateService>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {

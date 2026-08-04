@@ -1,0 +1,164 @@
+@import '../../students/student-form-dialog/student-form-dialog.scss';
+
+/* ======================================================= */
+/* Event Form */
+/* ======================================================= */
+
+.event-type-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+/* ======================================================= */
+/* Textarea */
+/* ======================================================= */
+
+textarea {
+  resize: vertical;
+
+  min-height: 120px;
+}
+
+/* ======================================================= */
+/* Time Inputs */
+/* ======================================================= */
+
+input[type='time'] {
+  width: 100%;
+}
+
+input[type='time']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+
+  opacity: 0.75;
+}
+
+/* ======================================================= */
+/* Number */
+/* ======================================================= */
+
+input[type='number'] {
+  text-align: center;
+}
+
+/* ======================================================= */
+/* Toggles */
+/* ======================================================= */
+
+mat-slide-toggle {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 56px;
+}
+
+.full-width mat-slide-toggle,
+mat-slide-toggle.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ======================================================= */
+/* Hints */
+/* ======================================================= */
+
+mat-hint {
+  font-size: 12px;
+}
+
+/* ======================================================= */
+/* Expansion Panel */
+/* ======================================================= */
+
+.mat-expansion-panel-content .dialog-form {
+  padding-top: 8px;
+}
+
+/* ======================================================= */
+/* Responsive */
+/* ======================================================= */
+
+@media (max-width: 900px) {
+  .event-type-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field-label {
+  margin-bottom: 12px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: var(--card-text);
+}
+
+.event-type-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+
+  gap: 14px;
+}
+
+.event-card {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  min-height: 110px;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  border: 2px solid transparent;
+
+  background: var(--surface);
+
+  transition: all .2s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--primary);
+}
+
+.event-card.selected {
+  border-color: var(--primary);
+
+  background: color-mix(in srgb, var(--primary) 10%, var(--surface));
+}
+
+.event-card mat-icon {
+  font-size: 34px;
+
+  width: 34px;
+
+  height: 34px;
+
+  color: var(--primary);
+}
+
+.event-name {
+  text-align: center;
+
+  font-weight: 600;
+
+  font-size: 13px;
+
+  color: var(--text-primary);
+}

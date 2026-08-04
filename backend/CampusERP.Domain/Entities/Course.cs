@@ -39,5 +39,7 @@ public class Course : BaseEntity, ITenantEntity
 
     public ICollection<Student> Students { get; set; } = new List<Student>();
 
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
     public bool IsActive { get; set; } = true;
 }

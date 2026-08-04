@@ -1,0 +1,102 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Teacher Assignment</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (loading()) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else {
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Academic Session</mat-label>
+
+          <mat-select
+            [ngModel]="selectedAcademicSession()"
+            (ngModelChange)="selectedAcademicSession.set($event)"
+            (selectionChange)="onAcademicSessionChanged()"
+          >
+            @for (session of academicSessions(); track session.id) {
+              <mat-option [value]="session.id">
+                {{ session.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Section</mat-label>
+
+          <mat-select
+            [ngModel]="selectedSection()"
+            (ngModelChange)="selectedSection.set($event)"
+            (selectionChange)="onSectionChanged()"
+          >
+            @for (section of sections(); track section.id) {
+              <mat-option [value]="section.id">
+                {{ section.name }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      @if (rows().length === 0) {
+        <div class="empty-state">No subjects found for the selected section.</div>
+      } @else {
+        <table mat-table [dataSource]="rows()" class="assignment-table">
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef>Subject</th>
+
+            <td mat-cell *matCellDef="let row">
+              {{ row.subjectName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="teacher">
+            <th mat-header-cell *matHeaderCellDef>Teacher</th>
+
+            <td mat-cell *matCellDef="let row">
+              <mat-form-field appearance="outline" class="teacher-select">
+                <mat-select [ngModel]="row.teacherId" (ngModelChange)="teacherChanged(row, $event)">
+                  <mat-option [value]="null"> -- Select Teacher -- </mat-option>
+
+                  @for (teacher of teachers(); track teacher.id) {
+                    <mat-option [value]="teacher.id">
+                      {{ teacher.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              @if (row.dirty) {
+                <div class="unsaved-indicator">Unsaved Changes</div>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      }
+
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="loading() || saving() || !hasChanges()"
+          (click)="save()"
+        >
+          @if (saving()) {
+            Saving...
+          } @else {
+            Save Changes
+          }
+        </button>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

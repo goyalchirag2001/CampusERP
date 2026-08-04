@@ -5,9 +5,13 @@ namespace CampusERP.Application.Interfaces;
 
 public interface ITeacherAssignmentService
 {
-    Task<TeacherAssignmentResponse> AssignAsync(AssignTeacherRequest request);
+    Task<List<TeacherAssignmentListResponse>> GetAllAsync();
 
-    Task<List<TeacherAssignmentResponse>> GetByTeacherAsync(Guid teacherId);
+    Task<TeacherAssignmentResponse?> GetByIdAsync(Guid id);
 
-    Task RemoveAsync(Guid id);
+    Task<TeacherAssignmentResponse> CreateAsync(CreateTeacherAssignmentRequest request);
+
+    Task<TeacherAssignmentResponse> UpdateAsync(Guid id, UpdateTeacherAssignmentRequest request);
+
+    Task DeleteAsync(Guid id);
 }

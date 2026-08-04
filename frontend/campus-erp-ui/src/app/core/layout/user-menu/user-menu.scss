@@ -9,64 +9,69 @@
 
   gap: 14px;
 
-  min-width: 240px;
+  width: 260px;
+  max-width: 260px;
 
   padding: 8px 18px;
 
-  border-radius: 18px;
+  border-radius: 20px;
 
   background: transparent;
 
-  width: 260px;
-  max-width: 260px;
-  border-radius: 20px;
-  transition: background 0.25s ease;
+  transition: all 0.25s ease;
+
+  color: var(--text-primary);
 }
 
 .user-trigger:hover {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 90%, var(--primary) 10%);
+}
+
+.user-trigger .mdc-button__label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.user-trigger mat-icon {
+  color: var(--text-secondary);
 }
 
 .trigger-avatar,
 .menu-avatar {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
+
+  color: white;
 }
 
 .trigger-avatar {
   width: 46px;
-
   height: 46px;
 
   border-radius: 14px;
 
+  overflow: hidden;
+
   flex-shrink: 0;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  color: white;
-
-  font-size: 18px;
-
   font-weight: 700;
-
-  overflow: hidden;
+  font-size: 18px;
 }
 
-.trigger-avatar img {
+.trigger-avatar img,
+.menu-avatar img {
   width: 100%;
-
   height: 100%;
-
   object-fit: cover;
 }
 
 .trigger-content {
   display: flex;
-
+  min-width: 0;
   flex-direction: column;
 
   align-items: flex-start;
@@ -77,18 +82,21 @@
 }
 
 .trigger-name {
-  font-size: 15px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
+  width: 100%;
 
   overflow: hidden;
-
   text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: var(--text-primary);
 }
 
 .trigger-role {
+  margin-top: 2px;
+
   font-size: 12px;
 
   color: var(--muted);
@@ -101,27 +109,21 @@
 
   gap: 16px;
 
-  padding: 18px 20px;
+  padding: 20px;
 }
 
 .menu-avatar {
   width: 58px;
-
   height: 58px;
 
   border-radius: 16px;
 
   display: flex;
-
+  align-items: center;
   justify-content: center;
 
-  align-items: center;
-
-  color: white;
-
-  font-weight: 700;
-
   font-size: 22px;
+  font-weight: 700;
 
   overflow: hidden;
 }
@@ -141,17 +143,14 @@
 }
 
 .menu-name {
-  font-size: 17px;
-
-  font-weight: 700;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
 
-  color: var(--card-text);
+  font-size: 17px;
+  font-weight: 700;
+
+  color: var(--text-primary);
 }
 
 ::ng-deep .mat-mdc-menu-item-text {
@@ -159,44 +158,101 @@
 }
 
 .menu-role {
+  margin-top: 4px;
+
   font-size: 13px;
 
-  color: var(--muted);
-
-  margin-top: 4px;
+  color: var(--text-secondary);
 }
 
 .mat-mdc-menu-item {
   height: 50px;
 
-  border-radius: 12px;
-
   margin: 4px 8px;
 
   width: calc(100% - 16px);
+
+  border-radius: 14px;
+
+  transition: all 0.2s ease;
 }
 
 .mat-mdc-menu-item:hover {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 88%, var(--primary) 12%);
 }
 
 .mat-mdc-menu-item mat-icon {
-  color: var(--primary);
-
   margin-right: 12px;
+
+  color: var(--primary);
+}
+
+::ng-deep .mat-mdc-menu-item-text {
+  color: var(--text-primary) !important;
 }
 
 ::ng-deep .user-menu .mat-mdc-menu-content {
   padding: 8px;
-  background: var(--card-bg);
-  color: var(--card-text);
+
+  background: transparent;
+
+  color: var(--text-primary);
+}
+
+::ng-deep .user-menu mat-divider {
+  border-top-color: var(--border);
 }
 
 ::ng-deep .user-menu {
-  border-radius: 24px !important;
-  overflow: hidden;
+  overflow: hidden !important;
+
+  border-radius: 22px !important;
+
+  border: 1px solid var(--border) !important;
+
+  background: var(--card-bg) !important;
+
   box-shadow: var(--shadow-premium);
-  border: 1px solid var(--glass-border);
-  background: var(--card-bg);
-  color: var(--card-text);
+}
+
+@media (max-width: 768px) {
+  .user-trigger {
+    width: auto;
+    min-width: auto;
+    max-width: 180px;
+
+    padding: 6px 10px;
+
+    gap: 10px;
+  }
+
+  .trigger-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .trigger-name {
+    font-size: 14px;
+  }
+
+  .trigger-role {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .trigger-content {
+    display: none;
+  }
+
+  .user-trigger {
+    width: auto;
+    min-width: auto;
+
+    padding: 4px;
+  }
+
+  .user-trigger mat-icon:last-child {
+    display: none;
+  }
 }

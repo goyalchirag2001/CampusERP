@@ -11,4 +11,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CampusERP.Shared\CampusERP.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

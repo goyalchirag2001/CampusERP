@@ -34,4 +34,6 @@ public class Student : BaseEntity, ITenantEntity
     public bool IsActive { get; set; } = true;
 
     public ICollection<StudentEnrollment> Enrollments { get; set; } = new List<StudentEnrollment>();
+
+    public ICollection<AttendanceCorrectionRequest> AttendanceCorrectionRequests { get; set; } = new List<AttendanceCorrectionRequest>();
 }

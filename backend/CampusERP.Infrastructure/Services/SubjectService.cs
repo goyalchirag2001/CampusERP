@@ -1,9 +1,8 @@
 ﻿using CampusERP.Application.Interfaces;
-using CampusERP.Contracts.Enums;
+using CampusERP.Shared.Enums;
 using CampusERP.Contracts.Requests;
 using CampusERP.Contracts.Responses;
 using CampusERP.Domain.Entities;
-using CampusERP.Domain.Enums;
 using CampusERP.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -93,7 +92,7 @@ public class SubjectService : ISubjectService
 
                     Credits = x.Credits,
 
-                    SubjectType = (SubjectTypeDto)x.SubjectType,
+                    SubjectType = (SubjectType)x.SubjectType,
 
                     IsActive = x.IsActive
                 })
@@ -121,7 +120,7 @@ public class SubjectService : ISubjectService
 
                     Credits = x.Credits,
 
-                    SubjectType = (SubjectTypeDto)x.SubjectType,
+                    SubjectType = (SubjectType)x.SubjectType,
 
                     IsActive = x.IsActive
                 })

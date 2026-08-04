@@ -66,6 +66,7 @@ export class SemesterCard implements OnInit {
       .open(LookupPickerComponent, {
         width: '700px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: {
           title: `Assign Subject - ${this.semester.name}`,
           placeholder: 'Search subject code or name',

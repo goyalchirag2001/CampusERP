@@ -91,6 +91,7 @@ export class SubjectList implements OnInit {
       .open(SubjectCreateDialog, {
         width: '650px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
       })
       .afterClosed()
       .subscribe((created) => {

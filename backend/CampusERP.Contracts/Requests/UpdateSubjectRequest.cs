@@ -1,4 +1,4 @@
-﻿using CampusERP.Contracts.Enums;
+﻿using CampusERP.Shared.Enums;
 
 namespace CampusERP.Contracts.Requests;
 
@@ -14,5 +14,5 @@ public class UpdateSubjectRequest
 
     public int Credits { get; set; }
 
-    public SubjectTypeDto SubjectType { get; set; }
+    public SubjectType SubjectType { get; set; }
 }

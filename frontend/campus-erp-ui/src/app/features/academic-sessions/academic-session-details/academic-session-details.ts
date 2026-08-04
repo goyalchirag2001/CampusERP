@@ -53,6 +53,7 @@ export class AcademicSessionDetails implements OnInit {
       .open(AcademicSessionFormDialog, {
         width: '900px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: {
           isEdit: true,
           academicSession: session,

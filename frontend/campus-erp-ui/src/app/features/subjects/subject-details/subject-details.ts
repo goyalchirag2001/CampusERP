@@ -70,6 +70,7 @@ export class SubjectDetails implements OnInit {
       .open(SubjectEditDialog, {
         width: '650px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: subject,
       })
       .afterClosed()

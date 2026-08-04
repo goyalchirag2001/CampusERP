@@ -76,19 +76,6 @@ body[data-theme='dark'] mat-expansion-panel-header:hover {
   background: rgba(255, 255, 255, 0.08) !important;
 }
 
-.mat-expansion-panel-header-title {
-  font-size: 15px;
-
-  font-weight: 600;
-
-  color: var(--card-text);
-}
-
-.mat-expansion-panel-header-description {
-  color: var(--muted);
-
-  font-size: 13px;
-}
 
 ::ng-deep .mat-expansion-panel-body {
   padding-top: 22px !important;

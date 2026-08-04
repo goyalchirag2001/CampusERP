@@ -1,0 +1,291 @@
+/* ===========================================================
+   Angular Material Theme Overrides
+   =========================================================== */
+
+/* ===========================================================
+   Form Fields
+   =========================================================== */
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: var(--radius-lg) !important;
+
+  transition: all var(--transition);
+}
+
+.mat-mdc-text-field-wrapper:hover {
+  transform: translateY(-1px);
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  min-height: 24px;
+}
+
+/* ===========================================================
+   Labels
+   =========================================================== */
+
+.mdc-floating-label {
+  color: var(--text-secondary) !important;
+}
+
+.mdc-label {
+  color: var(--text-primary);
+}
+
+/* ===========================================================
+   Inputs
+   =========================================================== */
+
+.mat-mdc-input-element {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-input-element::placeholder {
+  color: var(--text-secondary) !important;
+
+  opacity: 1;
+}
+
+.mdc-text-field__input {
+  color: var(--text-primary) !important;
+}
+
+/* ===========================================================
+   Select
+   =========================================================== */
+
+.mat-mdc-select-value,
+.mat-mdc-select-value-text,
+.mat-mdc-select-arrow {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-select-panel {
+  background: var(--card-bg) !important;
+
+  border-radius: var(--radius-lg);
+}
+
+.mat-mdc-option {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-option:hover {
+  background: color-mix(in srgb, var(--primary) 8%, var(--card-bg));
+}
+
+.mat-mdc-option.mdc-list-item--selected {
+  background: color-mix(in srgb, var(--primary) 18%, var(--card-bg));
+}
+
+/* ===========================================================
+   Cards
+   =========================================================== */
+
+.mat-mdc-card {
+  background: var(--card-bg) !important;
+
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-card-title,
+.mat-mdc-card-subtitle,
+.mat-mdc-card-content,
+.mat-mdc-card-header {
+  color: inherit;
+}
+
+/* ===========================================================
+   Dialogs
+   =========================================================== */
+
+.mat-mdc-dialog-surface {
+  background: var(--card-bg) !important;
+
+  color: var(--text-primary) !important;
+
+  border-radius: var(--radius-xl);
+}
+
+.mat-mdc-dialog-container {
+  color: var(--text-primary);
+}
+
+/* ===========================================================
+   Tables
+   =========================================================== */
+
+.mat-mdc-table,
+.mat-mdc-header-row,
+.mat-mdc-row {
+  background: var(--card-bg) !important;
+
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-header-cell {
+  color: var(--text-primary) !important;
+
+  font-weight: 600;
+}
+
+.mat-mdc-cell,
+.mat-mdc-footer-cell {
+  color: var(--text-primary) !important;
+}
+
+/* ===========================================================
+   Paginator
+   =========================================================== */
+
+.mat-mdc-paginator {
+  background: var(--card-bg) !important;
+
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-paginator-page-size-label,
+.mat-mdc-paginator-range-label {
+  color: var(--text-primary) !important;
+}
+
+/* ===========================================================
+   Buttons
+   =========================================================== */
+
+.mat-mdc-icon-button {
+  color: var(--text-primary) !important;
+}
+
+/* ===========================================================
+   Slide Toggle
+   =========================================================== */
+
+.mat-mdc-slide-toggle {
+  color: var(--text-primary);
+}
+
+.mat-mdc-slide-toggle .mdc-label {
+  color: var(--text-primary);
+
+  font-weight: 500;
+}
+
+/* ===========================================================
+   Expansion Panels
+   =========================================================== */
+
+.mat-expansion-panel {
+  border-radius: var(--radius-xl) !important;
+
+  overflow: hidden;
+
+  background: var(--surface) !important;
+
+  border: 1px solid var(--border);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-premium);
+
+  transition: all var(--transition);
+}
+
+.mat-expansion-panel:hover {
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-lg);
+}
+
+.mat-expansion-panel-header {
+  height: 72px !important;
+
+  padding: 0 24px;
+}
+
+body[data-theme='light'] .mat-expansion-panel-header {
+  background: rgba(79, 70, 229, 0.05);
+}
+
+body[data-theme='dark'] .mat-expansion-panel-header {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  background: rgba(79, 70, 229, 0.12);
+}
+
+.mat-expansion-panel-header-title {
+  color: var(--text-primary) !important;
+
+  font-size: 17px;
+
+  font-weight: 600;
+}
+
+.mat-expansion-panel-header-description {
+  color: var(--text-secondary) !important;
+
+  font-size: 13px;
+
+  justify-content: flex-end;
+}
+
+.mat-expansion-panel-body {
+  padding-top: 24px !important;
+}
+
+/* ===========================================================
+   Snackbars
+   =========================================================== */
+
+.success-snackbar {
+  --mdc-snackbar-container-color: #16a34a;
+}
+
+.warning-snackbar {
+  --mdc-snackbar-container-color: #d97706;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #dc2626;
+}
+
+.mat-drawer {
+    background: var(--surface) !important;
+}
+
+.mat-drawer-container {
+    background: var(--background) !important;
+}
+
+.mat-drawer-content {
+    background: transparent !important;
+}
+
+.cdk-overlay-container {
+  color: var(--text-primary);
+}
+
+.cdk-overlay-pane {
+  color: var(--text-primary);
+}
+
+.mat-mdc-menu-panel {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.mat-mdc-menu-item {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-menu-item mat-icon {
+  color: var(--text-primary) !important;
+}

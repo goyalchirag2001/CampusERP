@@ -34,4 +34,10 @@ public class Section : BaseEntity, ITenantEntity
     public Semester Semester { get; set; } = null!;
 
     public ICollection<StudentEnrollment> StudentEnrollments { get; set; } = new List<StudentEnrollment>();
+
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
+
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
+    public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
 }

@@ -65,6 +65,22 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Section> Sections => Set<Section>();
 
+    public DbSet<AcademicConfiguration> AcademicConfigurations => Set<AcademicConfiguration>();
+
+    public DbSet<Room> Rooms => Set<Room>();
+
+    public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
+
+    public DbSet<TimetableTemplate> TimetableTemplates => Set<TimetableTemplate>();
+
+    public DbSet<LectureOverride> LectureOverrides => Set<LectureOverride>();
+
+    public DbSet<AttendanceCorrectionRequest> AttendanceCorrectionRequests => Set<AttendanceCorrectionRequest>();
+
+    public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
+
+    public DbSet<AttendanceSession> AttendanceSessions => Set<AttendanceSession>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -74,41 +90,71 @@ public class ApplicationDbContext : DbContext
         ConfigureGlobalFilters(modelBuilder);
     }
 
+    public override int SaveChanges()
+    {
+        ApplyAuditInformation();
+        return base.SaveChanges();
+    }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var entries = ChangeTracker.Entries<IAuditableEntity>();
+        ApplyAuditInformation();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 
-        foreach (var entry in entries)
+    private void ConfigureGlobalFilters(ModelBuilder modelBuilder)
+    {
+        ApplySoftDelete<Student>(modelBuilder);
+        ApplySoftDelete<Teacher>(modelBuilder);
+        ApplySoftDelete<Course>(modelBuilder);
+        ApplySoftDelete<Department>(modelBuilder);
+        ApplySoftDelete<User>(modelBuilder);
+        ApplySoftDelete<Campus>(modelBuilder);
+        ApplySoftDelete<Institution>(modelBuilder);
+        ApplySoftDelete<Semester>(modelBuilder);
+        ApplySoftDelete<Subject>(modelBuilder);
+        ApplySoftDelete<SemesterSubject>(modelBuilder);
+        ApplySoftDelete<TeacherAssignment>(modelBuilder);
+        ApplySoftDelete<Role>(modelBuilder);
+        ApplySoftDelete<Permission>(modelBuilder);
+        ApplySoftDelete<AcademicConfiguration>(modelBuilder);
+        ApplySoftDelete<AcademicSession>(modelBuilder);
+        ApplySoftDelete<StudentEnrollment>(modelBuilder);
+        ApplySoftDelete<Section>(modelBuilder);
+        ApplySoftDelete<RefreshToken>(modelBuilder);
+
+        ApplySoftDelete<Room>(modelBuilder);
+        ApplySoftDelete<CalendarEvent>(modelBuilder);
+        ApplySoftDelete<TimetableTemplate>(modelBuilder);
+        ApplySoftDelete<LectureOverride>(modelBuilder);
+
+        ApplySoftDelete<AttendanceCorrectionRequest>(modelBuilder);
+        ApplySoftDelete<AttendanceRecord>(modelBuilder);
+        ApplySoftDelete<AttendanceSession>(modelBuilder);
+    }
+
+    private void ApplyAuditInformation()
+    {
+        var userEmail = _currentUserService.Email ?? "System";
+
+        foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
         {
-            
             if (entry.Entity is not BaseEntity entity)
-            {
                 continue;
-            }
 
             if (entry.State == EntityState.Deleted)
             {
-                if (entry.Entity is RolePermission ||  entry.Entity is UserRole)
-                {
+                // Junction tables should be physically deleted
+                if (entry.Entity is RolePermission || entry.Entity is UserRole)
                     continue;
-                }
 
                 entity.IsDeleted = true;
-
                 entity.UpdatedAt = DateTime.UtcNow;
-
-                entity.UpdatedBy =
-                    _currentUserService.Email ??
-                    "System";
+                entity.UpdatedBy = userEmail;
 
                 entry.State = EntityState.Modified;
-
                 continue;
             }
-
-            var userEmail =
-                _currentUserService.Email ??
-                "System";
 
             if (entry.State == EntityState.Added)
             {
@@ -125,50 +171,11 @@ public class ApplicationDbContext : DbContext
                 entity.UpdatedBy = userEmail;
             }
         }
-
-        return await base.SaveChangesAsync(
-            cancellationToken);
     }
 
-    private void ConfigureGlobalFilters(ModelBuilder modelBuilder)
+    private static void ApplySoftDelete<TEntity>(ModelBuilder modelBuilder) where TEntity : BaseEntity
     {
-        modelBuilder.Entity<Student>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Teacher>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Course>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Department>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<User>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Campus>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Institution>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Semester>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Subject>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<SemesterSubject>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<TeacherAssignment>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Role>()
-            .HasQueryFilter(x => !x.IsDeleted);
-
-        modelBuilder.Entity<Permission>()
+        modelBuilder.Entity<TEntity>()
             .HasQueryFilter(x => !x.IsDeleted);
     }
 }

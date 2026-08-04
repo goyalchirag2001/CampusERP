@@ -17,6 +17,8 @@ public static class DatabaseSeeder
 
         await SeedPlatformInstitutionAsync(dbContext);
 
+        await SeedAcademicConfigurationAsync(dbContext);
+
         await SeedGlobalCampusAsync(dbContext);
 
         await SeedSuperAdminAsync(dbContext, passwordService);
@@ -237,6 +239,42 @@ public static class DatabaseSeeder
                 dbContext.RolePermissions.Add(permission);
             }
         }
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static async Task SeedAcademicConfigurationAsync(ApplicationDbContext dbContext)
+    {
+        var exists =
+            await dbContext.AcademicConfigurations
+                .AnyAsync(x =>
+                    x.InstitutionId == SeedData.PlatformInstitutionId &&
+                    x.CampusId == null);
+
+        if (exists)
+        {
+            return;
+        }
+
+        dbContext.AcademicConfigurations.Add(
+            new AcademicConfiguration
+            {
+                Id = Guid.NewGuid(),
+
+                InstitutionId = SeedData.PlatformInstitutionId,
+
+                CampusId = null,
+
+                AcademicTermsPerSession = 2,
+
+                AutoPromoteEnabled = true,
+
+                MinimumAttendancePercentage = 75,
+
+                AllowAttendanceEditing = true,
+
+                AttendanceEditWindowDays = 7
+            });
 
         await dbContext.SaveChangesAsync();
     }

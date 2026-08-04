@@ -26,4 +26,12 @@ public class AcademicSession : BaseEntity
     public Campus Campus { get; set; } = null!;
 
     public ICollection<StudentEnrollment> StudentEnrollments { get; set; } = new List<StudentEnrollment>();
+
+    public ICollection<TeacherAssignment> TeacherAssignments { get; set; } = new List<TeacherAssignment>();
+
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
+    public ICollection<LectureOverride> LectureOverrides { get; set; } = new List<LectureOverride>();
+
+    public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
 }

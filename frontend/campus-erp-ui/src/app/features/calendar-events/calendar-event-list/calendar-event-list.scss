@@ -1,0 +1,247 @@
+@import '../../campuses/campus-list/campus-list.scss';
+
+.event-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-title {
+  font-weight: 600;
+}
+
+.event-description {
+  font-size: 12px;
+  color: var(--muted);
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 72px;
+  padding: 4px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  background: rgba(34, 197, 94, 0.12);
+  color: #15803d;
+
+  &.inactive {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.sortable:hover {
+  background: rgba(79, 70, 229, 0.06);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sort-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.sortable:hover .sort-icon {
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions button {
+    width: 100%;
+  }
+}
+
+.event-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  &.holiday {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+  }
+
+  &.exam {
+    background: rgba(59, 130, 246, 0.12);
+    color: #2563eb;
+  }
+
+  &.workshop {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+  }
+
+  &.seminar {
+    background: rgba(168, 85, 247, 0.12);
+    color: #7c3aed;
+  }
+
+  &.sports {
+    background: rgba(249, 115, 22, 0.12);
+    color: #ea580c;
+  }
+
+  &.cultural {
+    background: rgba(236, 72, 153, 0.12);
+    color: #db2777;
+  }
+
+  &.guest {
+    background: rgba(14, 165, 233, 0.12);
+    color: #0284c7;
+  }
+
+  &.faculty {
+    background: rgba(99, 102, 241, 0.12);
+    color: #4f46e5;
+  }
+
+  &.ptm {
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+  }
+
+  &.extra {
+    background: rgba(245, 158, 11, 0.12);
+    color: #d97706;
+  }
+
+  &.maintenance {
+    background: rgba(107, 114, 128, 0.12);
+    color: #4b5563;
+  }
+
+  &.placement {
+    background: rgba(6, 182, 212, 0.12);
+    color: #0891b2;
+  }
+
+  &.convocation {
+    background: rgba(124, 58, 237, 0.12);
+    color: #6d28d9;
+  }
+
+  &.orientation {
+    background: rgba(37, 99, 235, 0.12);
+    color: #1d4ed8;
+  }
+
+  &.custom {
+    background: rgba(75, 85, 99, 0.12);
+    color: #374151;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 450px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+
+  padding: 80px 32px;
+
+  background: var(--surface);
+
+  border-radius: 28px;
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-premium);
+
+  text-align: center;
+}
+
+.empty-state mat-icon {
+  width: 72px;
+  height: 72px;
+  font-size: 72px;
+  color: var(--muted);
+}
+
+.empty-state h2 {
+  margin: 0;
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.create-btn {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-weight: 600;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+  }
+}

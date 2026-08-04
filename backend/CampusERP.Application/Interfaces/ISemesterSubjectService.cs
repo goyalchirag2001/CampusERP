@@ -11,6 +11,8 @@ public interface ISemesterSubjectService
 
     Task<List<CourseSemesterSubjectResponse>> GetByCourseAsync(Guid courseId);
 
+    Task<List<LookupResponse>> GetLookupBySectionAsync(Guid sectionId);
+
     Task RemoveAsync(Guid id);
 
     Task MoveUpAsync(Guid id);

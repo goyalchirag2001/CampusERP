@@ -1,0 +1,273 @@
+/* ===========================================================
+   CampusERP List / Table System
+   =========================================================== */
+
+/* ===========================================================
+   Page
+   =========================================================== */
+
+.entity-page {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+/* ===========================================================
+   Header
+   =========================================================== */
+
+.page-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  font-size: 34px;
+
+  font-weight: 700;
+
+  color: var(--text-primary);
+}
+
+.page-header p {
+  margin-top: 8px;
+
+  color: var(--text-secondary);
+}
+
+/* ===========================================================
+   Header Actions
+   =========================================================== */
+
+.header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+/* ===========================================================
+   Toolbar
+   =========================================================== */
+
+.toolbar {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 16px;
+}
+
+/* ===========================================================
+   Search
+   =========================================================== */
+
+.search-box {
+  width: 420px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 16px 20px;
+
+  border-radius: var(--radius-xl);
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  box-shadow: var(--shadow-md);
+
+  transition: all var(--transition);
+}
+
+.search-box:hover {
+  border-color: var(--border-hover);
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  font-size: 15px;
+}
+
+.search-box input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-box mat-icon {
+  color: var(--text-secondary);
+}
+
+/* ===========================================================
+   Table Container
+   =========================================================== */
+
+.table-container {
+  overflow: hidden;
+
+  border-radius: var(--radius-xl);
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: var(--shadow-md);
+}
+
+table {
+  width: 100%;
+}
+
+/* ===========================================================
+   Hover
+   =========================================================== */
+
+.mat-mdc-row {
+  transition: background 0.2s ease;
+}
+
+.mat-mdc-row:hover {
+  cursor: pointer;
+
+  background: color-mix(in srgb, var(--card-bg) 88%, var(--primary) 12%);
+}
+
+/* ===========================================================
+   Sort
+   =========================================================== */
+
+.sortable {
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.sortable:hover {
+  background: rgba(79, 70, 229, 0.06);
+}
+
+.header-content {
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+}
+
+.sort-icon {
+  width: 18px;
+
+  height: 18px;
+
+  font-size: 18px;
+
+  color: var(--text-secondary);
+
+  transition: color var(--transition);
+}
+
+.sortable:hover .sort-icon {
+  color: var(--primary);
+}
+
+/* ===========================================================
+   Status
+   =========================================================== */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 74px;
+
+  padding: 5px 12px;
+
+  border-radius: var(--radius-pill);
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  background: rgba(34, 197, 94, 0.15);
+
+  color: #15803d;
+}
+
+.status-badge.inactive {
+  background: rgba(239, 68, 68, 0.15);
+
+  color: #dc2626;
+}
+
+/* ===========================================================
+   Secondary Text
+   =========================================================== */
+
+.secondary-text {
+  font-size: 12px;
+
+  color: var(--text-secondary);
+}
+
+/* ===========================================================
+   Responsive
+   =========================================================== */
+
+@media (max-width: 900px) {
+  .page-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .toolbar {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-actions button {
+    flex: 1;
+  }
+}

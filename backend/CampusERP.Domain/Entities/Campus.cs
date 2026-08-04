@@ -43,4 +43,12 @@ public class Campus : BaseEntity, ITenantEntity
     public ICollection<Semester> Semesters { get; set; } = new List<Semester>();
 
     public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
+
+    public ICollection<LectureOverride> LectureOverrides { get; set; } = new List<LectureOverride>();
+
+    public ICollection<Room> Rooms { get; set; } = new List<Room>();
+
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
+    public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
 }

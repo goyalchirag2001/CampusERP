@@ -1,9 +1,8 @@
 ﻿using CampusERP.Application.Interfaces;
-using CampusERP.Contracts.Enums;
+using CampusERP.Shared.Enums;
 using CampusERP.Contracts.Requests;
 using CampusERP.Contracts.Responses;
 using CampusERP.Domain.Entities;
-using CampusERP.Domain.Enums;
 using CampusERP.Infrastructure.Data;
 using CampusERP.Shared.Constants;
 using CampusERP.Shared.Utilities;
@@ -490,11 +489,11 @@ public class StudentService : IStudentService
 
             AcademicSessionName = enrollment.AcademicSession.Name,
 
-            EnrollmentStatus = (EnrollmentStatusDto)enrollment.EnrollmentStatus,
+            EnrollmentStatus = (EnrollmentStatus)enrollment.EnrollmentStatus,
 
             EnrollmentStatusName = enrollment.EnrollmentStatus.ToString(),
 
-            PromotionStatus = (PromotionStatusDto)enrollment.PromotionStatus,
+            PromotionStatus = (PromotionStatus)enrollment.PromotionStatus,
 
             PromotionStatusName = enrollment.PromotionStatus.ToString()
         };

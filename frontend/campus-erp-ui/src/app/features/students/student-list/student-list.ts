@@ -164,6 +164,7 @@ export class StudentList implements OnInit {
       .open(StudentFormDialog, {
         width: '950px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: {
           mode: 'create',
         },

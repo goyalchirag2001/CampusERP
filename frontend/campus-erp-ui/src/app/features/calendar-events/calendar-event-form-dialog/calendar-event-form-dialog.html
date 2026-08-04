@@ -1,0 +1,281 @@
+<h2 mat-dialog-title>
+  {{ isEdit() ? 'Edit Calendar Event' : 'Create Calendar Event' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-accordion multi>
+      <!-- ===================================================== -->
+      <!-- Academic Information -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Academic Information </mat-panel-title>
+
+          <mat-panel-description> Campus & Academic Scope </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          @if (!isCampusAdmin()) {
+            <mat-form-field appearance="outline">
+              <mat-label>Campus</mat-label>
+
+              <mat-select formControlName="campusId">
+                @for (campus of campuses(); track campus.id) {
+                  <mat-option [value]="campus.id">
+                    {{ campus.name }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+
+          <mat-form-field appearance="outline">
+            <mat-label>Department</mat-label>
+
+            <mat-select formControlName="departmentId">
+              <mat-option value="">All Departments</mat-option>
+
+              @for (department of filteredDepartments(); track department.id) {
+                <mat-option [value]="department.id">
+                  {{ department.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Course</mat-label>
+
+            <mat-select formControlName="courseId">
+              <mat-option value="">All Courses</mat-option>
+
+              @for (course of filteredCourses(); track course.id) {
+                <mat-option [value]="course.id">
+                  {{ course.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Semester</mat-label>
+
+            <mat-select formControlName="semesterId">
+              <mat-option value="">All Semesters</mat-option>
+
+              @for (semester of semesters(); track semester.id) {
+                <mat-option [value]="semester.id">
+                  {{ semester.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Section</mat-label>
+
+            <mat-select formControlName="sectionId">
+              <mat-option value="">All Sections</mat-option>
+
+              @for (section of sections(); track section.id) {
+                <mat-option [value]="section.id">
+                  {{ section.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Teacher</mat-label>
+
+            <mat-select formControlName="teacherId">
+              <mat-option value="">All Teachers</mat-option>
+
+              @for (teacher of filteredTeachers(); track teacher.id) {
+                <mat-option [value]="teacher.id">
+                  {{ teacher.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Academic Session</mat-label>
+
+            <mat-select formControlName="academicSessionId">
+              @for (session of academicSessions(); track session.id) {
+                <mat-option [value]="session.id">
+                  {{ session.name }}
+
+                  @if (session.isCurrent) {
+                    (Current)
+                  }
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ===================================================== -->
+      <!-- Event Information -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Event Information </mat-panel-title>
+
+          <mat-panel-description> Basic Event Details </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+
+            <input matInput formControlName="title" maxlength="200" />
+
+            <mat-hint align="end"> {{ form.controls.title.value?.length ?? 0 }}/200 </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+
+            <textarea matInput rows="4" maxlength="2000" formControlName="description"> </textarea>
+
+            <mat-hint align="end">
+              {{ form.controls.description.value?.length ?? 0 }}/2000
+            </mat-hint>
+          </mat-form-field>
+
+          <div class="full-width">
+            <div class="field-label">Event Type</div>
+
+            <div class="event-type-grid">
+              @for (type of eventTypes; track type.value) {
+                <div
+                  class="event-card"
+                  [class.selected]="form.controls.eventType.value === type.value"
+                  (click)="selectEventType(type.value)"
+                >
+                  <mat-icon>
+                    {{ type.icon }}
+                  </mat-icon>
+
+                  <div class="event-name">
+                    {{ type.name }}
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ===================================================== -->
+      <!-- Schedule -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Schedule </mat-panel-title>
+
+          <mat-panel-description> Event Timing </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+
+            <input matInput readonly [matDatepicker]="startPicker" formControlName="startDate" />
+
+            <mat-datepicker-toggle matSuffix [for]="startPicker"> </mat-datepicker-toggle>
+
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+
+            <input matInput readonly [matDatepicker]="endPicker" formControlName="endDate" />
+
+            <mat-datepicker-toggle matSuffix [for]="endPicker"> </mat-datepicker-toggle>
+
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-slide-toggle class="full-width" formControlName="isFullDay">
+            Full Day Event
+          </mat-slide-toggle>
+
+          @if (!form.controls.isFullDay.value) {
+            <mat-form-field appearance="outline">
+              <mat-label>Start Time</mat-label>
+
+              <input matInput type="time" formControlName="startTime" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>End Time</mat-label>
+
+              <input matInput type="time" formControlName="endTime" />
+            </mat-form-field>
+          }
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ===================================================== -->
+      <!-- Recurrence & Timetable -->
+      <!-- ===================================================== -->
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title> Recurrence & Timetable </mat-panel-title>
+
+          <mat-panel-description> Advanced Settings </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+          <mat-slide-toggle class="full-width" formControlName="isRecurring">
+            Recurring Event
+          </mat-slide-toggle>
+
+          @if (form.controls.isRecurring.value) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Recurrence Rule</mat-label>
+
+              <input
+                matInput
+                placeholder="Example: FREQ=WEEKLY;BYDAY=MO"
+                formControlName="recurrenceRule"
+              />
+
+              <mat-hint> RFC-5545 recurrence rule </mat-hint>
+            </mat-form-field>
+          }
+
+          <mat-slide-toggle class="full-width" formControlName="affectsTimetable">
+            Affects Timetable
+          </mat-slide-toggle>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+
+            <input matInput type="number" min="1" max="100" formControlName="priority" />
+
+            <mat-hint> Higher priority overrides lower priority events. </mat-hint>
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="close()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="saving()" (click)="save()">
+    {{ isEdit() ? 'Save Changes' : 'Create Event' }}
+  </button>
+</mat-dialog-actions>

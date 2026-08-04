@@ -224,6 +224,23 @@ public class SectionService : ISectionService
             .ToListAsync();
     }
 
+    public async Task<List<LookupResponse>> GetLookupAsync()
+    {
+        return await ApplySectionScope(
+                _dbContext.Sections
+                    .Where(x => x.IsActive))
+            .OrderBy(x => x.Course.Name)
+            .ThenBy(x => x.Semester.SequenceNumber)
+            .ThenBy(x => x.Name)
+            .Select(x => new LookupResponse
+            {
+                Id = x.Id,
+
+                Name = $"{x.Course.Name} • {x.Semester.Name} • Section {x.Name}"
+            })
+            .ToListAsync();
+    }
+
     private IQueryable<Semester> ApplySemesterScope(IQueryable<Semester> query)
     {
         if (_scope.IsSuperAdmin() || _scope.IsPlatformAdmin())

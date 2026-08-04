@@ -117,6 +117,7 @@ export class SectionList implements OnInit {
       .open(SectionFormDialog, {
         width: '900px',
         maxWidth: '95vw',
+        maxHeight: '90vh',
         data: {
           isEdit: true,
           section,
