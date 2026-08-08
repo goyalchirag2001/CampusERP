@@ -134,9 +134,7 @@ public class AuthService : IAuthService
             throw new UnauthorizedException(ErrorCodes.InvalidCredentials, "Invalid email or password.");
         }
 
-        var isValid = _passwordService.VerifyPassword(
-                request.Password,
-                user.PasswordHash);
+        var isValid = _passwordService.VerifyPassword(request.Password, user.PasswordHash);
 
         if (!isValid)
         {
