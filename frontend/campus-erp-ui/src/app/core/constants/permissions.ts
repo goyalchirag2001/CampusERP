@@ -81,4 +81,7 @@ export const Permissions = {
   AttendanceCorrectionView: 'Attendance-Correction.View',
   AttendanceCorrectionCreate: 'Attendance-Correction.Create',
   AttendanceCorrectionApprove: 'Attendance-Correction.Approve',
+
+  TimetableTemplateView: 'TimetableTemplate.View',
+  TimetableTemplateManage: 'TimetableTemplate.Manage',
 } as const;

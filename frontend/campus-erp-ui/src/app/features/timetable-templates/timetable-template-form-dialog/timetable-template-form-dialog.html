@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>
+  @if (isEdit) {
+    Edit Timetable Template
+  } @else {
+    Create Timetable Template
+  }
+</h2>
+
+<mat-dialog-content>
+  <form class="dialog-form" [formGroup]="form">
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Academic Information </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="dialog-form"></div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Schedule </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="dialog-form"></div>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Lecture Configuration </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="dialog-form"></div>
+    </mat-expansion-panel>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+
+  <button mat-flat-button color="primary" type="button" (click)="save()">
+    @if (isEdit) {
+      Update Timetable
+    } @else {
+      Create Timetable
+    }
+  </button>
+</mat-dialog-actions>

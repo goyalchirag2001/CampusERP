@@ -109,6 +109,14 @@ export class NavigationService {
       },
 
       {
+        label: 'Timetables',
+        icon: 'schedule',
+        route: slug ? `/${slug}/timetables` : '/platform/timetables',
+        permission: Permissions.TimetableTemplateView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
         label: 'Sections',
         icon: 'view_module',
         route: slug ? `/${slug}/sections` : '/platform/sections',

@@ -1,0 +1,89 @@
+.dialog-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+
+  padding-top: 8px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* ======================================================= */
+/* Material */
+/* ======================================================= */
+
+mat-form-field {
+  width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input[type='number'] {
+  text-align: center;
+}
+
+input[type='time'] {
+  width: 100%;
+}
+
+mat-slide-toggle {
+  min-height: 56px;
+}
+
+mat-hint {
+  font-size: 12px;
+}
+
+/* ======================================================= */
+/* Expansion Panels */
+/* ======================================================= */
+
+mat-expansion-panel {
+  overflow: hidden;
+
+  border-radius: var(--radius-lg) !important;
+}
+
+mat-expansion-panel-header {
+  min-height: 64px !important;
+}
+
+.mat-expansion-panel-header-title {
+  color: var(--card-text) !important;
+
+  font-size: 16px;
+
+  font-weight: 600;
+}
+
+.mat-expansion-panel-header-description {
+  color: var(--text-secondary) !important;
+}
+
+/* ======================================================= */
+/* Dialog */
+/* ======================================================= */
+
+mat-dialog-content {
+  padding-top: 8px !important;
+}
+
+mat-dialog-actions {
+  padding-top: 20px;
+}
+
+/* ======================================================= */
+/* Responsive */
+/* ======================================================= */
+
+@media (max-width: 900px) {
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+}

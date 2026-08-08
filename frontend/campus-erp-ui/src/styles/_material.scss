@@ -289,3 +289,7 @@ body[data-theme='dark'] .mat-expansion-panel-header {
 .mat-mdc-menu-item mat-icon {
   color: var(--text-primary) !important;
 }
+
+.info-snackbar {
+  --mdc-snackbar-container-color: #2563eb;
+}

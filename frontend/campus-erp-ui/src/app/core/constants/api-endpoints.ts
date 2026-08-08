@@ -41,5 +41,7 @@ export const ApiEndpoints = {
 
   Roles: 'roles',
 
+  TimetableTemplates: 'TimetableTemplates',
+
   //#endregion
 } as const;

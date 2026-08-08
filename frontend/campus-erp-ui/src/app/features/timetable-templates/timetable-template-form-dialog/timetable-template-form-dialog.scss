@@ -1,0 +1,27 @@
+@use '../../../../styles/entity-form' as *;
+
+:host {
+  display: block;
+}
+
+mat-dialog-content {
+  width: 1000px;
+
+  max-width: 90vw;
+
+  max-height: 75vh;
+
+  overflow: auto;
+}
+
+mat-expansion-panel {
+  margin-bottom: 16px;
+}
+
+mat-dialog-actions {
+  padding: 20px 24px;
+}
+
+button + button {
+  margin-left: 12px;
+}

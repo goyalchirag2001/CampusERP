@@ -38,8 +38,8 @@ import { AcademicSettingsComponent } from './features/academic-settings/academic
 import { TeacherAssignmentComponent } from './features/teacher-assignments/teacher-assignment';
 import { CalendarEventListComponent } from './features/calendar-events/calendar-event-list/calendar-event-list';
 import { CalendarEventDetails } from './features/calendar-events/calendar-event-details/calendar-event-details';
-import { TimetableList } from './features/timetables/timetable-list/timetable-list';
-import { TimetableDetails } from './features/timetables/timetable-details/timetable-details';
+import { TimetableTemplateList } from './features/timetable-templates/timetable-template-list/timetable-template-list';
+import { TimetableTemplateDetails } from './features/timetable-templates/timetable-template-details/timetable-template-details';
 
 export const routes: Routes = [
   {
@@ -304,13 +304,13 @@ export const routes: Routes = [
 
       {
         path: 'timetables',
-        component: TimetableList,
-        //canActivate: [permissionGuard(Permissions.TimetableView)],
+        component: TimetableTemplateList,
+        canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
       },
       {
         path: 'timetables/:id',
-        component: TimetableDetails,
-        //canActivate: [permissionGuard(Permissions.TimetableView)],
+        component: TimetableTemplateDetails,
+        canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
       },
 
       {
