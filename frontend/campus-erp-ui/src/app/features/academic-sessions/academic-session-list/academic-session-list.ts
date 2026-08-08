@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -33,6 +40,7 @@ import { NotificationService } from '../../../core/services/notification';
     DatePipe,
   ],
   templateUrl: './academic-session-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './academic-session-list.scss',
 })
 export class AcademicSessionList implements OnInit {

@@ -14,7 +14,11 @@
       } @else {
         <div class="institution-brand">
           @if (branding()?.logoUrl) {
-            <img class="institution-logo" [src]="branding()?.logoUrl" [alt]="branding()?.name" />
+            <img
+              class="institution-logo"
+              [src]="$safeNavigationMigration(branding()?.logoUrl)"
+              [alt]="$safeNavigationMigration(branding()?.name)"
+            />
           } @else {
             <div class="brand-logo">
               {{ branding()?.name?.charAt(0) }}

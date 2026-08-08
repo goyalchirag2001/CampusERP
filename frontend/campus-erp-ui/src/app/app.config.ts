@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { AppInitializerService } from './core/services/app-initializer';
 import { authInterceptor } from './core/interceptors/auth-interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -22,7 +22,7 @@ export const appConfig: ApplicationConfig = {
 
     importProvidersFrom(MatNativeDateModule),
 
-    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    provideHttpClient(withXhr(), withInterceptors([authInterceptor, errorInterceptor])),
     {
       provide: APP_INITIALIZER,
       useFactory: initializeApp,

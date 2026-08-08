@@ -1,4 +1,12 @@
-import { Component, Inject, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +33,7 @@ import { NotificationService } from '../../../core/services/notification';
     MatSelectModule,
   ],
   templateUrl: './teacher-edit-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './teacher-edit-dialog.scss',
 })
 export class TeacherEditDialog implements OnInit {

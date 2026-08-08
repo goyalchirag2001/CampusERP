@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
@@ -38,6 +38,7 @@ import { Permissions } from '../../core/constants/permissions';
     MatIconModule,
   ],
   templateUrl: './academic-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './academic-settings.component.scss',
 })
 export class AcademicSettingsComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ import { ConfirmationDialogComponent } from '../../../shared/dialogs/confirmatio
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatIconModule, DatePipe],
   templateUrl: './calendar-event-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar-event-details.scss',
 })
 export class CalendarEventDetails implements OnInit {

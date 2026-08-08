@@ -13,7 +13,11 @@
   >
     <div class="sidebar-top">
       @if (branding()?.logoUrl) {
-        <img class="sidebar-logo-image" [src]="branding()?.logoUrl" [alt]="branding()?.name" />
+        <img
+          class="sidebar-logo-image"
+          [src]="$safeNavigationMigration(branding()?.logoUrl)"
+          [alt]="$safeNavigationMigration(branding()?.name)"
+        />
       } @else {
         <div class="sidebar-logo-placeholder">
           {{ branding()?.name?.charAt(0) || user()?.institutionSlug?.charAt(0) || 'C' }}
@@ -21,7 +25,7 @@
       }
 
       <div class="sidebar-brand">
-        <h2 [title]="branding()?.name">
+        <h2 [title]="$safeNavigationMigration(branding()?.name)">
           {{ branding()?.loginSlug?.toUpperCase() }}
         </h2>
 

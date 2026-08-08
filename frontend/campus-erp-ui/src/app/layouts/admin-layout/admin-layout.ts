@@ -1,5 +1,14 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, ViewChild, computed, inject, signal, OnInit, DestroyRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  computed,
+  inject,
+  signal,
+  OnInit,
+  DestroyRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterModule } from '@angular/router';
 
@@ -31,6 +40,7 @@ import { UserContextService } from '../../core/services/user-context';
     UserMenuComponent,
   ],
   templateUrl: './admin-layout.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './admin-layout.scss',
 })
 export class AdminLayout implements OnInit {

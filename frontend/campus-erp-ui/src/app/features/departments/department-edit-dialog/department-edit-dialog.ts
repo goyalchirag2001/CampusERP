@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -25,6 +25,7 @@ import { Department } from '../models/department';
     MatInputModule,
   ],
   templateUrl: './department-edit-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './department-edit-dialog.scss',
 })
 export class DepartmentEditDialog {

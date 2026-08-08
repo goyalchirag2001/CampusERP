@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,6 +35,7 @@ import { StudentImportDialog } from '../student-import-dialog/student-import-dia
     MatTooltipModule,
   ],
   templateUrl: './student-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './student-list.scss',
 })
 export class StudentList implements OnInit {
@@ -148,7 +156,7 @@ export class StudentList implements OnInit {
 
     return students.slice(start, start + this.pageSize());
   });
-  
+
   ngOnInit(): void {
     this.load();
   }

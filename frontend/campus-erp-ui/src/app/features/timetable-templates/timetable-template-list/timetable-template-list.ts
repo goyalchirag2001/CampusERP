@@ -1,4 +1,12 @@
-import { Component, OnInit, computed, inject, signal, effect } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  effect,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TimetableTemplate } from '../models/timetable-template';
@@ -46,6 +54,7 @@ import { MatTableDataSource } from '@angular/material/table';
     MatSortModule,
   ],
   templateUrl: './timetable-template-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './timetable-template-list.scss',
 })
 export class TimetableTemplateList implements OnInit, AfterViewInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +32,7 @@ import { NotificationService } from '../../../core/services/notification';
     MatSelectModule,
   ],
   templateUrl: './user-edit-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-edit-dialog.scss',
 })
 export class UserEditDialog implements OnInit {

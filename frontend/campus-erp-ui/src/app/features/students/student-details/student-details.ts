@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { StudentFormDialog } from '../student-form-dialog/student-form-dialog';
   standalone: true,
   imports: [MatButtonModule, DatePipe],
   templateUrl: './student-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './student-details.scss',
 })
 export class StudentDetails implements OnInit {

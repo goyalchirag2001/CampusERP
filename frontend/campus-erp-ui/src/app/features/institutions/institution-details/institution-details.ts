@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { InstitutionEditDialog } from '../institution-edit-dialog/institution-ed
   standalone: true,
   imports: [MatButtonModule],
   templateUrl: './institution-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './institution-details.scss',
 })
 export class InstitutionDetails implements OnInit {

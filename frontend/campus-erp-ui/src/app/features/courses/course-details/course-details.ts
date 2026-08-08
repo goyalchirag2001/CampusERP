@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +18,7 @@ import { NotificationService } from '../../../core/services/notification';
   standalone: true,
   imports: [MatButtonModule, SemesterCard],
   templateUrl: './course-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './course-details.scss',
 })
 export class CourseDetails implements OnInit {

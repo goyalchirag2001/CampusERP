@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ export interface ConfirmationDialogData {
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './confirmation-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './confirmation-dialog.scss',
 })
 export class ConfirmationDialogComponent {

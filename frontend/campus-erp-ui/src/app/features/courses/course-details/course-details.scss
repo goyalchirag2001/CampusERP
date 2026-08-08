@@ -1,4 +1,4 @@
-@import '../../../../styles/entity-details.scss';
+@use '../../../../styles/entity-details.scss' as *;
 
 :host {
   display: block;

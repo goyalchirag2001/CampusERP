@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -33,6 +33,7 @@ import { AccountService } from '../services/account';
     MatProgressSpinnerModule,
   ],
   templateUrl: './change-password-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './change-password-dialog.scss',
 })
 export class ChangePasswordDialogComponent {

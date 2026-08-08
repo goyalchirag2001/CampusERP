@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { SectionFormDialog } from '../section-form-dialog/section-form-dialog';
   standalone: true,
   imports: [MatButtonModule],
   templateUrl: './section-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-details.scss',
 })
 export class SectionDetails implements OnInit {

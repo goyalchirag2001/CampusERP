@@ -1,4 +1,12 @@
-import { Component, Inject, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -54,6 +62,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   templateUrl: './calendar-event-form-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './calendar-event-form-dialog.scss',
 })
 export class CalendarEventFormDialogComponent implements OnInit {

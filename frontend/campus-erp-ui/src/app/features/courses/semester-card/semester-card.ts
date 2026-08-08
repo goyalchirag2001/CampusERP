@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,6 +20,7 @@ import { LookupPickerItem } from '../../../shared/components/lookup-picker/looku
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule],
   templateUrl: './semester-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './semester-card.scss',
 })
 export class SemesterCard implements OnInit {

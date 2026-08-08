@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, Inject, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -25,6 +25,7 @@ import { UserService } from '../services/user';
     MatInputModule,
   ],
   templateUrl: './reset-password-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './reset-password-dialog.scss',
 })
 export class ResetPasswordDialog {

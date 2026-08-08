@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,6 +33,7 @@ import { TemporaryPasswordDialog } from '../temporary-password-dialog/temporary-
     MatDialogModule,
   ],
   templateUrl: './user-create.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-create.scss',
 })
 export class UserCreate implements OnInit {

@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +23,7 @@ import { RoleEditDialog } from '../role-edit-dialog/role-edit-dialog';
   standalone: true,
   imports: [MatButtonModule, MatCardModule, MatIconModule],
   templateUrl: './role-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './role-details.scss',
 })
 export class RoleDetails implements OnInit {

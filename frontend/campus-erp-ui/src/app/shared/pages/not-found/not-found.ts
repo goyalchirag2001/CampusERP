@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -16,6 +16,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
 
   templateUrl: './not-found.html',
 
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './not-found.scss',
 })
 export class NotFoundComponent {

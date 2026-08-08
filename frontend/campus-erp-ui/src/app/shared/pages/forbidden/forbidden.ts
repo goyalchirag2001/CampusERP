@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { CurrentUserService } from '../../../core/services/current-user';
 
   templateUrl: './forbidden.html',
 
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './forbidden.scss',
 })
 export class ForbiddenComponent {

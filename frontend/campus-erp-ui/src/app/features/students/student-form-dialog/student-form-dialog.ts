@@ -1,4 +1,12 @@
-import { Component, Inject, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import {
@@ -56,6 +64,7 @@ import { AcademicSessionLookup } from '../../academic-sessions/models/academic-s
     MatExpansionModule,
   ],
   templateUrl: './student-form-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './student-form-dialog.scss',
 })
 export class StudentFormDialog implements OnInit {

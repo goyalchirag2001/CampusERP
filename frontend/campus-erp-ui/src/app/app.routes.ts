@@ -1,327 +1,589 @@
 import { Routes } from '@angular/router';
+
 import { Login } from './features/auth/login/login';
 import { Dashboard } from './features/dashboard/dashboard/dashboard';
-import { StudentList } from './features/students/student-list/student-list';
-import { TeacherList } from './features/teachers/teacher-list/teacher-list';
-import { SubjectList } from './features/subjects/subject-list/subject-list';
-import { InstitutionList } from './features/institutions/institution-list/institution-list';
-import { InstitutionCreate } from './features/institutions/institution-create/institution-create';
-import { InstitutionDetails } from './features/institutions/institution-details/institution-details';
+
 import { AdminLayout } from './layouts/admin-layout/admin-layout';
+
 import { authGuard } from './core/guards/auth-guard';
-import { CampusCreate } from './features/campuses/campus-create/campus-create';
-import { CampusDetails } from './features/campuses/campus-details/campus-details';
-import { CampusList } from './features/campuses/campus-list/campus-list';
-import { UserList } from './features/users/user-list/user-list';
-import { UserCreate } from './features/users/user-create/user-create';
-import { UserDetails } from './features/users/user-details/user-details';
-import { RoleList } from './features/roles/role-list/role-list';
-import { RoleCreate } from './features/roles/role-create/role-create';
-import { RoleDetails } from './features/roles/role-details/role-details';
 import { permissionGuard } from './core/guards/permission-guard';
+
 import { Permissions } from './core/constants/permissions';
-import { DepartmentList } from './features/departments/department-list/department-list';
-import { DepartmentDetails } from './features/departments/department-details/department-details';
-import { CourseList } from './features/courses/course-list/course-list';
-import { CourseDetails } from './features/courses/course-details/course-details';
-import { SubjectDetails } from './features/subjects/subject-details/subject-details';
-import { TeacherDetails } from './features/teachers/teacher-details/teacher-details';
-import { StudentDetails } from './features/students/student-details/student-details';
-import { ProfileComponent } from './features/profile/profile/profile';
+
 import { ForbiddenComponent } from './shared/pages/forbidden/forbidden';
 import { NotFoundComponent } from './shared/pages/not-found/not-found';
-import { AcademicSessionList } from './features/academic-sessions/academic-session-list/academic-session-list';
-import { AcademicSessionDetails } from './features/academic-sessions/academic-session-details/academic-session-details';
-import { SectionList } from './features/sections/section-list/section-list';
-import { SectionDetails } from './features/sections/section-details/section-details';
-import { AcademicSettingsComponent } from './features/academic-settings/academic-settings.component';
-import { TeacherAssignmentComponent } from './features/teacher-assignments/teacher-assignment';
-import { CalendarEventListComponent } from './features/calendar-events/calendar-event-list/calendar-event-list';
-import { CalendarEventDetails } from './features/calendar-events/calendar-event-details/calendar-event-details';
-import { TimetableTemplateList } from './features/timetable-templates/timetable-template-list/timetable-template-list';
-import { TimetableTemplateDetails } from './features/timetable-templates/timetable-template-details/timetable-template-details';
 
 export const routes: Routes = [
+  /* =========================================================
+     Authentication
+     ========================================================= */
+
   {
     path: 'platform/login',
+
     component: Login,
   },
 
   {
     path: 'access-denied',
+
     component: ForbiddenComponent,
   },
 
   {
     path: ':institutionSlug/login',
+
     component: Login,
   },
 
+  /* =========================================================
+     Platform Administration
+     ========================================================= */
+
   {
     path: 'platform',
+
     component: AdminLayout,
+
     canActivate: [authGuard],
+
     children: [
       {
         path: 'dashboard',
-        component: Dashboard,
+
+        loadComponent: () =>
+          import('./features/dashboard/dashboard/dashboard').then((m) => m.Dashboard),
+
         canActivate: [permissionGuard(Permissions.AdminDashboardView)],
       },
 
+      /* -------------------------------------------------------
+         Institutions
+         ------------------------------------------------------- */
+
       {
         path: 'institutions',
-        component: InstitutionList,
+
+        loadComponent: () =>
+          import('./features/institutions/institution-list/institution-list').then(
+            (m) => m.InstitutionList,
+          ),
+
         canActivate: [permissionGuard(Permissions.InstitutionView)],
       },
+
       {
         path: 'institutions/new',
-        component: InstitutionCreate,
+
+        loadComponent: () =>
+          import('./features/institutions/institution-create/institution-create').then(
+            (m) => m.InstitutionCreate,
+          ),
+
         canActivate: [permissionGuard(Permissions.InstitutionCreate)],
       },
+
       {
         path: 'institutions/:id',
-        component: InstitutionDetails,
+
+        loadComponent: () =>
+          import('./features/institutions/institution-details/institution-details').then(
+            (m) => m.InstitutionDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.InstitutionView)],
       },
+
+      /* -------------------------------------------------------
+         Default Platform Route
+         ------------------------------------------------------- */
 
       {
         path: '',
+
         redirectTo: 'dashboard',
+
         pathMatch: 'full',
       },
 
+      /* -------------------------------------------------------
+         Campuses
+         ------------------------------------------------------- */
+
       {
         path: 'campuses',
-        component: CampusList,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-list/campus-list').then((m) => m.CampusList),
+
         canActivate: [permissionGuard(Permissions.CampusView)],
       },
+
       {
         path: 'campuses/new',
-        component: CampusCreate,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-create/campus-create').then((m) => m.CampusCreate),
+
         canActivate: [permissionGuard(Permissions.CampusCreate)],
       },
+
       {
         path: 'campuses/:id',
-        component: CampusDetails,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-details/campus-details').then((m) => m.CampusDetails),
+
         canActivate: [permissionGuard(Permissions.CampusView)],
       },
+
+      /* -------------------------------------------------------
+         Users
+         ------------------------------------------------------- */
+
       {
         path: 'users',
-        component: UserList,
+
+        loadComponent: () => import('./features/users/user-list/user-list').then((m) => m.UserList),
+
         canActivate: [permissionGuard(Permissions.UserView)],
       },
+
       {
         path: 'users/new',
-        component: UserCreate,
+
+        loadComponent: () =>
+          import('./features/users/user-create/user-create').then((m) => m.UserCreate),
+
         canActivate: [permissionGuard(Permissions.UserCreate)],
       },
+
       {
         path: 'users/:id',
-        component: UserDetails,
+
+        loadComponent: () =>
+          import('./features/users/user-details/user-details').then((m) => m.UserDetails),
+
         canActivate: [permissionGuard(Permissions.UserView)],
       },
+
+      /* -------------------------------------------------------
+         Roles
+         ------------------------------------------------------- */
+
       {
         path: 'roles',
-        component: RoleList,
-        canActivate: [permissionGuard(Permissions.RoleView)],
-      },
-      {
-        path: 'roles/new',
-        component: RoleCreate,
-        canActivate: [permissionGuard(Permissions.RoleCreate)],
-      },
-      {
-        path: 'roles/:id',
-        component: RoleDetails,
+
+        loadComponent: () => import('./features/roles/role-list/role-list').then((m) => m.RoleList),
+
         canActivate: [permissionGuard(Permissions.RoleView)],
       },
 
       {
+        path: 'roles/new',
+
+        loadComponent: () =>
+          import('./features/roles/role-create/role-create').then((m) => m.RoleCreate),
+
+        canActivate: [permissionGuard(Permissions.RoleCreate)],
+      },
+
+      {
+        path: 'roles/:id',
+
+        loadComponent: () =>
+          import('./features/roles/role-details/role-details').then((m) => m.RoleDetails),
+
+        canActivate: [permissionGuard(Permissions.RoleView)],
+      },
+
+      /* -------------------------------------------------------
+         Platform Profile
+         ------------------------------------------------------- */
+
+      {
         path: 'profile',
-        component: ProfileComponent,
+
+        loadComponent: () =>
+          import('./features/profile/profile/profile').then((m) => m.ProfileComponent),
       },
     ],
   },
 
+  /* =========================================================
+     Institution Administration
+     ========================================================= */
+
   {
     path: ':institutionSlug',
+
     component: AdminLayout,
+
     canActivate: [authGuard],
+
     children: [
+      /* -------------------------------------------------------
+         Dashboard
+         ------------------------------------------------------- */
+
       {
         path: 'dashboard',
-        component: Dashboard,
+
+        loadComponent: () =>
+          import('./features/dashboard/dashboard/dashboard').then((m) => m.Dashboard),
+
         canActivate: [permissionGuard(Permissions.AdminDashboardView)],
       },
 
+      /* -------------------------------------------------------
+         Students
+         ------------------------------------------------------- */
+
       {
         path: 'students',
-        component: StudentList,
+
+        loadComponent: () =>
+          import('./features/students/student-list/student-list').then((m) => m.StudentList),
+
         canActivate: [permissionGuard(Permissions.StudentView)],
       },
 
       {
         path: 'students/:id',
-        component: StudentDetails,
+
+        loadComponent: () =>
+          import('./features/students/student-details/student-details').then(
+            (m) => m.StudentDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.StudentView)],
       },
 
+      /* -------------------------------------------------------
+         Teachers
+         ------------------------------------------------------- */
+
       {
         path: 'teachers',
-        component: TeacherList,
+
+        loadComponent: () =>
+          import('./features/teachers/teacher-list/teacher-list').then((m) => m.TeacherList),
+
         canActivate: [permissionGuard(Permissions.TeacherView)],
       },
 
       {
         path: 'teachers/:id',
-        component: TeacherDetails,
+
+        loadComponent: () =>
+          import('./features/teachers/teacher-details/teacher-details').then(
+            (m) => m.TeacherDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.TeacherView)],
       },
 
+      /* -------------------------------------------------------
+         Subjects
+         ------------------------------------------------------- */
+
       {
         path: 'subjects',
-        component: SubjectList,
+
+        loadComponent: () =>
+          import('./features/subjects/subject-list/subject-list').then((m) => m.SubjectList),
+
         canActivate: [permissionGuard(Permissions.SubjectView)],
       },
 
       {
         path: 'subjects/:id',
-        component: SubjectDetails,
+
+        loadComponent: () =>
+          import('./features/subjects/subject-details/subject-details').then(
+            (m) => m.SubjectDetails,
+          ),
+
         canActivate: [permissionGuard],
+
         data: {
           permission: Permissions.SubjectView,
         },
       },
 
+      /* -------------------------------------------------------
+         Default Institution Route
+         ------------------------------------------------------- */
+
       {
         path: '',
+
         redirectTo: 'dashboard',
+
         pathMatch: 'full',
       },
 
+      /* -------------------------------------------------------
+         Campuses
+         ------------------------------------------------------- */
+
       {
         path: 'campuses',
-        component: CampusList,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-list/campus-list').then((m) => m.CampusList),
+
         canActivate: [permissionGuard(Permissions.CampusView)],
       },
+
       {
         path: 'campuses/new',
-        component: CampusCreate,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-create/campus-create').then((m) => m.CampusCreate),
+
         canActivate: [permissionGuard(Permissions.CampusCreate)],
       },
+
       {
         path: 'campuses/:id',
-        component: CampusDetails,
+
+        loadComponent: () =>
+          import('./features/campuses/campus-details/campus-details').then((m) => m.CampusDetails),
+
         canActivate: [permissionGuard(Permissions.CampusView)],
       },
+
+      /* -------------------------------------------------------
+         Users
+         ------------------------------------------------------- */
+
       {
         path: 'users',
-        component: UserList,
-        canActivate: [permissionGuard(Permissions.UserView)],
-      },
-      {
-        path: 'users/new',
-        component: UserCreate,
-        canActivate: [permissionGuard(Permissions.UserCreate)],
-      },
-      {
-        path: 'users/:id',
-        component: UserDetails,
+
+        loadComponent: () => import('./features/users/user-list/user-list').then((m) => m.UserList),
+
         canActivate: [permissionGuard(Permissions.UserView)],
       },
 
       {
+        path: 'users/new',
+
+        loadComponent: () =>
+          import('./features/users/user-create/user-create').then((m) => m.UserCreate),
+
+        canActivate: [permissionGuard(Permissions.UserCreate)],
+      },
+
+      {
+        path: 'users/:id',
+
+        loadComponent: () =>
+          import('./features/users/user-details/user-details').then((m) => m.UserDetails),
+
+        canActivate: [permissionGuard(Permissions.UserView)],
+      },
+
+      /* -------------------------------------------------------
+         Departments
+         ------------------------------------------------------- */
+
+      {
         path: 'departments',
-        component: DepartmentList,
+
+        loadComponent: () =>
+          import('./features/departments/department-list/department-list').then(
+            (m) => m.DepartmentList,
+          ),
+
         canActivate: [permissionGuard(Permissions.DepartmentView)],
       },
 
       {
         path: 'departments/:id',
-        component: DepartmentDetails,
+
+        loadComponent: () =>
+          import('./features/departments/department-details/department-details').then(
+            (m) => m.DepartmentDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.DepartmentView)],
       },
 
+      /* -------------------------------------------------------
+         Courses
+         ------------------------------------------------------- */
+
       {
         path: 'courses',
-        component: CourseList,
+
+        loadComponent: () =>
+          import('./features/courses/course-list/course-list').then((m) => m.CourseList),
+
         canActivate: [permissionGuard(Permissions.CourseView)],
       },
 
       {
         path: 'courses/:id',
-        component: CourseDetails,
+
+        loadComponent: () =>
+          import('./features/courses/course-details/course-details').then((m) => m.CourseDetails),
+
         canActivate: [permissionGuard(Permissions.CourseView)],
       },
 
+      /* -------------------------------------------------------
+         Academic Sessions
+         ------------------------------------------------------- */
+
       {
         path: 'academic-sessions',
-        component: AcademicSessionList,
+
+        loadComponent: () =>
+          import('./features/academic-sessions/academic-session-list/academic-session-list').then(
+            (m) => m.AcademicSessionList,
+          ),
+
         canActivate: [permissionGuard(Permissions.AcademicSessionView)],
       },
 
       {
         path: 'academic-sessions/:id',
-        component: AcademicSessionDetails,
+
+        loadComponent: () =>
+          import('./features/academic-sessions/academic-session-details/academic-session-details').then(
+            (m) => m.AcademicSessionDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.AcademicSessionView)],
       },
 
+      /* -------------------------------------------------------
+         Academic Settings
+         ------------------------------------------------------- */
+
       {
         path: 'academic-settings',
-        component: AcademicSettingsComponent,
+
+        loadComponent: () =>
+          import('./features/academic-settings/academic-settings.component').then(
+            (m) => m.AcademicSettingsComponent,
+          ),
+
         canActivate: [permissionGuard(Permissions.AcademicSettingsView)],
       },
 
+      /* -------------------------------------------------------
+         Sections
+         ------------------------------------------------------- */
+
       {
         path: 'sections',
-        component: SectionList,
+
+        loadComponent: () =>
+          import('./features/sections/section-list/section-list').then((m) => m.SectionList),
+
         canActivate: [permissionGuard(Permissions.SectionView)],
       },
 
       {
         path: 'sections/:id',
-        component: SectionDetails,
+
+        loadComponent: () =>
+          import('./features/sections/section-details/section-details').then(
+            (m) => m.SectionDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.SectionView)],
       },
 
+      /* -------------------------------------------------------
+         Teacher Assignments
+         ------------------------------------------------------- */
+
       {
         path: 'teacher-assignments',
-        component: TeacherAssignmentComponent,
+
+        loadComponent: () =>
+          import('./features/teacher-assignments/teacher-assignment').then(
+            (m) => m.TeacherAssignmentComponent,
+          ),
+
         canActivate: [permissionGuard(Permissions.TeacherAssignmentView)],
       },
 
+      /* -------------------------------------------------------
+         Calendar Events
+         ------------------------------------------------------- */
+
       {
         path: 'calendar-events',
-        component: CalendarEventListComponent,
+
+        loadComponent: () =>
+          import('./features/calendar-events/calendar-event-list/calendar-event-list').then(
+            (m) => m.CalendarEventListComponent,
+          ),
+
         canActivate: [permissionGuard(Permissions.CalendarView)],
       },
 
       {
         path: 'calendar-events/:id',
-        component: CalendarEventDetails,
+
+        loadComponent: () =>
+          import('./features/calendar-events/calendar-event-details/calendar-event-details').then(
+            (m) => m.CalendarEventDetails,
+          ),
+
         canActivate: [permissionGuard(Permissions.CalendarView)],
       },
 
+      /* -------------------------------------------------------
+         Timetable Templates
+         ------------------------------------------------------- */
+
       {
         path: 'timetables',
-        component: TimetableTemplateList,
-        canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
-      },
-      {
-        path: 'timetables/:id',
-        component: TimetableTemplateDetails,
+
+        loadComponent: () =>
+          import('./features/timetable-templates/timetable-template-list/timetable-template-list').then(
+            (m) => m.TimetableTemplateList,
+          ),
+
         canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
       },
 
       {
+        path: 'timetables/:id',
+
+        loadComponent: () =>
+          import('./features/timetable-templates/timetable-template-details/timetable-template-details').then(
+            (m) => m.TimetableTemplateDetails,
+          ),
+
+        canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
+      },
+
+      /* -------------------------------------------------------
+         Institution Profile
+         ------------------------------------------------------- */
+
+      {
         path: 'profile',
-        component: ProfileComponent,
+
+        loadComponent: () =>
+          import('./features/profile/profile/profile').then((m) => m.ProfileComponent),
       },
     ],
   },
 
+  /* =========================================================
+     Fallback
+     ========================================================= */
+
   {
     path: '**',
+
     component: NotFoundComponent,
   },
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,6 +22,7 @@ import { computed } from '@angular/core';
     MatInputModule,
   ],
   templateUrl: './role-edit-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './role-edit-dialog.scss',
 })
 export class RoleEditDialog implements OnInit {

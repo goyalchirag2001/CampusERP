@@ -1,4 +1,4 @@
-@import '../../campuses/campus-list/campus-list.scss';
+@use '../../campuses/campus-list/campus-list.scss' as *;
 
 .student-cell {
   display: flex;

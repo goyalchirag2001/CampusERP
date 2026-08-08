@@ -1,4 +1,12 @@
-import { Component, Inject, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -44,6 +52,7 @@ export interface SectionFormDialogData {
     MatSelectModule,
   ],
   templateUrl: './section-form-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-form-dialog.scss',
 })
 export class SectionFormDialog implements OnInit {

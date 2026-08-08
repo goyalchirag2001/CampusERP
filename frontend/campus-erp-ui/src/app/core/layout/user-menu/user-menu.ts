@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { ChangePasswordDialogComponent } from '../../../features/account/change-
 
   templateUrl: './user-menu.html',
 
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-menu.scss',
 })
 export class UserMenuComponent {

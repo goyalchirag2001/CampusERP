@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +37,7 @@ import { TemporaryPasswordDialog } from '../../users/temporary-password-dialog/t
     MatSelectModule,
   ],
   templateUrl: './teacher-create-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './teacher-create-dialog.scss',
 })
 export class TeacherCreateDialog implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ import { InstitutionService } from '../services/institution';
     MatIconModule,
   ],
   templateUrl: './institution-create.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './institution-create.scss',
 })
 export class InstitutionCreate {

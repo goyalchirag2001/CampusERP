@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { ResetPasswordDialog } from '../reset-password-dialog/reset-password-dia
   standalone: true,
   imports: [MatButtonModule],
   templateUrl: './user-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './user-details.scss',
 })
 export class UserDetails implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, inject, signal } from '@angular/core';
+import { Component, OnInit, Inject, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -32,6 +32,7 @@ import { Lookup } from '../../../core/models/lookup';
     MatSelectModule,
   ],
   templateUrl: './course-edit-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './course-edit-dialog.scss',
 })
 export class CourseEditDialog implements OnInit {

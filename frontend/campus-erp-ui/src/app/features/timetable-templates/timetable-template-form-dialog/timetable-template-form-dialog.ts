@@ -11,7 +11,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-
+import { OnInit, signal } from '@angular/core';
+import { TeacherAssignmentService } from '../../teacher-assignments/services/teacher-assignment';
+import { NotificationService } from '../../../core/services/notification';
 import { TimetableTemplate } from '../models/timetable-template';
 
 export interface TimetableTemplateDialogData {

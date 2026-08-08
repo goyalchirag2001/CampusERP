@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { NotificationService } from '../../../core/services/notification';
   standalone: true,
   imports: [MatButtonModule, DatePipe],
   templateUrl: './academic-session-details.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './academic-session-details.scss',
 })
 export class AcademicSessionDetails implements OnInit {

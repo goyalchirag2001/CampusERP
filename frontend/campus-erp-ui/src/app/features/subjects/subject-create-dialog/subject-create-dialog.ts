@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,7 @@ import { Lookup } from '../../../core/models/lookup';
     MatSelectModule,
   ],
   templateUrl: './subject-create-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './subject-create-dialog.scss',
 })
 export class SubjectCreateDialog implements OnInit {

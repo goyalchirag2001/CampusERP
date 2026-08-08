@@ -1,10 +1,10 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { saveAs } from 'file-saver';
+
 import { StudentImportService } from '../services/student-import';
 import { CurrentUserService } from '../../../core/services/current-user';
 import { NotificationService } from '../../../core/services/notification';
@@ -22,6 +22,7 @@ import { StudentImportValidation } from '../models/student-import-validation';
     MatProgressSpinnerModule,
   ],
   templateUrl: './student-import-dialog.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './student-import-dialog.scss',
 })
 export class StudentImportDialog implements OnInit {
@@ -31,7 +32,7 @@ export class StudentImportDialog implements OnInit {
 
   private readonly notificationService = inject(NotificationService);
 
-  private readonly dialogRef = inject(MatDialogRef<StudentImportDialog>);
+  private readonly dialogRef = inject(MatDialogRef);
 
   readonly selectedFile = signal<File | null>(null);
 
@@ -67,6 +68,8 @@ export class StudentImportDialog implements OnInit {
     if (!file.name.toLowerCase().endsWith('.xlsx')) {
       this.notificationService.error('Please select a valid Excel (.xlsx) file.');
 
+      input.value = '';
+
       return;
     }
 
@@ -80,7 +83,7 @@ export class StudentImportDialog implements OnInit {
 
     this.service.downloadTemplate().subscribe({
       next: (blob) => {
-        saveAs(blob, 'StudentImportTemplate.xlsx');
+        this.downloadBlob(blob, 'StudentImportTemplate.xlsx');
 
         this.loading.set(false);
       },
@@ -144,7 +147,13 @@ export class StudentImportDialog implements OnInit {
       next: (result) => {
         this.service.downloadCredentials(result.credentials).subscribe({
           next: (blob) => {
-            saveAs(blob, 'StudentCredentials.xlsx');
+            this.downloadBlob(blob, 'StudentCredentials.xlsx');
+          },
+
+          error: () => {
+            this.notificationService.warning(
+              'Students were imported, but credentials could not be downloaded.',
+            );
           },
         });
 
@@ -165,5 +174,25 @@ export class StudentImportDialog implements OnInit {
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  private downloadBlob(blob: Blob, fileName: string): void {
+    const url = URL.createObjectURL(blob);
+
+    const anchor = document.createElement('a');
+
+    anchor.href = url;
+
+    anchor.download = fileName;
+
+    anchor.style.display = 'none';
+
+    document.body.appendChild(anchor);
+
+    anchor.click();
+
+    document.body.removeChild(anchor);
+
+    URL.revokeObjectURL(url);
   }
 }

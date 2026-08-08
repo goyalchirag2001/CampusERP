@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { Router } from '@angular/router';
 
@@ -38,6 +45,7 @@ import {
     MatTooltipModule,
   ],
   templateUrl: './section-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './section-list.scss',
 })
 export class SectionList implements OnInit {

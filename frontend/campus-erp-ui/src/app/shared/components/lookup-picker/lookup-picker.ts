@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  Inject,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -22,6 +29,7 @@ import { LookupPickerData, LookupPickerItem } from './lookup-picker.model';
     MatIconModule,
   ],
   templateUrl: './lookup-picker.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './lookup-picker.scss',
 })
 export class LookupPickerComponent {

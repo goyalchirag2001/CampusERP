@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
@@ -48,6 +55,7 @@ interface SubjectAssignmentRow {
     MatProgressSpinnerModule,
   ],
   templateUrl: './teacher-assignment.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './teacher-assignment.scss',
 })
 export class TeacherAssignmentComponent implements OnInit {
@@ -293,7 +301,6 @@ export class TeacherAssignmentComponent implements OnInit {
       },
     });
   }
-
 
   trackBySubject(index: number, row: SubjectAssignmentRow): string {
     return row.semesterSubjectId;

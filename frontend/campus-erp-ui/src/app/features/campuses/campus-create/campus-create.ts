@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -30,6 +30,7 @@ import { InstitutionService } from '../../institutions/services/institution';
     MatSelectModule,
   ],
   templateUrl: './campus-create.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './campus-create.scss',
 })
 export class CampusCreate implements OnInit {
