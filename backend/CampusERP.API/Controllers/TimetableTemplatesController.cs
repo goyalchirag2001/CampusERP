@@ -113,8 +113,7 @@ public class TimetableTemplatesController : BaseApiController
     [Authorize(Policy = PermissionConstants.TimetableTemplateManage)]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<TimetableTemplateResponse>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<ApiResponse<TimetableTemplateResponse>>> Create(
-        [FromBody] CreateTimetableTemplateRequest request)
+    public async Task<ActionResult<ApiResponse<TimetableTemplateResponse>>> Create([FromBody] CreateTimetableTemplateRequest request)
     {
         var response = await _timetableTemplateService.CreateAsync(request);
 

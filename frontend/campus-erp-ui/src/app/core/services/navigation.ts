@@ -1,6 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+
 import { CurrentUserService } from './current-user';
 import { PermissionService } from './permission';
+
 import { NavigationItem } from '../models/navigation-item';
 import { Permissions } from '../constants/permissions';
 
@@ -14,19 +16,28 @@ export class NavigationService {
 
   getMenuItems(): NavigationItem[] {
     const user = this.currentUserService.user();
-    const slug = user?.institutionSlug ?? null;
 
     if (!user) {
       return [];
     }
 
+    const slug = user.institutionSlug ?? null;
+
     const items: NavigationItem[] = [
+      /* =========================================================
+         Dashboard
+         ========================================================= */
+
       {
         label: 'Dashboard',
         icon: 'dashboard',
         route: slug ? `/${slug}/dashboard` : '/platform/dashboard',
         permission: Permissions.AdminDashboardView,
       },
+
+      /* =========================================================
+         Platform Administration
+         ========================================================= */
 
       {
         label: 'Institutions',
@@ -35,6 +46,10 @@ export class NavigationService {
         permission: Permissions.InstitutionView,
         roles: ['SuperAdmin', 'PlatformAdmin'],
       },
+
+      /* =========================================================
+         Institution / Campus Administration
+         ========================================================= */
 
       {
         label: 'Campuses',
@@ -69,12 +84,24 @@ export class NavigationService {
       },
 
       {
+        label: 'Rooms',
+        icon: 'meeting_room',
+        route: slug ? `/${slug}/rooms` : '/platform/rooms',
+        permission: Permissions.RoomView,
+        roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      {
         label: 'Courses',
         icon: 'menu_book',
         route: slug ? `/${slug}/courses` : '/platform/courses',
         permission: Permissions.CourseView,
         roles: ['InstitutionAdmin', 'CampusAdmin'],
       },
+
+      /* =========================================================
+         Academic Configuration
+         ========================================================= */
 
       {
         label: 'Academic Sessions',
@@ -100,6 +127,10 @@ export class NavigationService {
         roles: ['InstitutionAdmin', 'CampusAdmin'],
       },
 
+      /* =========================================================
+         Attendance
+         ========================================================= */
+
       {
         label: 'Attendance Corrections',
         icon: 'fact_check',
@@ -108,10 +139,14 @@ export class NavigationService {
         roles: ['InstitutionAdmin', 'CampusAdmin', 'Teacher'],
       },
 
+      /* =========================================================
+         Timetable Configuration
+         ========================================================= */
+
       {
         label: 'Timetables',
         icon: 'schedule',
-        route: slug ? `/${slug}/timetables` : '/platform/timetables',
+        route: slug ? `/${slug}/timetable-templates` : '/platform/timetable-templates',
         permission: Permissions.TimetableTemplateView,
         roles: ['InstitutionAdmin', 'CampusAdmin'],
       },
@@ -140,6 +175,10 @@ export class NavigationService {
         roles: ['InstitutionAdmin', 'CampusAdmin', 'Teacher'],
       },
 
+      /* =========================================================
+         People
+         ========================================================= */
+
       {
         label: 'Teachers',
         icon: 'groups',
@@ -154,6 +193,26 @@ export class NavigationService {
         route: slug ? `/${slug}/students` : '/platform/students',
         permission: Permissions.StudentView,
         roles: ['InstitutionAdmin', 'CampusAdmin'],
+      },
+
+      /* =========================================================
+         My Calendar
+         ========================================================= */
+
+      {
+        label: 'Timetable',
+        icon: 'event_note',
+        route: slug ? `/${slug}/teacher-calendar` : '/platform/teacher-calendar',
+        permission: Permissions.TeacherCalendarView,
+        roles: ['Teacher'],
+      },
+
+      {
+        label: 'Timetable',
+        icon: 'calendar_view_week',
+        route: slug ? `/${slug}/student-calendar` : '/platform/student-calendar',
+        permission: Permissions.StudentCalendarView,
+        roles: ['Student'],
       },
     ];
 

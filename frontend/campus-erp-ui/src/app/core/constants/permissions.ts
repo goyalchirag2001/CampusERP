@@ -84,4 +84,12 @@ export const Permissions = {
 
   TimetableTemplateView: 'TimetableTemplate.View',
   TimetableTemplateManage: 'TimetableTemplate.Manage',
+
+  RoomView: 'Room.View',
+  RoomCreate: 'Room.Create',
+  RoomEdit: 'Room.Edit',
+
+  TeacherCalendarView: 'TeacherCalendar.View',
+  StudentCalendarView: 'StudentCalendar.View',
+
 } as const;

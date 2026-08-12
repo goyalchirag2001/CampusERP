@@ -82,6 +82,10 @@ public static class DependencyInjection
 
         services.AddScoped<ITimetableTemplateService, TimetableTemplateService>();
 
+        services.AddScoped<ITimetableCalendarService, TimetableCalendarService>();
+
+        services.AddScoped<IAttendanceService, AttendanceService>();
+
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));

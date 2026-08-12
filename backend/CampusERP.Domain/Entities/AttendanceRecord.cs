@@ -60,5 +60,7 @@ public class AttendanceRecord : BaseEntity, ITenantEntity
 
     public ICollection<AttendanceCorrectionRequest> CorrectionRequests { get; set; } = new List<AttendanceCorrectionRequest>();
 
+    public AttendanceMarkingMethod MarkingMethod { get; set; }
+
     #endregion
 }

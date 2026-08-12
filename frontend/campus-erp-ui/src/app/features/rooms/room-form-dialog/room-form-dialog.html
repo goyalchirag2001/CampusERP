@@ -1,0 +1,242 @@
+<h2 mat-dialog-title>
+  <mat-icon>
+    {{ isEditMode ? 'edit' : 'meeting_room' }}
+  </mat-icon>
+
+  {{ title }}
+</h2>
+
+<mat-dialog-content>
+  <form class="dialog-form" [formGroup]="form" (ngSubmit)="save()">
+    <!-- ============================= -->
+    <!-- Room Information -->
+    <!-- ============================= -->
+
+    <div class="form-section full-width">
+      <div class="section-title">
+        <mat-icon>meeting_room</mat-icon>
+
+        <div>
+          <h3>Room Information</h3>
+
+          <p>Basic information about the room.</p>
+        </div>
+      </div>
+    </div>
+
+    @if (!isCampusAdmin()) {
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Campus</mat-label>
+
+        <mat-select formControlName="campusId">
+          @for (campus of campuses(); track campus.id) {
+            <mat-option [value]="campus.id">
+              {{ campus.name }}
+            </mat-option>
+          }
+        </mat-select>
+
+        @if (form.controls.campusId.hasError('required')) {
+          <mat-error> Campus is required. </mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <!-- Building -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Building</mat-label>
+
+      <input matInput formControlName="building" placeholder="e.g. Academic Block A" />
+
+      @if (form.controls.building.hasError('required')) {
+        <mat-error> Building is required. </mat-error>
+      }
+
+      @if (form.controls.building.hasError('maxlength')) {
+        <mat-error> Building cannot exceed 100 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Floor -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Floor</mat-label>
+
+      <input matInput formControlName="floor" placeholder="e.g. Ground Floor" />
+
+      @if (form.controls.floor.hasError('required')) {
+        <mat-error> Floor is required. </mat-error>
+      }
+
+      @if (form.controls.floor.hasError('maxlength')) {
+        <mat-error> Floor cannot exceed 50 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Room Number -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Room Number</mat-label>
+
+      <input matInput formControlName="roomNumber" placeholder="e.g. A-101" />
+
+      @if (form.controls.roomNumber.hasError('required')) {
+        <mat-error> Room number is required. </mat-error>
+      }
+
+      @if (form.controls.roomNumber.hasError('maxlength')) {
+        <mat-error> Room number cannot exceed 50 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Room Name -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Room Name</mat-label>
+
+      <input matInput formControlName="roomName" placeholder="e.g. Physics Laboratory" />
+
+      @if (form.controls.roomName.hasError('required')) {
+        <mat-error> Room name is required. </mat-error>
+      }
+
+      @if (form.controls.roomName.hasError('maxlength')) {
+        <mat-error> Room name cannot exceed 150 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Room Type -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Room Type</mat-label>
+
+      <mat-select formControlName="roomType">
+        @for (type of roomTypes; track type) {
+          <mat-option [value]="type">
+            {{ type }}
+          </mat-option>
+        }
+      </mat-select>
+
+      @if (form.controls.roomType.hasError('required')) {
+        <mat-error> Room type is required. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Capacity -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Capacity</mat-label>
+
+      <input matInput type="number" min="1" max="10000" formControlName="capacity" />
+
+      <mat-hint> Maximum number of occupants. </mat-hint>
+
+      @if (form.controls.capacity.hasError('required')) {
+        <mat-error> Capacity is required. </mat-error>
+      }
+
+      @if (form.controls.capacity.hasError('min')) {
+        <mat-error> Capacity must be at least 1. </mat-error>
+      }
+
+      @if (form.controls.capacity.hasError('max')) {
+        <mat-error> Capacity cannot exceed 10,000. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Location Code -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Location Code</mat-label>
+
+      <input matInput formControlName="locationCode" placeholder="e.g. A-GF-101" />
+
+      <mat-hint> Optional internal location identifier. </mat-hint>
+
+      @if (form.controls.locationCode.hasError('maxlength')) {
+        <mat-error> Location code cannot exceed 50 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Display Order -->
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Display Order</mat-label>
+
+      <input matInput type="number" min="0" formControlName="displayOrder" />
+
+      <mat-hint> Controls ordering in room lists. </mat-hint>
+
+      @if (form.controls.displayOrder.hasError('required')) {
+        <mat-error> Display order is required. </mat-error>
+      }
+
+      @if (form.controls.displayOrder.hasError('min')) {
+        <mat-error> Display order cannot be negative. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Description -->
+
+    <mat-form-field appearance="outline" floatLabel="always" class="full-width">
+      <mat-label>Description</mat-label>
+
+      <textarea
+        matInput
+        rows="4"
+        formControlName="description"
+        placeholder="Describe the room, its purpose, or other relevant information..."
+      ></textarea>
+
+      <mat-hint align="end"> {{ form.controls.description.value.length }}/1000 </mat-hint>
+
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error> Description cannot exceed 1000 characters. </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- ============================= -->
+    <!-- Facilities -->
+    <!-- ============================= -->
+
+    <div class="form-section full-width">
+      <div class="section-title">
+        <mat-icon>devices</mat-icon>
+
+        <div>
+          <h3>Facilities & Equipment</h3>
+
+          <p>Select the facilities available in this room.</p>
+        </div>
+      </div>
+
+      <div class="options-grid">
+        <mat-slide-toggle formControlName="hasProjector"> Projector </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="hasSmartBoard"> Smart Board </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="hasAirConditioning"> Air Conditioning </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="hasComputers"> Computers </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="hasInternet"> Internet </mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="isAccessible"> Accessibility Enabled </mat-slide-toggle>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button type="button" (click)="cancel()">Cancel</button>
+
+  <button mat-flat-button color="primary" type="button" [disabled]="form.invalid" (click)="save()">
+    <mat-icon>
+      {{ isEditMode ? 'save' : 'add' }}
+    </mat-icon>
+
+    {{ submitLabel }}
+  </button>
+</mat-dialog-actions>

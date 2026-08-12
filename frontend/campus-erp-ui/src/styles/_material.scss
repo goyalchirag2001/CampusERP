@@ -1,5 +1,5 @@
 /* ===========================================================
-   Angular Material Theme Overrides
+   CampusERP Angular Material Theme Overrides
    =========================================================== */
 
 /* ===========================================================
@@ -13,61 +13,107 @@
 .mat-mdc-text-field-wrapper {
   border-radius: var(--radius-lg) !important;
 
-  transition: all var(--transition);
-}
-
-.mat-mdc-text-field-wrapper:hover {
-  transform: translateY(-1px);
-}
-
-.mat-mdc-form-field-subscript-wrapper {
-  min-height: 24px;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 /* ===========================================================
-   Labels
+   Input / Textarea
+   =========================================================== */
+
+.mat-mdc-input-element,
+.mat-mdc-form-field input,
+.mat-mdc-form-field textarea {
+  color: var(--text-primary) !important;
+
+  caret-color: var(--primary) !important;
+}
+
+.mat-mdc-input-element::placeholder,
+.mat-mdc-form-field input::placeholder,
+.mat-mdc-form-field textarea::placeholder {
+  color: var(--text-secondary) !important;
+
+  opacity: 1 !important;
+}
+
+/* ===========================================================
+   Material Text Field Background
+   =========================================================== */
+
+.mat-mdc-text-field-wrapper {
+  background-color: var(--surface) !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+/* ===========================================================
+   Floating Labels
    =========================================================== */
 
 .mdc-floating-label {
   color: var(--text-secondary) !important;
 }
 
-.mdc-label {
-  color: var(--text-primary);
+.mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: var(--primary) !important;
 }
 
 /* ===========================================================
-   Inputs
+   Form Field Outline
    =========================================================== */
 
-.mat-mdc-input-element {
-  color: var(--text-primary) !important;
-}
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--border);
+  --mdc-outlined-text-field-hover-outline-color: var(--border-hover);
+  --mdc-outlined-text-field-focus-outline-color: var(--primary);
 
-.mat-mdc-input-element::placeholder {
-  color: var(--text-secondary) !important;
+  --mdc-outlined-text-field-input-text-color: var(--text-primary);
+  --mdc-outlined-text-field-caret-color: var(--primary);
 
-  opacity: 1;
-}
+  --mdc-outlined-text-field-input-text-placeholder-color: var(
+    --text-secondary
+  );
 
-.mdc-text-field__input {
-  color: var(--text-primary) !important;
+  --mdc-outlined-text-field-label-text-color: var(--text-secondary);
+  --mdc-outlined-text-field-focus-label-text-color: var(--primary);
 }
 
 /* ===========================================================
    Select
    =========================================================== */
 
-.mat-mdc-select-value,
-.mat-mdc-select-value-text,
-.mat-mdc-select-arrow {
+.mat-mdc-select {
   color: var(--text-primary) !important;
 }
+
+.mat-mdc-select-value,
+.mat-mdc-select-value-text {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-select-placeholder {
+  color: var(--text-secondary) !important;
+}
+
+.mat-mdc-select-arrow {
+  color: var(--text-secondary) !important;
+}
+
+/* ===========================================================
+   Select Panel
+   =========================================================== */
 
 .mat-mdc-select-panel {
   background: var(--card-bg) !important;
 
-  border-radius: var(--radius-lg);
+  color: var(--text-primary) !important;
+
+  border-radius: var(--radius-lg) !important;
 }
 
 .mat-mdc-option {
@@ -75,11 +121,78 @@
 }
 
 .mat-mdc-option:hover {
-  background: color-mix(in srgb, var(--primary) 8%, var(--card-bg));
+  background: color-mix(
+    in srgb,
+    var(--primary) 8%,
+    var(--card-bg)
+  ) !important;
 }
 
 .mat-mdc-option.mdc-list-item--selected {
-  background: color-mix(in srgb, var(--primary) 18%, var(--card-bg));
+  background: color-mix(
+    in srgb,
+    var(--primary) 18%,
+    var(--card-bg)
+  ) !important;
+}
+
+/* ===========================================================
+   Material Labels
+   =========================================================== */
+
+.mdc-label {
+  color: var(--text-primary);
+}
+
+/* ===========================================================
+   Material Icons
+   =========================================================== */
+
+/*
+   mat-icon uses currentColor.
+   Explicitly inherit the application's text theme so icons
+   don't fall back to the browser / Material default color.
+*/
+
+.mat-icon {
+  color: currentColor;
+}
+
+body .mat-icon {
+  color: var(--text-primary);
+}
+
+.mat-mdc-icon-button {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-icon-button .mat-icon {
+  color: inherit !important;
+}
+
+/* Preserve icon colors when explicitly requested */
+
+.mat-icon[color='primary'] {
+  color: var(--primary) !important;
+}
+
+.mat-icon[color='warn'] {
+  color: var(--danger) !important;
+}
+
+/* ===========================================================
+   Buttons
+   =========================================================== */
+
+.mat-mdc-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button {
+  color: var(--text-primary);
+}
+
+.mat-mdc-outlined-button {
+  border-color: var(--border) !important;
 }
 
 /* ===========================================================
@@ -119,7 +232,10 @@
    Tables
    =========================================================== */
 
-.mat-mdc-table,
+.mat-mdc-table {
+  background: var(--card-bg) !important;
+}
+
 .mat-mdc-header-row,
 .mat-mdc-row {
   background: var(--card-bg) !important;
@@ -154,14 +270,6 @@
 }
 
 /* ===========================================================
-   Buttons
-   =========================================================== */
-
-.mat-mdc-icon-button {
-  color: var(--text-primary) !important;
-}
-
-/* ===========================================================
    Slide Toggle
    =========================================================== */
 
@@ -171,8 +279,6 @@
 
 .mat-mdc-slide-toggle .mdc-label {
   color: var(--text-primary);
-
-  font-weight: 500;
 }
 
 /* ===========================================================
@@ -192,7 +298,9 @@
 
   box-shadow: var(--shadow-premium);
 
-  transition: all var(--transition);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
 }
 
 .mat-expansion-panel:hover {
@@ -240,7 +348,67 @@ body[data-theme='dark'] .mat-expansion-panel-header {
 }
 
 /* ===========================================================
-   Snackbars
+   Drawer
+   =========================================================== */
+
+.mat-drawer {
+  background: var(--surface) !important;
+
+  color: var(--text-primary) !important;
+}
+
+.mat-drawer-container {
+  background: var(--background) !important;
+}
+
+.mat-drawer-content {
+  background: transparent !important;
+}
+
+/* ===========================================================
+   Menus
+   =========================================================== */
+
+.mat-mdc-menu-panel {
+  background: var(--card-bg) !important;
+
+  color: var(--text-primary) !important;
+
+  border: 1px solid var(--border);
+
+  border-radius: var(--radius-xl);
+}
+
+.mat-mdc-menu-item {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-menu-item .mat-icon {
+  color: var(--text-primary) !important;
+}
+
+.mat-mdc-menu-item:hover {
+  background: color-mix(
+    in srgb,
+    var(--primary) 8%,
+    var(--card-bg)
+  ) !important;
+}
+
+/* ===========================================================
+   Overlay
+   =========================================================== */
+
+.cdk-overlay-container {
+  color: var(--text-primary);
+}
+
+.cdk-overlay-pane {
+  color: var(--text-primary);
+}
+
+/* ===========================================================
+   Snackbar
    =========================================================== */
 
 .success-snackbar {
@@ -253,41 +421,6 @@ body[data-theme='dark'] .mat-expansion-panel-header {
 
 .error-snackbar {
   --mdc-snackbar-container-color: #dc2626;
-}
-
-.mat-drawer {
-    background: var(--surface) !important;
-}
-
-.mat-drawer-container {
-    background: var(--background) !important;
-}
-
-.mat-drawer-content {
-    background: transparent !important;
-}
-
-.cdk-overlay-container {
-  color: var(--text-primary);
-}
-
-.cdk-overlay-pane {
-  color: var(--text-primary);
-}
-
-.mat-mdc-menu-panel {
-  background: var(--card-bg) !important;
-  color: var(--text-primary) !important;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-}
-
-.mat-mdc-menu-item {
-  color: var(--text-primary) !important;
-}
-
-.mat-mdc-menu-item mat-icon {
-  color: var(--text-primary) !important;
 }
 
 .info-snackbar {

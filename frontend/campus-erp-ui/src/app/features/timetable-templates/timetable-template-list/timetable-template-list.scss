@@ -83,8 +83,10 @@
 
 .toolbar {
   display: grid;
-  grid-template-columns: repeat(3, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns:
+    minmax(280px, 2fr)
+    repeat(4, minmax(180px, 1fr));
+  gap: 16px;
   padding: 24px;
 
   mat-form-field {
@@ -93,7 +95,7 @@
 }
 
 .search-box {
-  grid-column: span 2;
+  grid-column: autof;
 }
 
 /* Table */
@@ -105,8 +107,32 @@
   border: 1px solid var(--glass-border);
 }
 
+.toggle-container {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /*
+   * Makes scrolling on touch devices smoother.
+   */
+  -webkit-overflow-scrolling: touch;
+
+  /*
+   * Keeps the scrollbar from being visually hidden.
+   */
+  scrollbar-width: thin;
+}
+
 .timetable-table {
   width: 100%;
+  min-width: 1250px;
+  border-collapse: separate;
 }
 
 .mat-mdc-header-row {
@@ -117,6 +143,7 @@
   color: var(--text-primary);
   font-size: 14px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .mat-mdc-row {
@@ -139,6 +166,7 @@
 .mat-mdc-cell {
   padding-top: 18px;
   padding-bottom: 18px;
+  white-space: nowrap;
 }
 
 .clickable-row {
@@ -268,12 +296,87 @@ mat-chip {
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .table-card {
-    overflow-x: auto;
+.timetable-table {
+  .mat-column-day {
+    width: 100px;
+    min-width: 100px;
   }
 
-  .timetable-table {
-    min-width: 950px;
+  .mat-column-time {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .mat-column-subject {
+    width: 230px;
+    min-width: 230px;
+  }
+
+  .mat-column-teacher {
+    width: 190px;
+    min-width: 190px;
+  }
+
+  .mat-column-section {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .mat-column-room {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .mat-column-lectureType {
+    width: 150px;
+    min-width: 150px;
+  }
+
+  .mat-column-attendance {
+    width: 130px;
+    min-width: 130px;
+  }
+
+  .mat-column-status {
+    width: 110px;
+    min-width: 110px;
+  }
+
+  .mat-column-actions {
+    width: 64px;
+    min-width: 64px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .toolbar {
+    grid-template-columns:
+      repeat(3, minmax(200px, 1fr));
+  }
+
+  .search-box {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .toolbar {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+
+  .search-box {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .search-box {
+    grid-column: auto;
   }
 }

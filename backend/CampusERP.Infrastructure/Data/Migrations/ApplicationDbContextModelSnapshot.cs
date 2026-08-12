@@ -374,13 +374,18 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsMarked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<Guid?>("MarkedByUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("MarkedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("MarkingMethod")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remarks")
                         .HasMaxLength(500)
@@ -400,13 +405,24 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttendanceSessionId");
+                    b.HasIndex("IsMarked");
 
                     b.HasIndex("MarkedByUserId");
 
+                    b.HasIndex("MarkedOn");
+
+                    b.HasIndex("MarkingMethod");
+
+                    b.HasIndex("Status");
+
                     b.HasIndex("StudentId");
 
-                    b.ToTable("AttendanceRecords");
+                    b.HasIndex("AttendanceSessionId", "StudentId")
+                        .IsUnique();
+
+                    b.HasIndex("InstitutionId", "CampusId", "StudentId");
+
+                    b.ToTable("AttendanceRecords", (string)null);
                 });
 
             modelBuilder.Entity("CampusERP.Domain.Entities.AttendanceSession", b =>
@@ -437,13 +453,17 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsAttendanceMarked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsLocked")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<Guid?>("LectureOverrideId")
                         .HasColumnType("uniqueidentifier");
@@ -461,7 +481,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SectionId")
@@ -499,19 +519,11 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AcademicSessionId");
-
                     b.HasIndex("CampusId");
-
-                    b.HasIndex("InstitutionId");
-
-                    b.HasIndex("LectureOverrideId");
 
                     b.HasIndex("LockedByUserId");
 
                     b.HasIndex("RoomId");
-
-                    b.HasIndex("SectionId");
 
                     b.HasIndex("SemesterSubjectId");
 
@@ -519,11 +531,21 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
                     b.HasIndex("TeacherAssignmentId");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("LectureOverrideId", "AttendanceDate");
 
-                    b.HasIndex("TimetableTemplateId");
+                    b.HasIndex("SectionId", "AttendanceDate");
 
-                    b.ToTable("AttendanceSessions");
+                    b.HasIndex("Status", "AttendanceDate");
+
+                    b.HasIndex("TeacherId", "AttendanceDate");
+
+                    b.HasIndex("TimetableTemplateId", "AttendanceDate");
+
+                    b.HasIndex("AcademicSessionId", "SectionId", "AttendanceDate");
+
+                    b.HasIndex("InstitutionId", "CampusId", "AttendanceDate");
+
+                    b.ToTable("AttendanceSessions", (string)null);
                 });
 
             modelBuilder.Entity("CampusERP.Domain.Entities.CalendarEvent", b =>
@@ -1877,7 +1899,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("SectionId")
@@ -2126,17 +2148,18 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.HasOne("CampusERP.Domain.Entities.AttendanceSession", "AttendanceSession")
                         .WithMany("AttendanceRecords")
                         .HasForeignKey("AttendanceSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.User", "MarkedByUser")
                         .WithMany()
-                        .HasForeignKey("MarkedByUserId");
+                        .HasForeignKey("MarkedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.Student", "Student")
-                        .WithMany()
+                        .WithMany("AttendanceRecords")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AttendanceSession");
@@ -2149,68 +2172,71 @@ namespace CampusERP.Infrastructure.Data.Migrations
             modelBuilder.Entity("CampusERP.Domain.Entities.AttendanceSession", b =>
                 {
                     b.HasOne("CampusERP.Domain.Entities.AcademicSession", "AcademicSession")
-                        .WithMany()
+                        .WithMany("AttendanceSessions")
                         .HasForeignKey("AcademicSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Campus", "Campus")
                         .WithMany()
                         .HasForeignKey("CampusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.Institution", "Institution")
                         .WithMany()
                         .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.LectureOverride", "LectureOverride")
                         .WithMany()
-                        .HasForeignKey("LectureOverrideId");
+                        .HasForeignKey("LectureOverrideId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.User", "LockedByUser")
                         .WithMany()
-                        .HasForeignKey("LockedByUserId");
+                        .HasForeignKey("LockedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.Section", "Section")
                         .WithMany()
                         .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.SemesterSubject", "SemesterSubject")
                         .WithMany()
                         .HasForeignKey("SemesterSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.TeacherAssignment", "TeacherAssignment")
                         .WithMany()
-                        .HasForeignKey("TeacherAssignmentId");
+                        .HasForeignKey("TeacherAssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.Teacher", "Teacher")
                         .WithMany()
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("CampusERP.Domain.Entities.TimetableTemplate", "TimetableTemplate")
                         .WithMany()
-                        .HasForeignKey("TimetableTemplateId");
+                        .HasForeignKey("TimetableTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AcademicSession");
 
@@ -2780,8 +2806,7 @@ namespace CampusERP.Infrastructure.Data.Migrations
                     b.HasOne("CampusERP.Domain.Entities.Room", "Room")
                         .WithMany("TimetableTemplates")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("CampusERP.Domain.Entities.Section", "Section")
                         .WithMany("TimetableTemplates")
@@ -2889,6 +2914,8 @@ namespace CampusERP.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CampusERP.Domain.Entities.AcademicSession", b =>
                 {
+                    b.Navigation("AttendanceSessions");
+
                     b.Navigation("CalendarEvents");
 
                     b.Navigation("LectureOverrides");
@@ -3015,6 +3042,8 @@ namespace CampusERP.Infrastructure.Data.Migrations
             modelBuilder.Entity("CampusERP.Domain.Entities.Student", b =>
                 {
                     b.Navigation("AttendanceCorrectionRequests");
+
+                    b.Navigation("AttendanceRecords");
 
                     b.Navigation("Enrollments");
                 });

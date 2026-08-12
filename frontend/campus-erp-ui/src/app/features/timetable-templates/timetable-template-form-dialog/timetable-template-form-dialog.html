@@ -1,47 +1,631 @@
 <h2 mat-dialog-title>
-  @if (isEdit) {
-    Edit Timetable Template
-  } @else {
-    Create Timetable Template
-  }
+  <mat-icon>
+    {{ isEdit ? 'edit_calendar' : 'calendar_add_on' }}
+  </mat-icon>
+
+  {{ title }}
 </h2>
 
 <mat-dialog-content>
-  <form class="dialog-form" [formGroup]="form">
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title> Academic Information </mat-panel-title>
-      </mat-expansion-panel-header>
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-icon>hourglass_top</mat-icon>
 
-      <div class="dialog-form"></div>
-    </mat-expansion-panel>
+      <p>Loading timetable data...</p>
+    </div>
+  } @else {
+    <form
+      [formGroup]="form"
+      class="timetable-form"
+    >
 
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title> Schedule </mat-panel-title>
-      </mat-expansion-panel-header>
+      <!-- ================================================= -->
+      <!-- BASIC INFORMATION -->
+      <!-- ================================================= -->
 
-      <div class="dialog-form"></div>
-    </mat-expansion-panel>
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>school</mat-icon>
+            Basic Information
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title> Lecture Configuration </mat-panel-title>
-      </mat-expansion-panel-header>
+        <div class="dialog-form">
 
-      <div class="dialog-form"></div>
-    </mat-expansion-panel>
-  </form>
+          <!-- Academic Session -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Academic Session
+            </mat-label>
+
+            <mat-select
+              formControlName="academicSessionId"
+              (selectionChange)="onAcademicSessionChange()"
+            >
+              @for (
+                session of academicSessions();
+                track session.id
+              ) {
+                <mat-option
+                  [value]="session.id"
+                >
+                  {{ session.name }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (
+              form.controls.academicSessionId.hasError(
+                'required'
+              )
+            ) {
+              <mat-error>
+                Academic session is required.
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Teacher Assignment -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Teacher Assignment
+            </mat-label>
+
+            <mat-select
+              formControlName="teacherAssignmentId"
+            >
+              @for (
+                assignment of filteredAssignments;
+                track assignment.id
+              ) {
+                <mat-option
+                  [value]="assignment.id"
+                >
+                  {{ assignment.teacherName }}
+                  ·
+                  {{ assignment.classDisplayName }}
+                  ·
+                  {{ assignment.subjectName }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (
+              form.controls.teacherAssignmentId.hasError(
+                'required'
+              )
+            ) {
+              <mat-error>
+                Teacher assignment is required.
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Derived Teacher -->
+
+          @if (
+            selectedAssignment;
+            as assignment
+          ) {
+            <div class="derived-field">
+              <span class="field-label">
+                Teacher
+              </span>
+
+              <strong>
+                {{ assignment.teacherName }}
+              </strong>
+            </div>
+
+            <div class="derived-field">
+              <span class="field-label">
+                Class / Section
+              </span>
+
+              <strong>
+                {{ assignment.classDisplayName }}
+              </strong>
+            </div>
+
+            <div
+              class="derived-field full-width"
+            >
+              <span class="field-label">
+                Subject
+              </span>
+
+              <strong>
+                {{ assignment.subjectName }}
+              </strong>
+            </div>
+          }
+
+          <!-- Room -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Room
+            </mat-label>
+
+            <mat-select
+              formControlName="roomId"
+            >
+              @if (
+                form.controls.isOnline.value
+              ) {
+                <mat-option value="">
+                  No physical room
+                </mat-option>
+              }
+
+              @for (
+                room of rooms();
+                track room.id
+              ) {
+                <mat-option
+                  [value]="room.id"
+                >
+                  {{ room.name }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (
+              form.controls.roomId.hasError(
+                'required'
+              )
+            ) {
+              <mat-error>
+                Room is required for offline lectures.
+              </mat-error>
+            }
+
+            @if (
+              form.controls.isOnline.value
+            ) {
+              <mat-hint>
+                Room is optional for online lectures.
+              </mat-hint>
+            }
+          </mat-form-field>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ================================================= -->
+      <!-- SCHEDULE -->
+      <!-- ================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>schedule</mat-icon>
+            Schedule
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+
+          <!-- Days -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+            class="full-width"
+          >
+            <mat-label>
+              Days of Week
+            </mat-label>
+
+            <mat-select
+              formControlName="dayOfWeek"
+              multiple
+            >
+              @for (
+                day of daysOfWeek;
+                track day.value
+              ) {
+                <mat-option
+                  [value]="day.value"
+                >
+                  {{ day.label }}
+                </mat-option>
+              }
+            </mat-select>
+
+            @if (isEdit) {
+              <mat-hint>
+                The day cannot be changed while
+                editing an existing timetable.
+              </mat-hint>
+            } @else {
+              <mat-hint>
+                Select multiple days to create
+                the same schedule across those days.
+              </mat-hint>
+            }
+
+            @if (
+              form.controls.dayOfWeek.hasError(
+                'required'
+              )
+            ) {
+              <mat-error>
+                Select at least one day.
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Time -->
+
+          <div class="time-row">
+
+            <!-- Start -->
+
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+            >
+              <mat-label>
+                Start Time
+              </mat-label>
+
+              <mat-icon matPrefix>
+                schedule
+              </mat-icon>
+
+              <input
+                matInput
+                type="time"
+                formControlName="startTime"
+              />
+
+              @if (
+                form.controls.startTime.hasError(
+                  'required'
+                )
+              ) {
+                <mat-error>
+                  Start time is required.
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <div class="time-separator">
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+            </div>
+
+            <!-- End -->
+
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+            >
+              <mat-label>
+                End Time
+              </mat-label>
+
+              <mat-icon matPrefix>
+                schedule
+              </mat-icon>
+
+              <input
+                matInput
+                type="time"
+                formControlName="endTime"
+              />
+
+              @if (
+                form.controls.endTime.hasError(
+                  'required'
+                )
+              ) {
+                <mat-error>
+                  End time is required.
+                </mat-error>
+              }
+            </mat-form-field>
+
+          </div>
+
+          <!-- Date Range -->
+
+          <div class="date-row">
+
+            <!-- Valid From -->
+
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+            >
+              <mat-label>
+                Valid From
+              </mat-label>
+
+              <input
+                matInput
+                [matDatepicker]="validFromPicker"
+                formControlName="validFrom"
+              />
+
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="validFromPicker"
+              />
+
+              <mat-datepicker
+                #validFromPicker
+              ></mat-datepicker>
+
+              @if (
+                form.controls.validFrom.hasError(
+                  'required'
+                )
+              ) {
+                <mat-error>
+                  Valid From is required.
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <div class="date-separator">
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+            </div>
+
+            <!-- Valid To -->
+
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+            >
+              <mat-label>
+                Valid To
+              </mat-label>
+
+              <input
+                matInput
+                [matDatepicker]="validToPicker"
+                formControlName="validTo"
+              />
+
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="validToPicker"
+              />
+
+              <mat-datepicker
+                #validToPicker
+              ></mat-datepicker>
+
+              @if (
+                form.controls.validTo.hasError(
+                  'required'
+                )
+              ) {
+                <mat-error>
+                  Valid To is required.
+                </mat-error>
+              }
+            </mat-form-field>
+
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+      <!-- ================================================= -->
+      <!-- LECTURE CONFIGURATION -->
+      <!-- ================================================= -->
+
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>tune</mat-icon>
+            Lecture Configuration
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="dialog-form">
+
+          <!-- Lecture Type -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Lecture Type
+            </mat-label>
+
+            <mat-select
+              formControlName="lectureType"
+            >
+              @for (
+                type of lectureTypes;
+                track type.value
+              ) {
+                <mat-option
+                  [value]="type.value"
+                >
+                  {{ type.label }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Priority -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Priority
+            </mat-label>
+
+            <input
+              matInput
+              type="number"
+              min="0"
+              formControlName="priority"
+            />
+
+            <mat-hint>
+              Higher priority takes precedence
+              during scheduling.
+            </mat-hint>
+          </mat-form-field>
+
+          <!-- Display Order -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+          >
+            <mat-label>
+              Display Order
+            </mat-label>
+
+            <input
+              matInput
+              type="number"
+              min="1"
+              formControlName="displayOrder"
+            />
+
+            @if (
+              form.controls.displayOrder.hasError(
+                'min'
+              )
+            ) {
+              <mat-error>
+                Display order must be greater than zero.
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Meeting Link -->
+
+          @if (
+            form.controls.isOnline.value
+          ) {
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+              class="full-width"
+            >
+              <mat-label>
+                Meeting Link
+              </mat-label>
+
+              <mat-icon matPrefix>
+                link
+              </mat-icon>
+
+              <input
+                matInput
+                formControlName="meetingLink"
+                placeholder="https://..."
+              />
+
+              <mat-hint>
+                Required for online lectures.
+              </mat-hint>
+            </mat-form-field>
+          }
+
+          <!-- Remarks -->
+
+          <mat-form-field
+            appearance="outline"
+            floatLabel="always"
+            class="full-width"
+          >
+            <mat-label>
+              Remarks
+            </mat-label>
+
+            <textarea
+              matInput
+              rows="3"
+              formControlName="remarks"
+              placeholder="Additional notes..."
+            ></textarea>
+          </mat-form-field>
+
+          <!-- Options -->
+
+          <div class="options-grid full-width">
+
+            <mat-slide-toggle
+              formControlName="generateAttendance"
+            >
+              Generate Attendance
+            </mat-slide-toggle>
+
+            <mat-slide-toggle
+              formControlName="isOnline"
+              (change)="onOnlineChange()"
+            >
+              Online Lecture
+            </mat-slide-toggle>
+
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
+    </form>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
 
-  <button mat-flat-button color="primary" type="button" (click)="save()">
-    @if (isEdit) {
-      Update Timetable
-    } @else {
-      Create Timetable
-    }
+  <button
+    mat-stroked-button
+    type="button"
+    [disabled]="saving()"
+    (click)="cancel()"
+  >
+    Cancel
   </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="
+      loading() ||
+      saving() ||
+      form.invalid
+    "
+    (click)="save()"
+  >
+    <mat-icon>
+      {{ isEdit ? 'save' : 'add' }}
+    </mat-icon>
+
+    {{
+      saving()
+        ? 'Saving...'
+        : submitLabel
+    }}
+  </button>
+
 </mat-dialog-actions>

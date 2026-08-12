@@ -36,14 +36,18 @@ public class TimetableTemplateService : ITimetableTemplateService
 
     public async Task<List<TimetableTemplateResponse>> GetAllAsync()
     {
-        return await BuildQuery()
-            .OrderBy(x => x.AcademicSession.Name)
-            .ThenBy(x => x.Section.Name)
+        var result = await ApplyScope(_dbContext.TimetableTemplates)
+            .AsNoTracking()
+            .Select(MapResponse())
+            .ToListAsync();
+
+        return result
+            .OrderBy(x => x.AcademicSessionName)
+            .ThenBy(x => x.SectionName)
             .ThenBy(x => x.DayOfWeek)
             .ThenBy(x => x.DisplayOrder)
             .ThenBy(x => x.StartTime)
-            .Select(MapResponse())
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<TimetableTemplateResponse> GetByIdAsync(Guid id)
@@ -245,7 +249,7 @@ public class TimetableTemplateService : ITimetableTemplateService
 
     #region Validation
 
-    private async Task ValidateRequestAsync(CreateTimetableTemplateRequest request)
+    private async Task ValidateRequestAsync(CreateTimetableTemplateRequest request, Guid? excludeTimetableTemplateId)
     {
         if (request.StartTime >= request.EndTime)
         {
@@ -267,10 +271,10 @@ public class TimetableTemplateService : ITimetableTemplateService
 
         await ValidateMeetingLinkAsync(request);
 
-        await ValidateSchedulingEngineAsync(request);
+        await ValidateSchedulingEngineAsync(request, excludeTimetableTemplateId);
     }
 
-    private async Task ValidateRequestAsync(UpdateTimetableTemplateRequest request)
+    private async Task ValidateRequestAsync(UpdateTimetableTemplateRequest request, Guid? excludeTimetableTemplateId)
     {
         if (request.StartTime >= request.EndTime)
         {
@@ -292,9 +296,8 @@ public class TimetableTemplateService : ITimetableTemplateService
 
         await ValidateMeetingLinkAsync(request);
 
-        await ValidateSchedulingEngineAsync(request);
+        await ValidateSchedulingEngineAsync(request, excludeTimetableTemplateId);
     }
-
     #endregion
 
     private async Task ValidateTeacherAssignmentAsync(ITimetableTemplateRequest request)
@@ -321,14 +324,51 @@ public class TimetableTemplateService : ITimetableTemplateService
             throw new BadRequestException(ErrorCodes.RoomRequired, "Room is required for offline lectures.");
         }
 
-        var exists = await _dbContext.Rooms
-            .AnyAsync(x =>
-                x.Id == request.RoomId.Value &&
-                x.IsActive);
+        var institutionId = _currentUser.InstitutionId;
 
-        if (!exists)
+        if (!institutionId.HasValue || institutionId.Value == Guid.Empty)
+        {
+            throw new BadRequestException(ErrorCodes.Validation, "Institution scope is not available.");
+        }
+
+        var room = await _dbContext.Rooms
+            .AsNoTracking()
+            .Where(x =>
+                x.Id == request.RoomId.Value &&
+                x.IsActive)
+            .Select(x => new
+            {
+                x.Id,
+                x.InstitutionId,
+                x.CampusId
+            })
+            .FirstOrDefaultAsync();
+
+        if (room == null)
         {
             throw new NotFoundException(ErrorCodes.RoomNotFound, "Room not found.");
+        }
+
+        if (room.InstitutionId != institutionId.Value)
+        {
+            throw new BadRequestException(ErrorCodes.Validation, "The selected room does not belong to the current institution.");
+        }
+
+        // CampusAdmin must only be able to use rooms
+        // belonging to their own campus.
+        if (_scope.IsCampusAdmin())
+        {
+            var campusId = _scope.CampusId();
+
+            if (campusId == Guid.Empty)
+            {
+                throw new BadRequestException(ErrorCodes.Validation, "Campus scope is not available.");
+            }
+
+            if (room.CampusId != campusId)
+            {
+                throw new BadRequestException(ErrorCodes.Validation, "The selected room does not belong to your campus.");
+            }
         }
     }
 
@@ -376,13 +416,14 @@ public class TimetableTemplateService : ITimetableTemplateService
         return Task.CompletedTask;
     }
 
-    private async Task ValidateSchedulingEngineAsync(ITimetableTemplateRequest request)
+    private async Task ValidateSchedulingEngineAsync(ITimetableTemplateRequest request, Guid? excludeTimetableTemplateId)
     {
-        var assignment = await _dbContext.TeacherAssignments.AsNoTracking().FirstAsync(x => x.Id == request.TeacherAssignmentId);
+        var assignment = await _dbContext.TeacherAssignments
+                .AsNoTracking()
+                .FirstAsync(x =>
+                    x.Id == request.TeacherAssignmentId);
 
-        var validation =
-            await _schedulingEngine.ValidateTimetableAsync(
-                new ScheduleValidationRequest
+        var validation = await _schedulingEngine.ValidateTimetableAsync(new ScheduleValidationRequest
                 {
                     AcademicSessionId = request.AcademicSessionId,
 
@@ -404,7 +445,16 @@ public class TimetableTemplateService : ITimetableTemplateService
 
                     Priority = request.Priority,
 
-                    AffectsTimetable = true
+                    AffectsTimetable = true,
+
+                    DayOfWeek = request.DayOfWeek,
+
+                    /*
+                     * NULL for create.
+                     *
+                     * Existing timetable ID for update.
+                     */
+                    ExcludeTimetableTemplateId = excludeTimetableTemplateId
                 });
 
         if (validation.IsValid)
@@ -412,25 +462,111 @@ public class TimetableTemplateService : ITimetableTemplateService
             return;
         }
 
-        throw new BadRequestException(ErrorCodes.Validation, string.Join(Environment.NewLine, validation.Conflicts.Select(x => x.Message)));
+        var messages = validation.Conflicts
+                .Select(x => x.Message)
+                .Where(x =>
+                    !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToList();
+
+        throw new BadRequestException(ErrorCodes.Validation, string.Join(Environment.NewLine, messages));
     }
 
     #region Commands
 
     public async Task<TimetableTemplateResponse> CreateAsync(CreateTimetableTemplateRequest request)
     {
-        await ValidateRequestAsync(request);
+        await ValidateRequestAsync(request, null);
+
+        var institutionId = _currentUser.InstitutionId;
+
+        if (!institutionId.HasValue || institutionId.Value == Guid.Empty)
+        {
+            throw new BadRequestException(ErrorCodes.Validation, "Institution scope is not available.");
+        }
+
+        Guid campusId;
+
+        if (request.RoomId.HasValue)
+        {
+            var room = await _dbContext.Rooms
+                    .AsNoTracking()
+                    .Where(x =>
+                        x.Id == request.RoomId.Value &&
+                        x.IsActive)
+                    .Select(x => new
+                    {
+                        x.Id,
+                        x.CampusId,
+                        x.InstitutionId
+                    })
+                    .FirstOrDefaultAsync();
+
+            if (room == null)
+            {
+                throw new NotFoundException(ErrorCodes.RoomNotFound, "Room not found.");
+            }
+
+            if (room.InstitutionId != institutionId.Value)
+            {
+                throw new BadRequestException(ErrorCodes.Validation, "The selected room does not belong to the current institution.");
+            }
+
+            campusId = room.CampusId;
+        }
+        else
+        {
+            var currentCampusId = _currentUser.CampusId;
+
+            if (!currentCampusId.HasValue || currentCampusId.Value == Guid.Empty)
+            {
+                throw new BadRequestException(ErrorCodes.Validation, "Campus scope is required when creating an online timetable.");
+            }
+
+            campusId = currentCampusId.Value;
+        }
+
+        var deletedEntity = await ApplyScope(_dbContext.TimetableTemplates
+                            .IgnoreQueryFilters())
+                               .FirstOrDefaultAsync(x =>
+                                   x.InstitutionId == institutionId.Value &&
+                                   x.AcademicSessionId == request.AcademicSessionId &&
+                                   x.TeacherAssignmentId == request.TeacherAssignmentId &&
+                                   x.DayOfWeek == request.DayOfWeek &&
+                                   x.StartTime == request.StartTime &&
+                                   x.EndTime == request.EndTime &&
+                                   x.IsDeleted);
+
+        if (deletedEntity != null)
+        {
+            // =====================================================
+            // 5. Restore the previously deleted timetable
+            // =====================================================
+
+            deletedEntity.IsDeleted = false;
+            deletedEntity.IsActive = true;
+
+            deletedEntity.InstitutionId = institutionId.Value;
+            deletedEntity.CampusId = campusId;
+
+            await ApplyRequestAsync(deletedEntity, request);
+
+            await _dbContext.SaveChangesAsync();
+
+            return await GetByIdAsync(deletedEntity.Id) ?? throw new NotFoundException(ErrorCodes.TimetableTemplateNotFound, "Timetable template could not be restored.");
+        }
+
 
         var entity = new TimetableTemplate
-        {
-            Id = Guid.NewGuid(),
+            {
+                Id = Guid.NewGuid(),
 
-            InstitutionId = _currentUser.InstitutionId!.Value,
+                InstitutionId = institutionId.Value,
 
-            CampusId = _currentUser.CampusId!.Value,
+                CampusId = campusId,
 
-            IsActive = true
-        };
+                IsActive = true
+            };
 
         await ApplyRequestAsync(entity, request);
 
@@ -440,21 +576,64 @@ public class TimetableTemplateService : ITimetableTemplateService
 
         return await GetByIdAsync(entity.Id) ?? throw new NotFoundException(ErrorCodes.TimetableTemplateNotFound, "Timetable template not found.");
     }
-
+    
     #endregion
 
     public async Task<TimetableTemplateResponse> UpdateAsync(Guid id, UpdateTimetableTemplateRequest request)
     {
-        await ValidateRequestAsync(request);
 
-        var entity = await _dbContext.TimetableTemplates.FirstOrDefaultAsync(x => x.Id == id);
+        var entity = await ApplyScope(_dbContext.TimetableTemplates).FirstOrDefaultAsync(x => x.Id == id);
 
         if (entity == null)
         {
             throw new NotFoundException(ErrorCodes.TimetableTemplateNotFound, "Timetable template not found.");
         }
 
+        /*
+         * Pass the existing timetable ID into validation.
+         *
+         * The scheduling engine will exclude this record from
+         * conflict detection.
+         */
+        await ValidateRequestAsync(request, id);
+
         await ApplyRequestAsync(entity, request);
+
+        /*
+         * If the room changes, the campus must follow the room.
+         */
+        if (request.RoomId.HasValue)
+        {
+            var room = await _dbContext.Rooms
+                    .AsNoTracking()
+                    .Where(x =>
+                        x.Id == request.RoomId.Value &&
+                        x.IsActive)
+                    .Select(x => new
+                    {
+                        x.CampusId,
+                        x.InstitutionId
+                    })
+                    .FirstOrDefaultAsync();
+
+            if (room == null)
+            {
+                throw new NotFoundException(ErrorCodes.RoomNotFound, "Room not found.");
+            }
+
+            entity.CampusId = room.CampusId;
+        }
+        else
+        {
+            var currentCampusId = _currentUser.CampusId;
+
+            if (!currentCampusId.HasValue || currentCampusId.Value == Guid.Empty)
+            {
+                throw new BadRequestException(ErrorCodes.Validation, "Campus scope is required for an online timetable.");
+            }
+
+            entity.CampusId = currentCampusId.Value;
+        }
 
         await _dbContext.SaveChangesAsync();
 

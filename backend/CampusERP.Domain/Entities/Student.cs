@@ -35,5 +35,7 @@ public class Student : BaseEntity, ITenantEntity
 
     public ICollection<StudentEnrollment> Enrollments { get; set; } = new List<StudentEnrollment>();
 
+    public ICollection<AttendanceRecord> AttendanceRecords { get; set; } = new List<AttendanceRecord>();
+
     public ICollection<AttendanceCorrectionRequest> AttendanceCorrectionRequests { get; set; } = new List<AttendanceCorrectionRequest>();
 }

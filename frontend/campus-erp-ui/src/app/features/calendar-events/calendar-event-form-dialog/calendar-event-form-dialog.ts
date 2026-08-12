@@ -174,7 +174,7 @@ export class CalendarEventFormDialogComponent implements OnInit {
 
     recurrenceRule: [''],
 
-    priority: [1],
+    priority: [300],
 
     affectsTimetable: [true],
   });
@@ -536,7 +536,11 @@ export class CalendarEventFormDialogComponent implements OnInit {
   }
 
   private toDateOnly(date: Date): string {
-    return date.toISOString().split('T')[0];
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   readonly eventTypes = [
@@ -560,36 +564,76 @@ export class CalendarEventFormDialogComponent implements OnInit {
   selectEventType(type: EventType): void {
     this.form.controls.eventType.setValue(type);
 
+    this.form.controls.priority.setValue(this.getPriorityByEventType(type));
+
     switch (type) {
       case EventType.Holiday:
         this.form.patchValue({
           isFullDay: true,
           affectsTimetable: true,
-          priority: 100,
         });
         break;
 
       case EventType.Examination:
         this.form.patchValue({
           affectsTimetable: true,
-          priority: 90,
-        });
-        break;
-
-      case EventType.Workshop:
-        this.form.patchValue({
-          priority: 30,
-        });
-        break;
-
-      case EventType.Seminar:
-        this.form.patchValue({
-          priority: 20,
         });
         break;
 
       default:
         break;
+    }
+  }
+
+  private getPriorityByEventType(type: EventType): number {
+    switch (type) {
+      case EventType.Holiday:
+        return 300;
+
+      case EventType.Examination:
+        return 500;
+
+      case EventType.Workshop:
+        return 130;
+
+      case EventType.Seminar:
+        return 120;
+
+      case EventType.SportsDay:
+        return 200;
+
+      case EventType.CulturalEvent:
+        return 200;
+
+      case EventType.GuestLecture:
+        return 140;
+
+      case EventType.FacultyMeeting:
+        return 110;
+
+      case EventType.ParentTeacherMeeting:
+        return 110;
+
+      case EventType.ExtraClass:
+        return 100;
+
+      case EventType.Maintenance:
+        return 250;
+
+      case EventType.PlacementDrive:
+        return 200;
+
+      case EventType.Convocation:
+        return 300;
+
+      case EventType.Orientation:
+        return 150;
+
+      case EventType.Custom:
+        return 100;
+
+      default:
+        return 100;
     }
   }
 }

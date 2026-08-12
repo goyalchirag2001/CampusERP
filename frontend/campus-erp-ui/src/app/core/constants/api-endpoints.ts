@@ -43,5 +43,9 @@ export const ApiEndpoints = {
 
   TimetableTemplates: 'TimetableTemplates',
 
+  Rooms: 'Room',
+
+  TimetableCalendar: 'TimetableCalendar',
+
   //#endregion
 } as const;

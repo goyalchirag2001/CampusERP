@@ -1,0 +1,202 @@
+@if (loading()) {
+  <div class="loading-state">
+    <mat-icon>hourglass_empty</mat-icon>
+
+    <p>Loading room details...</p>
+  </div>
+} @else if (error()) {
+  <div class="error-state">
+    <mat-icon>error_outline</mat-icon>
+
+    <h2>Unable to load room</h2>
+
+    <p>{{ error() }}</p>
+
+    <button mat-flat-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Rooms
+    </button>
+  </div>
+} @else if (room(); as room) {
+  <div class="details-page">
+    <!-- =========================================================
+         Header
+         ========================================================= -->
+
+    <div class="page-header-card">
+      <div class="header-left">
+        <div class="entity-avatar">
+          <mat-icon>meeting_room</mat-icon>
+        </div>
+
+        <div class="header-content">
+          <h1>
+            {{ room.roomName || room.roomNumber }}
+          </h1>
+
+          <p>{{ room.building }} · {{ room.roomNumber }}</p>
+
+          <span class="status-chip" [class.inactive]="!room.isActive">
+            {{ room.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-stroked-button type="button" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          Back
+        </button>
+
+        <button mat-flat-button type="button" (click)="editRoom()">
+          <mat-icon>edit</mat-icon>
+          Edit Room
+        </button>
+
+        @if (room.isActive) {
+          <button mat-stroked-button type="button" (click)="deactivateRoom()">
+            <mat-icon>block</mat-icon>
+            Deactivate
+          </button>
+        } @else {
+          <button mat-flat-button type="button" (click)="activateRoom()">
+            <mat-icon>check_circle</mat-icon>
+            Activate
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- =========================================================
+         Room Overview
+         ========================================================= -->
+
+    <div class="info-card">
+      <h2>Room Information</h2>
+
+      <div class="info-grid">
+        <div>
+          <label>Room Name</label>
+          <p>{{ room.roomName || '—' }}</p>
+        </div>
+
+        <div>
+          <label>Room Number</label>
+          <p>{{ room.roomNumber }}</p>
+        </div>
+
+        <div>
+          <label>Room Type</label>
+          <p>{{ room.roomType }}</p>
+        </div>
+
+        <div>
+          <label>Building</label>
+          <p>{{ room.building }}</p>
+        </div>
+
+        <div>
+          <label>Floor</label>
+          <p>{{ room.floor }}</p>
+        </div>
+
+        <div>
+          <label>Campus</label>
+          <p>{{ room.campusName }}</p>
+        </div>
+
+        <div>
+          <label>Capacity</label>
+          <p>{{ room.capacity }}</p>
+        </div>
+
+        <div>
+          <label>Location Code</label>
+          <p>{{ room.locationCode || '—' }}</p>
+        </div>
+
+        <div>
+          <label>Display Order</label>
+          <p>{{ room.displayOrder }}</p>
+        </div>
+
+        <div>
+          <label>Accessibility</label>
+          <p>
+            {{ room.isAccessible ? 'Accessible' : 'Not Accessible' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         Facilities
+         ========================================================= -->
+
+    <div class="info-card">
+      <h2>Facilities & Equipment</h2>
+
+      <div class="amenities-grid">
+        <div class="amenity-item" [class.unavailable]="!room.hasProjector">
+          <mat-icon>
+            {{ room.hasProjector ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Projector</span>
+        </div>
+
+        <div class="amenity-item" [class.unavailable]="!room.hasSmartBoard">
+          <mat-icon>
+            {{ room.hasSmartBoard ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Smart Board</span>
+        </div>
+
+        <div class="amenity-item" [class.unavailable]="!room.hasAirConditioning">
+          <mat-icon>
+            {{ room.hasAirConditioning ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Air Conditioning</span>
+        </div>
+
+        <div class="amenity-item" [class.unavailable]="!room.hasComputers">
+          <mat-icon>
+            {{ room.hasComputers ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Computers</span>
+        </div>
+
+        <div class="amenity-item" [class.unavailable]="!room.hasInternet">
+          <mat-icon>
+            {{ room.hasInternet ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Internet</span>
+        </div>
+
+        <div class="amenity-item" [class.unavailable]="!room.isAccessible">
+          <mat-icon>
+            {{ room.isAccessible ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+
+          <span>Accessible</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         Description
+         ========================================================= -->
+
+    <div class="info-card">
+      <h2>Description</h2>
+
+      <p class="description">
+        {{ room.description || 'No description provided.' }}
+      </p>
+    </div>
+  </div>
+}

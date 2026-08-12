@@ -12,6 +12,7 @@ import { Permissions } from './core/constants/permissions';
 
 import { ForbiddenComponent } from './shared/pages/forbidden/forbidden';
 import { NotFoundComponent } from './shared/pages/not-found/not-found';
+import { platformGuard } from './core/guards/platform-guard';
 
 export const routes: Routes = [
   /* =========================================================
@@ -45,7 +46,7 @@ export const routes: Routes = [
 
     component: AdminLayout,
 
-    canActivate: [authGuard],
+    canActivate: [authGuard, platformGuard],
 
     children: [
       {
@@ -543,7 +544,7 @@ export const routes: Routes = [
          ------------------------------------------------------- */
 
       {
-        path: 'timetables',
+        path: 'timetable-templates',
 
         loadComponent: () =>
           import('./features/timetable-templates/timetable-template-list/timetable-template-list').then(
@@ -554,7 +555,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'timetables/:id',
+        path: 'timetable-templates/:id',
 
         loadComponent: () =>
           import('./features/timetable-templates/timetable-template-details/timetable-template-details').then(
@@ -562,6 +563,49 @@ export const routes: Routes = [
           ),
 
         canActivate: [permissionGuard(Permissions.TimetableTemplateView)],
+      },
+
+      /* -------------------------------------------------------
+         Timetable Calendar
+         ------------------------------------------------------- */
+
+      {
+        path: 'teacher-calendar',
+
+        loadComponent: () =>
+          import('./features/timetable-calendar/timetable-calendar/timetable-calendar').then(
+            (m) => m.TimetableCalendar,
+          ),
+
+        data: {
+          calendarMode: 'teacher',
+        },
+
+        canActivate: [permissionGuard(Permissions.TeacherCalendarView)],
+      },
+
+      {
+        path: 'student-calendar',
+
+        loadComponent: () =>
+          import('./features/timetable-calendar/timetable-calendar/timetable-calendar').then(
+            (m) => m.TimetableCalendar,
+          ),
+
+        data: {
+          calendarMode: 'student',
+        },
+
+        canActivate: [permissionGuard(Permissions.StudentCalendarView)],
+      },
+
+      {
+        path: 'calendar-event-details',
+
+        loadComponent: () =>
+          import('./features/timetable-calendar/timetable-calendar-details/timetable-calendar-details').then(
+            (m) => m.TimetableCalendarDetails,
+          ),
       },
 
       /* -------------------------------------------------------
@@ -573,6 +617,27 @@ export const routes: Routes = [
 
         loadComponent: () =>
           import('./features/profile/profile/profile').then((m) => m.ProfileComponent),
+      },
+
+      /* -------------------------------------------------------
+   Rooms
+   ------------------------------------------------------- */
+
+      {
+        path: 'rooms',
+
+        loadComponent: () => import('./features/rooms/room-list/room-list').then((m) => m.RoomList),
+
+        canActivate: [permissionGuard(Permissions.RoomView)],
+      },
+
+      {
+        path: 'rooms/:id',
+
+        loadComponent: () =>
+          import('./features/rooms/room-details/room-details').then((m) => m.RoomDetails),
+
+        canActivate: [permissionGuard(Permissions.RoomView)],
       },
     ],
   },

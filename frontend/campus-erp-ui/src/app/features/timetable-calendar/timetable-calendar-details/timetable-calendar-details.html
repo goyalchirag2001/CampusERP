@@ -1,0 +1,564 @@
+<div class="details-page">
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <div class="page-header">
+    <button
+      mat-icon-button
+      type="button"
+      class="back-button"
+      matTooltip="Back to Calendar"
+      (click)="goBack()"
+    >
+      <mat-icon> arrow_back </mat-icon>
+    </button>
+
+    <div class="header-content">
+      @if (loading()) {
+        <div class="header-skeleton">
+          <div class="skeleton skeleton-title"></div>
+
+          <div class="skeleton skeleton-subtitle"></div>
+        </div>
+
+      } @else if (event(); as item) {
+        <div class="breadcrumb">
+          <button type="button" class="breadcrumb-link" (click)="goBack()">Timetable</button>
+
+          <mat-icon> chevron_right </mat-icon>
+
+          <span> Details </span>
+        </div>
+
+        <div class="title-row">
+          <div class="title-content">
+            <div class="title-code">
+              @if (item.subjectCode) {
+                {{ item.subjectCode }}
+              } @else {
+                {{ getEventCategory() }}
+              }
+            </div>
+
+            <h1>
+              {{ getEventTitle() }}
+            </h1>
+          </div>
+
+          <div class="status-area">
+            @if (isCancelled()) {
+              <mat-chip class="status-chip cancelled">
+                <mat-icon> cancel </mat-icon>
+
+                Cancelled
+              </mat-chip>
+
+            } @else if (isOverride()) {
+              <mat-chip class="status-chip modified">
+                <mat-icon> edit </mat-icon>
+
+                Modified
+              </mat-chip>
+
+            } @else {
+              <mat-chip class="status-chip scheduled">
+                <mat-icon> check_circle </mat-icon>
+
+                Scheduled
+              </mat-chip>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (!loading() && event()) {
+      <button mat-icon-button type="button" matTooltip="Refresh" (click)="refresh()">
+        <mat-icon> refresh </mat-icon>
+      </button>
+    }
+  </div>
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="42"></mat-spinner>
+
+      <h2>Loading event</h2>
+
+      <p>Fetching timetable details...</p>
+    </div>
+  }
+
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
+  @else if (error()) {
+    <mat-card class="error-card">
+      <div class="error-icon">
+        <mat-icon> error_outline </mat-icon>
+      </div>
+
+      <div class="error-content">
+        <h2>Unable to load event</h2>
+
+        <p>
+          {{ error() }}
+        </p>
+
+        <div class="error-actions">
+          <button mat-stroked-button type="button" (click)="goBack()">
+            <mat-icon> arrow_back </mat-icon>
+
+            Back to Calendar
+          </button>
+
+          <button mat-flat-button type="button" (click)="retry()">
+            <mat-icon> refresh </mat-icon>
+
+            Try Again
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  }
+
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
+
+  @else if (event(); as item) {
+    <!-- ===================================================
+         EVENT HERO
+         =================================================== -->
+
+    <section
+      class="event-hero"
+      [class.cancelled]="item.isCancelled"
+      [class.modified]="item.isOverride"
+    >
+      <div class="hero-icon">
+        <mat-icon>
+          {{ getEventIcon() }}
+        </mat-icon>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-category">
+          {{ getEventCategory() }}
+        </div>
+
+        <div class="hero-title">
+          {{ getEventTitle() }}
+        </div>
+
+        @if (hasSubject()) {
+          <div class="hero-subject">
+            {{ getSubjectDisplay() }}
+          </div>
+        }
+
+        <div class="hero-meta">
+          <span>
+            <mat-icon> calendar_today </mat-icon>
+
+            {{ formatDate(item.date) }}
+          </span>
+
+          <span class="meta-separator"> • </span>
+
+          <span>
+            <mat-icon> schedule </mat-icon>
+
+            {{ getTimeRange() }}
+          </span>
+
+          @if (!item.isFullDay && getDuration() !== '—') {
+            <span class="meta-separator"> • </span>
+
+            <span>
+              <mat-icon> timelapse </mat-icon>
+
+              {{ getDuration() }}
+            </span>
+          }
+        </div>
+      </div>
+
+      @if (item.lectureType) {
+        <div class="hero-type">
+          <span> Lecture Type </span>
+
+          <mat-chip>
+            {{ getLectureType(item.lectureType) }}
+          </mat-chip>
+        </div>
+      }
+    </section>
+
+    <!-- ===================================================
+         OVERRIDE NOTICE
+         =================================================== -->
+
+    @if (isOverride()) {
+      <section class="notice-card override-notice">
+        <div class="notice-icon">
+          <mat-icon> edit_calendar </mat-icon>
+        </div>
+
+        <div class="notice-content">
+          <strong> Schedule modified </strong>
+
+          <p>
+            {{ getOverrideReason() }}
+          </p>
+        </div>
+      </section>
+    }
+
+    <!-- ===================================================
+         CANCELLED NOTICE
+         =================================================== -->
+
+    @if (isCancelled()) {
+      <section class="notice-card cancelled-notice">
+        <div class="notice-icon">
+          <mat-icon> event_busy </mat-icon>
+        </div>
+
+        <div class="notice-content">
+          <strong> This lecture is cancelled </strong>
+
+          <p>This event will not take place at the scheduled time.</p>
+        </div>
+      </section>
+    }
+
+    <!-- ===================================================
+         MAIN GRID
+         =================================================== -->
+
+    <div class="details-grid">
+      <!-- =================================================
+           SCHEDULE
+           ================================================= -->
+
+      <mat-card class="details-card">
+        <div class="card-header">
+          <div>
+            <h2>Schedule</h2>
+
+            <p>Date and timing information.</p>
+          </div>
+
+          <mat-icon> schedule </mat-icon>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label"> Date </span>
+
+            <strong>
+              {{ formatDate(item.date) }}
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Time </span>
+
+            <strong>
+              {{ getTimeRange() }}
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Duration </span>
+
+            <strong>
+              {{ getDuration() }}
+            </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Status </span>
+
+            <strong>
+              {{ getStatus() }}
+            </strong>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- =================================================
+           ACADEMIC INFORMATION
+           ================================================= -->
+
+      @if (hasSubject() || hasTeacher() || hasSection()) {
+        <mat-card class="details-card">
+          <div class="card-header">
+            <div>
+              <h2>Academic Information</h2>
+
+              <p>Subject and class information.</p>
+            </div>
+
+            <mat-icon> school </mat-icon>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-grid">
+            @if (hasSubject()) {
+              <div class="info-item wide">
+                <span class="info-label"> Subject </span>
+
+                <strong>
+                  {{ getSubjectDisplay() }}
+                </strong>
+              </div>
+            }
+
+            @if (hasTeacher()) {
+              <div class="info-item">
+                <span class="info-label"> Teacher </span>
+
+                <strong>
+                  {{ getTeacherDisplay() }}
+                </strong>
+              </div>
+            }
+
+            @if (hasSection()) {
+              <div class="info-item">
+                <span class="info-label"> Section </span>
+
+                <strong>
+                  {{ getSectionDisplay() }}
+                </strong>
+              </div>
+            }
+          </div>
+        </mat-card>
+      }
+
+      <!-- =================================================
+           LOCATION
+           ================================================= -->
+
+      <mat-card class="details-card location-card">
+        <div class="card-header">
+          <div>
+            <h2>Location</h2>
+
+            <p>Where this event will take place.</p>
+          </div>
+
+          <mat-icon> location_on </mat-icon>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        @if (item.isOnline) {
+          <div class="online-location">
+            <div class="location-main-icon">
+              <mat-icon> videocam </mat-icon>
+            </div>
+
+            <div>
+              <span class="location-label"> Delivery Mode </span>
+
+              <strong> Online </strong>
+
+              @if (hasMeetingLink()) {
+                <button
+                  mat-stroked-button
+                  type="button"
+                  class="meeting-button"
+                  (click)="openMeetingLink()"
+                >
+                  <mat-icon> open_in_new </mat-icon>
+
+                  Join Meeting
+                </button>
+              }
+            </div>
+          </div>
+
+        } @else if (hasPhysicalRoom()) {
+          <div class="room-location">
+            <div class="location-main-icon">
+              <mat-icon> meeting_room </mat-icon>
+            </div>
+
+            <div class="room-location-content">
+              <span class="location-label"> Physical Room </span>
+
+              <div class="room-title">
+                {{ getRoomName() }}
+              </div>
+
+              <div class="room-location-grid">
+                <div class="location-detail">
+                  <span> Building </span>
+
+                  <strong>
+                    {{ getRoomBuilding() }}
+                  </strong>
+                </div>
+
+                <div class="location-detail">
+                  <span> Floor </span>
+
+                  <strong>
+                    {{ getRoomFloor() }}
+                  </strong>
+                </div>
+
+                <div class="location-detail">
+                  <span> Room Number </span>
+
+                  <strong>
+                    {{ getRoomNumber() }}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        } @else {
+          <div class="empty-location">
+            <mat-icon> location_off </mat-icon>
+
+            <span> No room assigned </span>
+          </div>
+        }
+      </mat-card>
+
+      <!-- =================================================
+           LECTURE CONFIGURATION
+           ================================================= -->
+
+      @if (isTimetableEvent()) {
+        <mat-card class="details-card">
+          <div class="card-header">
+            <div>
+              <h2>Lecture Configuration</h2>
+
+              <p>Attendance and delivery settings.</p>
+            </div>
+
+            <mat-icon> tune </mat-icon>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-grid">
+            @if (item.lectureType) {
+              <div class="info-item">
+                <span class="info-label"> Lecture Type </span>
+
+                <strong>
+                  {{ getLectureType(item.lectureType) }}
+                </strong>
+              </div>
+            }
+
+            <div class="info-item">
+              <span class="info-label"> Priority </span>
+
+              <strong>
+                {{ item.priority ?? '—' }}
+              </strong>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Attendance </span>
+
+              <div>
+                @if (hasAttendance()) {
+                  <mat-chip class="attendance-chip enabled">
+                    <mat-icon> check_circle </mat-icon>
+
+                    Enabled
+                  </mat-chip>
+
+                } @else {
+                  <mat-chip class="attendance-chip disabled">
+                    <mat-icon> cancel </mat-icon>
+
+                    Disabled
+                  </mat-chip>
+                }
+              </div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Delivery Mode </span>
+
+              <strong>
+                {{ item.isOnline ? 'Online' : 'In Person' }}
+              </strong>
+            </div>
+          </div>
+        </mat-card>
+      }
+
+      <!-- =================================================
+           DESCRIPTION
+           ================================================= -->
+
+      @if (getDescription()) {
+        <mat-card class="details-card full-width">
+          <div class="card-header">
+            <div>
+              <h2>Description</h2>
+
+              <p>Additional information about this event.</p>
+            </div>
+
+            <mat-icon> notes </mat-icon>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <p class="description">
+            {{ getDescription() }}
+          </p>
+        </mat-card>
+      }
+
+      <!-- =================================================
+           ONLINE MEETING
+           ================================================= -->
+
+      @if (item.isOnline && hasMeetingLink()) {
+        <mat-card class="details-card full-width meeting-card">
+          <div class="meeting-content">
+            <div class="meeting-icon">
+              <mat-icon> videocam </mat-icon>
+            </div>
+
+            <div>
+              <h3>Online Meeting</h3>
+
+              <p>Join the scheduled online session.</p>
+            </div>
+
+            <button mat-flat-button type="button" (click)="openMeetingLink()">
+              <mat-icon> open_in_new </mat-icon>
+
+              Join Meeting
+            </button>
+          </div>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

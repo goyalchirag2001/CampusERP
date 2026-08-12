@@ -149,6 +149,17 @@ public static class PermissionConstants
     public const string TimetableTemplateView = "TimetableTemplate.View";
     public const string TimetableTemplateManage = "TimetableTemplate.Manage";
 
+    // Calendar
+
+    public const string TeacherCalendarView = "TeacherCalendar.View";
+    public const string StudentCalendarView = "StudentCalendar.View";
+
+    // Attendance
+
+    public const string AttendanceView = "Attendance.View";
+    public const string AttendanceManage = "Attendance.Manage";
+    public const string AttendanceStudentMark = "Attendance-Student.Mark";
+
     public static readonly List<string> All =
     [
         AdminDashboardView,
@@ -252,8 +263,14 @@ public static class PermissionConstants
         AttendanceCorrectionView,
         AttendanceCorrectionCreate,
         AttendanceCorrectionApprove,
+        AttendanceView,
+        AttendanceManage,
+        AttendanceStudentMark,
 
         TimetableTemplateView,
         TimetableTemplateManage,
+
+        TeacherCalendarView,
+        StudentCalendarView,
     ];
 }

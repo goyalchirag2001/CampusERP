@@ -112,6 +112,13 @@ public static class PermissionSeedData
     public static readonly Guid TimetableTemplateViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000083");
     public static readonly Guid TimetableTemplateManagePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000084");
 
+    public static readonly Guid TeacherCalendarViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000085");
+    public static readonly Guid StudentCalendarViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000086");
+
+    public static readonly Guid AttendanceViewPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000087");
+    public static readonly Guid AttendanceManagePermissionId = Guid.Parse("10000000-0000-0000-0000-000000000088");
+    public static readonly Guid AttendanceStudentMarkPermissionId = Guid.Parse("10000000-0000-0000-0000-000000000089");
+
     public static readonly List<Permission> Permissions =
     [
         // Admin Dashboard
@@ -767,6 +774,20 @@ public static class PermissionSeedData
             Name = "Manage Calendar",
             Module = "Calendar"
         },
+        new()
+        {
+            Id = TeacherCalendarViewPermissionId,
+            Code = PermissionConstants.TeacherCalendarView,
+            Name = "View Teacher Calendar",
+            Module = "Calendar"
+        },
+        new()
+        {
+            Id = StudentCalendarViewPermissionId,
+            Code = PermissionConstants.StudentCalendarView,
+            Name = "View Student Calendar",
+            Module = "Calendar"
+        },
 
         // Attendance Correction
         new()
@@ -805,6 +826,30 @@ public static class PermissionSeedData
             Code = PermissionConstants.TimetableTemplateManage,
             Name = "Manage Timetable Templates",
             Module = "TimetableTemplate"
+        },
+
+        // Attendance
+
+        new()
+        {
+            Id = AttendanceViewPermissionId,
+            Code = PermissionConstants.AttendanceView,
+            Name = "View Attendance",
+            Module = "Attendance"
+        },
+        new()
+        {
+            Id = AttendanceManagePermissionId,
+            Code = PermissionConstants.AttendanceManage,
+            Name = "Manage Attendance",
+            Module = "Attendance"
+        },
+        new()
+        {
+            Id = AttendanceStudentMarkPermissionId,
+            Code = PermissionConstants.AttendanceStudentMark,
+            Name = "Mark Student Attendance",
+            Module = "Attendance"
         }
     ];
 }

@@ -48,7 +48,7 @@ public class AttendanceSession : BaseEntity, ITenantEntity
 
     public Guid SectionId { get; set; }
 
-    public Guid RoomId { get; set; }
+    public Guid? RoomId { get; set; }
 
     public LectureType LectureType { get; set; }
 
@@ -120,11 +120,13 @@ public class AttendanceSession : BaseEntity, ITenantEntity
 
     public Section Section { get; set; } = null!;
 
-    public Room Room { get; set; } = null!;
+    public Room? Room { get; set; } = null!;
 
     public User? LockedByUser { get; set; }
 
     public ICollection<AttendanceRecord> AttendanceRecords { get; set; } = new List<AttendanceRecord>();
+
+    public ICollection<AttendanceQrSession> QrSessions { get; set; } = new List<AttendanceQrSession>();
 
     #endregion
 }

@@ -407,14 +407,46 @@ export class TimetableTemplateList implements OnInit, AfterViewInit {
   }
 
   duplicate(template: TimetableTemplate): void {
-    this.notification.info(
-      `Duplicate "${template.subjectCode}" will be available in a future update.`,
-    );
+    this.dialog
+      .open(TimetableTemplateFormDialog, {
+        width: '1100px',
+        maxWidth: '95vw',
+        disableClose: true,
+        autoFocus: false,
+        restoreFocus: false,
+        data: {
+          mode: 'duplicate',
+          timetable: template,
+        } satisfies TimetableTemplateDialogData,
+      })
+      .afterClosed()
+      .subscribe((saved) => {
+        if (saved) {
+          this.load();
+        }
+      });
   }
 
   delete(template: TimetableTemplate): void {
-    this.notification.info(
-      'Delete functionality will be enabled once the backend endpoint is available.',
+    const confirmed = window.confirm(
+      `Are you sure you want to delete the timetable for "${template.subjectCode}" on ${this.getDayName(
+        template.dayOfWeek,
+      )} at ${this.formatTime(template.startTime)}?`,
     );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.service.delete(template.id).subscribe({
+      next: () => {
+        this.notification.success('Timetable deleted successfully.');
+        this.load();
+      },
+
+      error: (err) => {
+        this.notification.error(err?.message ?? 'Unable to delete timetable.');
+      },
+    });
   }
 }

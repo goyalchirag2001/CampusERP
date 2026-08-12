@@ -1,27 +1,229 @@
-@use '../../../../styles/entity-form' as *;
-
 :host {
   display: block;
 }
 
 mat-dialog-content {
-  width: 1000px;
-
-  max-width: 90vw;
-
   max-height: 75vh;
-
-  overflow: auto;
+  padding-top: 8px;
 }
+
+mat-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timetable-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dialog-form {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+
+  padding: 8px 0 4px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+/* =========================================================
+   Derived fields
+   ========================================================= */
+
+.derived-field {
+  min-height: 56px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 10px 14px;
+
+  border-radius: 8px;
+
+  background: var(--mat-sys-surface-container);
+
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.field-label {
+  font-size: 12px;
+
+  color: var(--mat-sys-on-surface-variant);
+
+  margin-bottom: 3px;
+}
+
+.derived-field strong {
+  font-size: 14px;
+
+  color: var(--mat-sys-on-surface);
+}
+
+/* =========================================================
+   Time
+   ========================================================= */
+
+.time-row {
+  grid-column: 1 / -1;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.time-separator,
+.date-separator {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.time-separator mat-icon,
+.date-separator mat-icon {
+  font-size: 20px;
+
+  width: 20px;
+  height: 20px;
+}
+
+/* =========================================================
+   Dates
+   ========================================================= */
+
+.date-row {
+  grid-column: 1 / -1;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    auto
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+/* =========================================================
+   Options
+   ========================================================= */
+
+.options-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+
+  padding: 8px 0;
+}
+
+.options-grid mat-slide-toggle {
+  min-height: 40px;
+}
+
+/* =========================================================
+   Loading
+   ========================================================= */
+
+.loading-state {
+  min-height: 260px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.loading-state mat-icon {
+  font-size: 36px;
+
+  width: 36px;
+  height: 36px;
+}
+
+/* =========================================================
+   Expansion panels
+   ========================================================= */
 
 mat-expansion-panel {
-  margin-bottom: 16px;
+  border-radius: 10px;
+
+  box-shadow: none;
+
+  border: 1px solid var(--mat-sys-outline-variant);
 }
+
+mat-panel-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* =========================================================
+   Dialog actions
+   ========================================================= */
 
 mat-dialog-actions {
-  padding: 20px 24px;
+  padding-top: 12px;
+
+  gap: 8px;
 }
 
-button + button {
-  margin-left: 12px;
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .dialog-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .time-row,
+  .date-row {
+    grid-template-columns: 1fr;
+
+    gap: 4px;
+  }
+
+  .time-separator,
+  .date-separator {
+    display: none;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
 }

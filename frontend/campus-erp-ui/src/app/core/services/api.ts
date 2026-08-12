@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
 import { Observable, map } from 'rxjs';
 
 import { ApiResponse } from '../models/api-response';
@@ -10,76 +11,95 @@ import { ApiResponse } from '../models/api-response';
 export class ApiService {
   private readonly http = inject(HttpClient);
 
-  //#region GET
+  // =========================================================
+  // GET
+  // =========================================================
 
   get<T>(url: string, params?: HttpParams, headers?: HttpHeaders): Observable<T> {
     return this.http
-      .get<ApiResponse<T>>(url, {
+      .get<unknown>(url, {
         params,
         headers,
       })
-      .pipe(map((response) => this.extractData(response)));
+      .pipe(map((response) => this.extractData<T>(response)));
   }
 
-  //#endregion
-
-  //#region POST
+  // =========================================================
+  // POST
+  // =========================================================
 
   post<T>(url: string, body?: unknown, headers?: HttpHeaders): Observable<T> {
     return this.http
-      .post<ApiResponse<T>>(url, body, {
+      .post<unknown>(url, body, {
         headers,
       })
-      .pipe(map((response) => this.extractData(response)));
+      .pipe(map((response) => this.extractData<T>(response)));
   }
 
-  //#endregion
-
-  //#region PUT
+  // =========================================================
+  // PUT
+  // =========================================================
 
   put<T>(url: string, body?: unknown, headers?: HttpHeaders): Observable<T> {
     return this.http
-      .put<ApiResponse<T>>(url, body, {
+      .put<unknown>(url, body, {
         headers,
       })
-      .pipe(map((response) => this.extractData(response)));
+      .pipe(map((response) => this.extractData<T>(response)));
   }
 
-  //#endregion
-
-  //#region PATCH
+  // =========================================================
+  // PATCH
+  // =========================================================
 
   patch<T>(url: string, body?: unknown, headers?: HttpHeaders): Observable<T> {
     return this.http
-      .patch<ApiResponse<T>>(url, body, {
+      .patch<unknown>(url, body, {
         headers,
       })
-      .pipe(map((response) => this.extractData(response)));
+      .pipe(map((response) => this.extractData<T>(response)));
   }
 
-  //#endregion
-
-  //#region DELETE
+  // =========================================================
+  // DELETE
+  // =========================================================
 
   delete<T>(url: string, headers?: HttpHeaders): Observable<T> {
     return this.http
-      .delete<ApiResponse<T>>(url, {
+      .delete<unknown>(url, {
         headers,
       })
-      .pipe(map((response) => this.extractData(response)));
+      .pipe(map((response) => this.extractData<T>(response)));
   }
 
-  //#endregion
+  // =========================================================
+  // Private
+  // =========================================================
 
-  //#region Private
-
-  private extractData<T>(response: ApiResponse<T>): T {
-    if (!response.success) {
-      throw new Error(response.errors.join('\n') || response.message || 'Unexpected server error.');
+  private extractData<T>(response: unknown): T {
+    if (response === null || response === undefined) {
+      return response as T;
     }
 
-    return response.data as T;
+    if (this.isApiResponse<T>(response)) {
+      if (!response.success) {
+        const message =
+          response.errors?.join('\n') || response.message || 'Unexpected server error.';
+
+        throw new Error(message);
+      }
+
+      return response.data as T;
+    }
+
+    return response as T;
   }
 
-  //#endregion
+  private isApiResponse<T>(response: unknown): response is ApiResponse<T> {
+    if (typeof response !== 'object' || response === null) {
+      return false;
+    }
+
+    return 'success' in response;
+  }
 }

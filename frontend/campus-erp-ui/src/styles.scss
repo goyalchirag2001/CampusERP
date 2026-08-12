@@ -1,41 +1,14 @@
 @use '@angular/material' as mat;
+
 @use './styles/tokens';
 @use './styles/material';
 @use './styles/dialog';
 @use './styles/forms';
 @use './styles/table';
 
-html {
-  height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-}
-
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
-  margin: 0;
-  height: 100%;
-}
+/* =========================================================
+   Angular Material Theme
+   ========================================================= */
 
 html {
   height: 100%;
@@ -52,18 +25,13 @@ html {
   );
 }
 
-:root {
-  --primary: #4f46e5;
-  --primary-light: #818cf8;
+/* =========================================================
+   Global Reset
+   ========================================================= */
 
-  --shadow-premium: 0 8px 32px rgba(31, 38, 135, 0.15);
-}
-
-.field-description {
-  transition: color 0.25s ease;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -76,7 +44,6 @@ body {
   margin: 0;
 
   background: var(--background);
-
   color: var(--text-primary);
 
   font-family: Inter, Roboto, sans-serif;
@@ -87,6 +54,22 @@ body {
 
   overflow-x: hidden;
 }
+
+/* =========================================================
+   Material Color Scheme
+   ========================================================= */
+
+body {
+  color-scheme: light;
+}
+
+body[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* =========================================================
+   Background Effects
+   ========================================================= */
 
 body::before {
   content: '';
@@ -101,7 +84,11 @@ body::before {
 
   border-radius: 50%;
 
-  background: radial-gradient(circle, rgba(79, 70, 229, 0.25), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(79, 70, 229, 0.25),
+    transparent 70%
+  );
 
   pointer-events: none;
 
@@ -121,12 +108,20 @@ body::after {
 
   border-radius: 50%;
 
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.2), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(14, 165, 233, 0.2),
+    transparent 70%
+  );
 
   pointer-events: none;
 
   z-index: -1;
 }
+
+/* =========================================================
+   Glass Panels
+   ========================================================= */
 
 .glass-panel {
   background: var(--surface);
@@ -139,6 +134,18 @@ body::after {
 
   border-radius: var(--radius-xl);
 }
+
+/* =========================================================
+   Field Description
+   ========================================================= */
+
+.field-description {
+  transition: color 0.25s ease;
+}
+
+/* =========================================================
+   Snackbar
+   ========================================================= */
 
 .success-snackbar {
   --mdc-snackbar-container-color: #16a34a;

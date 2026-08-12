@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
 import { ApiService } from '../../../core/services/api';
-
 import { ApiEndpoints } from '../../../core/constants/api-endpoints';
 
 import { TimetableTemplate } from '../models/timetable-template';
@@ -19,7 +19,9 @@ export class TimetableTemplateService {
 
   private static readonly Endpoint = `${environment.apiUrl}/${ApiEndpoints.TimetableTemplates}`;
 
-  //#region Queries
+  // =========================================================
+  // Queries
+  // =========================================================
 
   getAll(): Observable<TimetableTemplate[]> {
     return this.api.get<TimetableTemplate[]>(TimetableTemplateService.Endpoint);
@@ -51,14 +53,16 @@ export class TimetableTemplateService {
     sectionId: string,
     academicSessionId: string,
   ): Observable<TimetableTemplate[]> {
-    return this.api.get<TimetableTemplate[]>(
-      `${TimetableTemplateService.Endpoint}/weekly?sectionId=${sectionId}&academicSessionId=${academicSessionId}`,
-    );
+    const params = new HttpParams()
+      .set('sectionId', sectionId)
+      .set('academicSessionId', academicSessionId);
+
+    return this.api.get<TimetableTemplate[]>(`${TimetableTemplateService.Endpoint}/weekly`, params);
   }
 
-  //#endregion
-
-  //#region Commands
+  // =========================================================
+  // Commands
+  // =========================================================
 
   create(request: CreateTimetableTemplateRequest): Observable<TimetableTemplate> {
     return this.api.post<TimetableTemplate>(TimetableTemplateService.Endpoint, request);
@@ -68,17 +72,15 @@ export class TimetableTemplateService {
     return this.api.put<TimetableTemplate>(`${TimetableTemplateService.Endpoint}/${id}`, request);
   }
 
-  activate(id: string): Observable<boolean> {
-    return this.api.post<boolean>(`${TimetableTemplateService.Endpoint}/${id}/activate`, {});
+  activate(id: string): Observable<void> {
+    return this.api.post<void>(`${TimetableTemplateService.Endpoint}/${id}/activate`, {});
   }
 
-  deactivate(id: string): Observable<boolean> {
-    return this.api.post<boolean>(`${TimetableTemplateService.Endpoint}/${id}/deactivate`, {});
+  deactivate(id: string): Observable<void> {
+    return this.api.post<void>(`${TimetableTemplateService.Endpoint}/${id}/deactivate`, {});
   }
 
-  delete(id: string): Observable<boolean> {
-    return this.api.delete<boolean>(`${TimetableTemplateService.Endpoint}/${id}`);
+  delete(id: string): Observable<void> {
+    return this.api.delete<void>(`${TimetableTemplateService.Endpoint}/${id}`);
   }
-
-  //#endregion
 }

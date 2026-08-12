@@ -48,7 +48,7 @@
 
 <mat-card class="toolbar-card">
   <div class="toolbar">
-    <mat-form-field appearance="outline" class="search-box">
+    <mat-form-field appearance="outline" floatLabel="always" class="search-box">
       <mat-label>Search</mat-label>
 
       <input
@@ -145,181 +145,186 @@
 </mat-card>
 
 <mat-card class="table-card">
-  <table mat-table matSort [dataSource]="dataSource" class="timetable-table">
-    <ng-container matColumnDef="day">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Day</th>
+  <div class="table-scroll-container">
+    <table mat-table matSort [dataSource]="dataSource" class="timetable-table">
+      <ng-container matColumnDef="day">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Day</th>
 
-      <td mat-cell *matCellDef="let row" class="actions-cell">
-        {{ getDayName(row.dayOfWeek) }}
-      </td>
-    </ng-container>
+        <td mat-cell *matCellDef="let row" class="actions-cell">
+          {{ getDayName(row.dayOfWeek) }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
 
-      <td mat-cell *matCellDef="let row">
-        <div class="time-cell">
-          <strong>{{ formatTime(row.startTime) }}</strong>
+        <td mat-cell *matCellDef="let row">
+          <div class="time-cell">
+            <strong>{{ formatTime(row.startTime) }}</strong>
 
-          <span>to</span>
+            <span>to</span>
 
-          <strong>{{ formatTime(row.endTime) }}</strong>
-        </div>
-      </td>
-    </ng-container>
+            <strong>{{ formatTime(row.endTime) }}</strong>
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="subject">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Subject</th>
 
-      <td mat-cell *matCellDef="let row">
-        <div class="subject-cell">
-          <span class="subject-code">
-            {{ row.subjectCode }}
-          </span>
+        <td mat-cell *matCellDef="let row">
+          <div class="subject-cell">
+            <span class="subject-code">
+              {{ row.subjectCode }}
+            </span>
 
-          <strong>
-            {{ row.subjectName }}
-          </strong>
-        </div>
+            <strong>
+              {{ row.subjectName }}
+            </strong>
+          </div>
 
-        <div class="priority">Priority {{ row.priority }}</div>
-      </td>
-    </ng-container>
+          <div class="priority">Priority {{ row.priority }}</div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="teacher">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Teacher</th>
+      <ng-container matColumnDef="teacher">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Teacher</th>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.teacherName }}
-      </td>
-    </ng-container>
+        <td mat-cell *matCellDef="let row">
+          {{ row.teacherName }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="section">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Section</th>
+      <ng-container matColumnDef="section">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Section</th>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.sectionName }}
-      </td>
-    </ng-container>
+        <td mat-cell *matCellDef="let row">
+          {{ row.sectionName }}
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="room">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Room</th>
+      <ng-container matColumnDef="room">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Room</th>
 
-      <td mat-cell *matCellDef="let row">
-        @if (row.isOnline) {
-          <mat-chip class="online-chip">Online</mat-chip>
-        } @else {
-          {{ row.roomName || '-' }}
-        }
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="lectureType">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Lecture Type</th>
-
-      <td mat-cell *matCellDef="let row">
-        <mat-chip class="lecture-chip">
-          {{ getLectureType(row.lectureType) }}
-        </mat-chip>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="attendance">
-      <th mat-header-cell *matHeaderCellDef>Attendance</th>
-
-      <td mat-cell *matCellDef="let row">
-        @if (row.generateAttendance) {
-          <mat-chip class="attendance-chip enabled"> Enabled </mat-chip>
-        } @else {
-          <mat-chip class="attendance-chip disabled"> Disabled </mat-chip>
-        }
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-
-      <td mat-cell *matCellDef="let row">
-        @if (row.isActive) {
-          <mat-chip class="status-chip active">Active</mat-chip>
-        } @else {
-          <mat-chip class="status-chip inactive">Inactive</mat-chip>
-        }
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
-
-      <td mat-cell *matCellDef="let row">
-        <button mat-icon-button [matMenuTriggerFor]="actionMenu" (click)="$event.stopPropagation()">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #actionMenu="matMenu">
-          <button mat-menu-item (click)="details(row.id)">
-            <mat-icon>visibility</mat-icon>
-
-            <span>View Details</span>
-          </button>
-
-          <button mat-menu-item (click)="edit(row)">
-            <mat-icon>edit</mat-icon>
-
-            <span>Edit</span>
-          </button>
-
-          @if (row.isActive) {
-            <button mat-menu-item (click)="deactivate(row)">
-              <mat-icon>block</mat-icon>
-
-              <span>Deactivate</span>
-            </button>
+        <td mat-cell *matCellDef="let row">
+          @if (row.isOnline) {
+            <mat-chip class="online-chip">Online</mat-chip>
           } @else {
-            <button mat-menu-item (click)="activate(row)">
-              <mat-icon>check_circle</mat-icon>
-
-              <span>Activate</span>
-            </button>
+            {{ row.roomName || '-' }}
           }
+        </td>
+      </ng-container>
 
-          <mat-divider></mat-divider>
+      <ng-container matColumnDef="lectureType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Lecture Type</th>
 
-          <button mat-menu-item (click)="duplicate(row)">
-            <mat-icon>content_copy</mat-icon>
+        <td mat-cell *matCellDef="let row">
+          <mat-chip class="lecture-chip">
+            {{ getLectureType(row.lectureType) }}
+          </mat-chip>
+        </td>
+      </ng-container>
 
-            <span>Duplicate</span>
+      <ng-container matColumnDef="attendance">
+        <th mat-header-cell *matHeaderCellDef>Attendance</th>
+
+        <td mat-cell *matCellDef="let row">
+          @if (row.generateAttendance) {
+            <mat-chip class="attendance-chip enabled"> Enabled </mat-chip>
+          } @else {
+            <mat-chip class="attendance-chip disabled"> Disabled </mat-chip>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+
+        <td mat-cell *matCellDef="let row">
+          @if (row.isActive) {
+            <mat-chip class="status-chip active">Active</mat-chip>
+          } @else {
+            <mat-chip class="status-chip inactive">Inactive</mat-chip>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+
+        <td mat-cell *matCellDef="let row">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="actionMenu"
+            (click)="$event.stopPropagation()"
+          >
+            <mat-icon>more_vert</mat-icon>
           </button>
 
-          <button mat-menu-item (click)="delete(row)">
-            <mat-icon color="warn">delete</mat-icon>
+          <mat-menu #actionMenu="matMenu">
+            <button mat-menu-item (click)="details(row.id)">
+              <mat-icon>visibility</mat-icon>
 
-            <span>Delete</span>
-          </button>
-        </mat-menu>
-      </td>
-    </ng-container>
+              <span>View Details</span>
+            </button>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <button mat-menu-item (click)="edit(row)">
+              <mat-icon>edit</mat-icon>
 
-    <tr
-      mat-row
-      *matRowDef="let row; columns: displayedColumns"
-      class="clickable-row"
-      (click)="details(row.id)"
-    ></tr>
+              <span>Edit</span>
+            </button>
 
-    <tr class="mat-row" *matNoDataRow>
-      <td class="empty-cell" colspan="10">
-        <mat-icon>schedule</mat-icon>
+            @if (row.isActive) {
+              <button mat-menu-item (click)="deactivate(row)">
+                <mat-icon>block</mat-icon>
 
-        <h3>No timetable templates found</h3>
+                <span>Deactivate</span>
+              </button>
+            } @else {
+              <button mat-menu-item (click)="activate(row)">
+                <mat-icon>check_circle</mat-icon>
 
-        <p>Create your first timetable template to begin scheduling lectures.</p>
-      </td>
-    </tr>
-  </table>
+                <span>Activate</span>
+              </button>
+            }
 
+            <mat-divider></mat-divider>
+
+            <button mat-menu-item (click)="duplicate(row)">
+              <mat-icon>content_copy</mat-icon>
+
+              <span>Duplicate</span>
+            </button>
+
+            <button mat-menu-item (click)="delete(row)">
+              <mat-icon color="warn">delete</mat-icon>
+
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="clickable-row"
+        (click)="details(row.id)"
+      ></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="empty-cell" colspan="10">
+          <mat-icon>schedule</mat-icon>
+
+          <h3>No timetable templates found</h3>
+
+          <p>Create your first timetable template to begin scheduling lectures.</p>
+        </td>
+      </tr>
+    </table>
+  </div>
   <mat-paginator
     [pageSize]="10"
     [pageSizeOptions]="[10, 20, 50, 100]"

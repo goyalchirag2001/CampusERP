@@ -1,1 +1,539 @@
-<p>timetable-template-details works!</p>
+@if (loading()) {
+  <div class="state-container">
+    <mat-icon>hourglass_top</mat-icon>
+
+    <h2>Loading timetable...</h2>
+
+    <p>Please wait while the timetable details are loaded.</p>
+  </div>
+} @else if (error()) {
+  <div class="state-container error-state">
+    <mat-icon>error_outline</mat-icon>
+
+    <h2>Unable to load timetable</h2>
+
+    <p>{{ error() }}</p>
+
+    <button mat-flat-button color="primary" type="button" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Timetable
+    </button>
+  </div>
+} @else if (timetable(); as timetable) {
+  <!-- ===================================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="page-header-card">
+    <div class="header-left">
+      <div class="entity-avatar">
+        <mat-icon>calendar_month</mat-icon>
+      </div>
+
+      <div class="header-content">
+        <div class="title-row">
+          <h1>
+            {{ timetable.subjectName || timetable.subjectCode }}
+          </h1>
+
+          @if (timetable.isActive) {
+            <mat-chip class="status-chip active"> Active </mat-chip>
+          } @else {
+            <mat-chip class="status-chip inactive"> Inactive </mat-chip>
+          }
+        </div>
+
+        <p class="subtitle">
+          {{ timetable.subjectCode }}
+          ·
+          {{ getDayName(timetable.dayOfWeek) }}
+          ·
+          {{ formatTime(timetable.startTime) }}
+          -
+          {{ formatTime(timetable.endTime) }}
+        </p>
+
+        <p class="secondary-subtitle">
+          {{ timetable.sectionName }}
+          ·
+          {{ timetable.teacherName }}
+        </p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button mat-stroked-button type="button" [disabled]="actionLoading()" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+
+      <button mat-stroked-button type="button" [disabled]="actionLoading()" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        [disabled]="actionLoading()"
+        (click)="edit()"
+      >
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+
+      @if (timetable.isActive) {
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="actionLoading()"
+          (click)="deactivate()"
+        >
+          <mat-icon>block</mat-icon>
+          Deactivate
+        </button>
+      } @else {
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          [disabled]="actionLoading()"
+          (click)="activate()"
+        >
+          <mat-icon>check_circle</mat-icon>
+          Activate
+        </button>
+      }
+
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="moreMenu"
+        [disabled]="actionLoading()"
+        matTooltip="More actions"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #moreMenu="matMenu">
+        <button mat-menu-item (click)="edit()">
+          <mat-icon>edit</mat-icon>
+          <span>Edit Timetable</span>
+        </button>
+
+        <button mat-menu-item (click)="duplicate()">
+          <mat-icon>content_copy</mat-icon>
+          <span>Duplicate Timetable</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="delete()">
+          <mat-icon color="warn">delete</mat-icon>
+          <span>Delete Timetable</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- QUICK SUMMARY -->
+  <!-- ===================================================== -->
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="summary-icon">
+        <mat-icon>schedule</mat-icon>
+      </div>
+
+      <div>
+        <span class="summary-label">Schedule</span>
+
+        <strong>
+          {{ formatTime(timetable.startTime) }}
+          -
+          {{ formatTime(timetable.endTime) }}
+        </strong>
+
+        <small>
+          {{ getDuration() }}
+        </small>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">
+        <mat-icon>person</mat-icon>
+      </div>
+
+      <div>
+        <span class="summary-label">Teacher</span>
+
+        <strong>
+          {{ timetable.teacherName }}
+        </strong>
+
+        <small>
+          {{ timetable.sectionName }}
+        </small>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">
+        <mat-icon>meeting_room</mat-icon>
+      </div>
+
+      <div>
+        <span class="summary-label">Location</span>
+
+        <strong>
+          @if (timetable.isOnline) {
+            Online
+          } @else {
+            {{ timetable.roomName || 'Room not assigned' }}
+          }
+        </strong>
+
+        <small>
+          @if (timetable.isOnline) {
+            Online lecture
+          } @else {
+            Physical classroom
+          }
+        </small>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-icon">
+        <mat-icon>fact_check</mat-icon>
+      </div>
+
+      <div>
+        <span class="summary-label">Attendance</span>
+
+        <strong>
+          {{ timetable.generateAttendance ? 'Enabled' : 'Disabled' }}
+        </strong>
+
+        <small>
+          {{ getLectureType(timetable.lectureType) }}
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- ACADEMIC INFORMATION -->
+  <!-- ===================================================== -->
+
+  <div class="info-card">
+    <div class="card-header">
+      <div>
+        <h2>Academic Information</h2>
+
+        <p>Academic context associated with this timetable entry.</p>
+      </div>
+
+      <mat-icon>school</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Academic Session</label>
+        <p>{{ timetable.academicSessionName || '—' }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Campus</label>
+        <p>{{ timetable.campusName || '—' }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Teacher</label>
+        <p>{{ timetable.teacherName || '—' }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Section</label>
+        <p>{{ timetable.sectionName || '—' }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Subject Code</label>
+        <p>{{ timetable.subjectCode || '—' }}</p>
+      </div>
+
+      <div class="info-item">
+        <label>Subject</label>
+        <p>{{ timetable.subjectName || '—' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- SCHEDULE INFORMATION -->
+  <!-- ===================================================== -->
+
+  <div class="info-card">
+    <div class="card-header">
+      <div>
+        <h2>Schedule</h2>
+
+        <p>Weekly schedule and validity period.</p>
+      </div>
+
+      <mat-icon>calendar_month</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="info-grid">
+      <div class="info-item highlighted">
+        <label>Day</label>
+
+        <p>
+          {{ getDayName(timetable.dayOfWeek) }}
+        </p>
+      </div>
+
+      <div class="info-item highlighted">
+        <label>Time</label>
+
+        <p>
+          {{ formatTime(timetable.startTime) }}
+          -
+          {{ formatTime(timetable.endTime) }}
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Duration</label>
+
+        <p>
+          {{ getDuration() }}
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Valid From</label>
+
+        <p>
+          {{ formatDate(timetable.validFrom) }}
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Valid To</label>
+
+        <p>
+          {{ formatDate(timetable.validTo) }}
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Display Order</label>
+
+        <p>
+          {{ timetable.displayOrder }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- LOCATION -->
+  <!-- ===================================================== -->
+
+  <div class="info-card">
+    <div class="card-header">
+      <div>
+        <h2>Location</h2>
+
+        <p>Physical or online lecture location.</p>
+      </div>
+
+      <mat-icon>location_on</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    @if (timetable.isOnline) {
+      <div class="online-location">
+        <div class="online-icon">
+          <mat-icon>videocam</mat-icon>
+        </div>
+
+        <div>
+          <span class="location-label"> Online Lecture </span>
+
+          @if (timetable.meetingLink) {
+            <a [href]="timetable.meetingLink" target="_blank" rel="noopener noreferrer">
+              {{ timetable.meetingLink }}
+              <mat-icon>open_in_new</mat-icon>
+            </a>
+          } @else {
+            <p>No meeting link provided.</p>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="physical-location">
+        <div class="location-icon">
+          <mat-icon>meeting_room</mat-icon>
+        </div>
+
+        <div>
+          <span class="location-label"> Physical Room </span>
+
+          <strong>
+            {{ timetable.roomName || 'Room not assigned' }}
+          </strong>
+
+          <small>
+            {{ timetable.campusName }}
+          </small>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- LECTURE CONFIGURATION -->
+  <!-- ===================================================== -->
+
+  <div class="info-card">
+    <div class="card-header">
+      <div>
+        <h2>Lecture Configuration</h2>
+
+        <p>Attendance and scheduling configuration.</p>
+      </div>
+
+      <mat-icon>tune</mat-icon>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Lecture Type</label>
+
+        <p>
+          <mat-chip class="lecture-chip">
+            {{ getLectureType(timetable.lectureType) }}
+          </mat-chip>
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Priority</label>
+
+        <p>
+          {{ timetable.priority }}
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Attendance</label>
+
+        <p>
+          @if (timetable.generateAttendance) {
+            <mat-chip class="attendance-chip enabled">
+              <mat-icon>check_circle</mat-icon>
+              Enabled
+            </mat-chip>
+          } @else {
+            <mat-chip class="attendance-chip disabled">
+              <mat-icon>cancel</mat-icon>
+              Disabled
+            </mat-chip>
+          }
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Delivery Mode</label>
+
+        <p>
+          @if (timetable.isOnline) {
+            Online
+          } @else {
+            In Person
+          }
+        </p>
+      </div>
+
+      <div class="info-item">
+        <label>Status</label>
+
+        <p>
+          @if (timetable.isActive) {
+            <mat-chip class="status-chip active"> Active </mat-chip>
+          } @else {
+            <mat-chip class="status-chip inactive"> Inactive </mat-chip>
+          }
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- REMARKS -->
+  <!-- ===================================================== -->
+
+  @if (timetable.remarks) {
+    <div class="info-card">
+      <div class="card-header">
+        <div>
+          <h2>Remarks</h2>
+
+          <p>Additional information for this timetable.</p>
+        </div>
+
+        <mat-icon>notes</mat-icon>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <p class="remarks">
+        {{ timetable.remarks }}
+      </p>
+    </div>
+  }
+
+  <!-- ===================================================== -->
+  <!-- BOTTOM ACTIONS -->
+  <!-- ===================================================== -->
+
+  <div class="bottom-actions">
+    <button mat-stroked-button type="button" [disabled]="actionLoading()" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Timetable
+    </button>
+
+    <div class="bottom-right">
+      <button mat-stroked-button type="button" [disabled]="actionLoading()" (click)="edit()">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        [disabled]="actionLoading()"
+        (click)="timetable.isActive ? deactivate() : activate()"
+      >
+        <mat-icon>
+          {{ timetable.isActive ? 'block' : 'check_circle' }}
+        </mat-icon>
+
+        {{ timetable.isActive ? 'Deactivate' : 'Activate' }}
+      </button>
+    </div>
+  </div>
+}

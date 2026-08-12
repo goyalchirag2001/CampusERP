@@ -1,0 +1,197 @@
+<div class="entity-page">
+  <div class="page-header">
+    <div>
+      <h1>Rooms</h1>
+
+      <p>Manage classrooms, laboratories, halls and campus facilities.</p>
+    </div>
+
+    <div class="header-actions">
+      <button mat-stroked-button type="button" (click)="refresh()">
+        <mat-icon>refresh</mat-icon>
+
+        Refresh
+      </button>
+
+      <button mat-flat-button class="create-btn" type="button" (click)="createRoom()">
+        <mat-icon>add</mat-icon>
+
+        Add Room
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <span>Total Rooms</span>
+
+      <h2>{{ totalRooms() }}</h2>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <span>Active</span>
+
+      <h2>{{ activeRooms() }}</h2>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <span>Inactive</span>
+
+      <h2>{{ inactiveRooms() }}</h2>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <span>Accessible</span>
+
+      <h2>{{ accessibleRooms() }}</h2>
+    </mat-card>
+  </div>
+
+  <div class="toolbar-card">
+    <div class="toolbar">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+
+        <input
+          placeholder="Search rooms..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table mat-table [dataSource]="pagedRooms()">
+      <ng-container matColumnDef="room">
+        <th mat-header-cell *matHeaderCellDef>Room</th>
+
+        <td mat-cell *matCellDef="let room">
+          <div class="room-cell">
+            <div class="room-avatar">
+              {{ room.roomNumber.charAt(0) }}
+            </div>
+
+            <div>
+              <strong>
+                {{ room.roomName }}
+              </strong>
+
+              <div class="secondary-text">
+                {{ room.roomNumber }}
+              </div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="building">
+        <th mat-header-cell *matHeaderCellDef>Building</th>
+
+        <td mat-cell *matCellDef="let room">
+          {{ room.building }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="floor">
+        <th mat-header-cell *matHeaderCellDef>Floor</th>
+
+        <td mat-cell *matCellDef="let room">
+          {{ room.floor }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="roomType">
+        <th mat-header-cell *matHeaderCellDef>Room Type</th>
+
+        <td mat-cell *matCellDef="let room">
+          <span class="room-type-badge">
+            {{ getRoomTypeName(room.roomType) }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="capacity">
+        <th mat-header-cell *matHeaderCellDef>Capacity</th>
+
+        <td mat-cell *matCellDef="let room">
+          {{ room.capacity }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="facilities">
+        <th mat-header-cell *matHeaderCellDef>Facilities</th>
+
+        <td mat-cell *matCellDef="let room">
+          <span class="secondary-text">
+            {{ getFacilities(room) }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accessibility">
+        <th mat-header-cell *matHeaderCellDef>Accessible</th>
+
+        <td mat-cell *matCellDef="let room">
+          <span class="accessibility-badge" [class.disabled]="!room.isAccessible">
+            {{ room.isAccessible ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+
+        <td mat-cell *matCellDef="let room">
+          <span class="status-badge" [class.inactive]="!room.isActive">
+            {{ room.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+        <td mat-cell *matCellDef="let room">
+          <button
+            mat-icon-button
+            color="primary"
+            type="button"
+            (click)="openRoom(room.id)"
+            matTooltip="View Details"
+          >
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        (click)="openRoom(row.id)"
+        class="clickable-row"
+      ></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="empty-cell" [attr.colspan]="displayedColumns.length">
+          <mat-icon>meeting_room</mat-icon>
+
+          <h3>No rooms found</h3>
+
+          <p>Add your first room to start managing campus facilities.</p>
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [length]="filteredRooms().length"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)"
+    >
+    </mat-paginator>
+  </div>
+</div>

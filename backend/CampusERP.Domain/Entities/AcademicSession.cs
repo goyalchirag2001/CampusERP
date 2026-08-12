@@ -34,4 +34,6 @@ public class AcademicSession : BaseEntity
     public ICollection<LectureOverride> LectureOverrides { get; set; } = new List<LectureOverride>();
 
     public ICollection<TimetableTemplate> TimetableTemplates { get; set; } = new List<TimetableTemplate>();
+
+    public ICollection<AttendanceSession> AttendanceSessions { get; set; } = new List<AttendanceSession>();
 }

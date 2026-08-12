@@ -106,6 +106,8 @@ public static class ErrorCodes
   
     public const string TeacherNotFound = "TEACHER_NOT_FOUND";
 
+    public const string StudentNotFound = "STUDENT_NOT_FOUND";
+
     public const string RoomNotFound = "ROOM_NOT_FOUND";
 
     public const string SubjectNotFound = "SUBJECT_NOT_FOUND";

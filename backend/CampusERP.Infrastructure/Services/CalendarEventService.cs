@@ -106,8 +106,7 @@ public class CalendarEventService : ICalendarEventService
         {
             await ValidateRequestAsync(request);
 
-            var calendarEvent = await ApplyScope(_dbContext.CalendarEvents)
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var calendarEvent = await ApplyScope(_dbContext.CalendarEvents).FirstOrDefaultAsync(x => x.Id == id);
 
             if (calendarEvent == null)
             {
@@ -121,6 +120,8 @@ public class CalendarEventService : ICalendarEventService
             await _dbContext.SaveChangesAsync();
 
             await _schedulingEngine.RemoveLectureOverridesAsync(id);
+
+            await _dbContext.SaveChangesAsync();
 
             if (calendarEvent.AffectsTimetable)
             {

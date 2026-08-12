@@ -80,6 +80,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
 
     public DbSet<AttendanceSession> AttendanceSessions => Set<AttendanceSession>();
+    
+    public DbSet<AttendanceQrSession> AttendanceQrSessions => Set<AttendanceQrSession>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,0 +1,454 @@
+<div class="calendar-page">
+  <!-- =======================================================
+       Page Header
+       ======================================================= -->
+
+  <div class="calendar-header">
+    <div class="header-left">
+      <div class="calendar-title-block">
+        <div class="calendar-icon">
+          <mat-icon>calendar_month</mat-icon>
+        </div>
+
+        <div>
+          <h1>Timetable</h1>
+
+          <p>
+            {{
+              calendarMode() === 'teacher'
+                ? 'Manage your lectures, events and teaching schedule.'
+                : 'View your lectures, holidays and academic events.'
+            }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button
+        mat-stroked-button
+        class="today-btn"
+        type="button"
+        (click)="today()"
+        [disabled]="isToday()"
+      >
+        <mat-icon>today</mat-icon>
+        Today
+      </button>
+
+      <div class="calendar-navigation">
+        <button mat-icon-button type="button" matTooltip="Previous" (click)="previous()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <button mat-icon-button type="button" matTooltip="Next" (click)="next()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       Calendar Toolbar
+       ======================================================= -->
+
+  <div class="calendar-toolbar">
+    <div class="toolbar-date">
+      <h2>
+        {{ title() }}
+      </h2>
+
+      @if (!isToday()) {
+        <span class="today-reference"> Today · {{ todayLabel() }} </span>
+      }
+    </div>
+
+    <div class="view-switcher">
+      <button type="button" [class.active]="viewMode() === 'day'" (click)="setView('day')">
+        Day
+      </button>
+
+      <button type="button" [class.active]="viewMode() === 'week'" (click)="setView('week')">
+        Week
+      </button>
+
+      <button type="button" [class.active]="viewMode() === 'month'" (click)="setView('month')">
+        Month
+      </button>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       Error
+       ======================================================= -->
+
+  @if (error()) {
+    <div class="calendar-error">
+      <mat-icon> error_outline </mat-icon>
+
+      <div>
+        <strong> Unable to load calendar </strong>
+
+        <p>
+          {{ error() }}
+        </p>
+      </div>
+
+      <button mat-stroked-button type="button" (click)="loadCalendar()">Retry</button>
+    </div>
+  }
+
+  <!-- =======================================================
+       Calendar Container
+       ======================================================= -->
+
+  <div class="calendar-container" [class.is-loading]="loading()">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <mat-spinner diameter="42"></mat-spinner>
+
+        <span> Loading calendar... </span>
+      </div>
+    }
+
+    <!-- =====================================================
+         DAY VIEW
+         ===================================================== -->
+
+    @if (viewMode() === 'day') {
+      <div class="day-calendar">
+        <!-- Day Header -->
+
+        <div class="day-view-header">
+          <div class="time-header"></div>
+
+          <div class="day-header-cell" [class.today]="isToday()">
+            <span class="day-name">
+              {{ currentDate() | date: 'EEEE' }}
+            </span>
+
+            <span class="day-number">
+              {{ currentDate() | date: 'd' }}
+            </span>
+
+            <span class="day-month">
+              {{ currentDate() | date: 'MMM' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Full Day Events -->
+
+        @if (dayEvents().filter((event) => event.isFullDay).length) {
+          <div class="full-day-strip">
+            @for (event of dayEvents().filter((event) => event.isFullDay); track event.id) {
+              <button
+                type="button"
+                class="full-day-event"
+                [class]="getEventClass(event)"
+                (click)="openEvent(event)"
+                [matTooltip]="getEventTitle(event)"
+              >
+                <mat-icon>
+                  {{ isHoliday(event) ? 'beach_access' : 'event' }}
+                </mat-icon>
+
+                <div class="full-day-content">
+                  <strong>
+                    {{ getEventTitle(event) }}
+                  </strong>
+
+                  @if (getEventSubtitle(event)) {
+                    <span>
+                      {{ getEventSubtitle(event) }}
+                    </span>
+                  }
+                </div>
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Timed Day Grid -->
+
+        <div class="day-grid">
+          <div class="time-column">
+            @for (hour of [].constructor(calendarEndHour - calendarStartHour); track $index) {
+              <div class="time-label">
+                {{ formatTime(calendarStartHour + $index + ':00') }}
+              </div>
+            }
+          </div>
+
+          <div class="day-events-column" [style.height.px]="totalCalendarHeight">
+            @for (
+              position of dayEvents()
+                .filter((event) => !event.isFullDay)
+                .map((event) => getDayPosition(event));
+              track position.event.id
+            ) {
+              <button
+                type="button"
+                class="calendar-event timed-event"
+                [class]="getEventClass(position.event)"
+                [style.top.px]="position.top"
+                [style.height.px]="position.height"
+                (click)="openEvent(position.event)"
+                [matTooltip]="getEventTitle(position.event)"
+              >
+                <div class="event-time">
+                  {{ getEventTime(position.event) }}
+                </div>
+
+                <div class="event-title">
+                  {{ getEventTitle(position.event) }}
+                </div>
+
+                @if (position.height >= 65 && getEventSubtitle(position.event)) {
+                  <div class="event-subtitle">
+                    {{ getEventSubtitle(position.event) }}
+                  </div>
+                }
+
+                @if (position.height >= 85 && hasPhysicalRoom(position.event)) {
+                  <div class="event-meta">
+                    <mat-icon> meeting_room </mat-icon>
+
+                    {{ getRoomShortDisplay(position.event) }}
+                  </div>
+                }
+
+                @if (position.height >= 85 && position.event.isOnline) {
+                  <div class="event-meta">
+                    <mat-icon> videocam </mat-icon>
+
+                    Online
+                  </div>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- =====================================================
+         WEEK VIEW
+         ===================================================== -->
+
+    @if (viewMode() === 'week') {
+      <div class="week-calendar">
+        <!-- Week Header -->
+
+        <div class="week-header">
+          <div class="week-time-header"></div>
+
+          @for (day of weekDaysForView(); track day.dateKey) {
+            <div class="week-day-header" [class.today]="day.isToday">
+              <span class="week-day-name">
+                {{ day.dayName }}
+              </span>
+
+              <span class="week-day-number">
+                {{ day.dayNumber }}
+              </span>
+
+              @if (day.isToday) {
+                <span class="today-dot"></span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Week Full-Day Events -->
+
+        <div class="week-full-day-row">
+          <div class="week-time-header full-day-label">All day</div>
+
+          @for (day of weekDaysForView(); track day.dateKey) {
+            <div class="week-full-day-cell" [class.today]="day.isToday">
+              @for (event of getFullDayEvents(day.date); track event.id) {
+                <button
+                  type="button"
+                  class="mini-event full-day-mini-event"
+                  [class]="getEventClass(event)"
+                  (click)="openEvent(event)"
+                  [matTooltip]="getEventTitle(event)"
+                >
+                  <span class="mini-event-title">
+                    {{ getEventTitle(event) }}
+                  </span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Week Timed Grid -->
+
+        <div class="week-grid-wrapper">
+          <div class="week-time-column" [style.height.px]="totalCalendarHeight">
+            @for (hour of [].constructor(calendarEndHour - calendarStartHour); track $index) {
+              <div class="week-time-slot">
+                {{ formatTime(calendarStartHour + $index + ':00') }}
+              </div>
+            }
+          </div>
+
+          @for (day of weekDaysForView(); track day.dateKey) {
+            <div
+              class="week-day-column"
+              [class.today]="day.isToday"
+              [style.height.px]="totalCalendarHeight"
+            >
+              @for (hour of [].constructor(calendarEndHour - calendarStartHour); track $index) {
+                <div class="hour-line"></div>
+              }
+
+              @for (position of getPositionedWeekEvents(day.date); track position.event.id) {
+                <button
+                  type="button"
+                  class="calendar-event week-event"
+                  [class]="getEventClass(position.event)"
+                  [style.top.px]="position.top"
+                  [style.height.px]="position.height"
+                  [style.left.%]="position.left"
+                  [style.width.%]="position.width"
+                  (click)="openEvent(position.event)"
+                  [matTooltip]="getEventTitle(position.event)"
+                >
+                  <div class="event-time">
+                    {{ getEventTime(position.event) }}
+                  </div>
+
+                  <div class="event-title">
+                    {{ getEventTitle(position.event) }}
+                  </div>
+
+                  @if (position.height >= 65 && getEventSubtitle(position.event)) {
+                    <div class="event-subtitle">
+                      {{ getEventSubtitle(position.event) }}
+                    </div>
+                  }
+
+                  @if (position.height >= 90 && hasPhysicalRoom(position.event)) {
+                    <div class="event-meta">
+                      <mat-icon> meeting_room </mat-icon>
+
+                      {{ getRoomShortDisplay(position.event) }}
+                    </div>
+                  }
+
+                  @if (position.height >= 90 && position.event.isOnline) {
+                    <div class="event-meta">
+                      <mat-icon> videocam </mat-icon>
+
+                      Online
+                    </div>
+                  }
+
+                  @if (position.event.isCancelled) {
+                    <span class="cancelled-label"> Cancelled </span>
+                  }
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- =====================================================
+         MONTH VIEW
+         ===================================================== -->
+
+    @if (viewMode() === 'month') {
+      <div class="month-calendar">
+        <!-- Month Weekday Header -->
+
+        <div class="month-weekdays">
+          @for (day of weekDays; track day.value) {
+            <div class="month-weekday">
+              {{ day.short }}
+            </div>
+          }
+        </div>
+
+        <!-- Month Grid -->
+
+        <div class="month-grid">
+          @for (day of monthDays(); track day.dateKey) {
+            <div
+              class="month-day"
+              [class.other-month]="!day.isCurrentMonth"
+              [class.today]="day.isToday"
+            >
+              <div class="month-day-header">
+                <span class="month-day-number">
+                  {{ day.dayNumber }}
+                </span>
+
+                @if (day.isToday) {
+                  <span class="month-today-label"> Today </span>
+                }
+              </div>
+
+              <div class="month-events">
+                @for (event of getMonthEvents(day.date); track event.id) {
+                  <button
+                    type="button"
+                    class="month-event"
+                    [class]="getEventClass(event)"
+                    (click)="openEvent(event)"
+                    [matTooltip]="getEventTitle(event)"
+                  >
+                    @if (!event.isFullDay) {
+                      <span class="month-event-time">
+                        {{ formatTime(event.startTime) }}
+                      </span>
+                    }
+
+                    <span class="month-event-title">
+                      {{ getEventTitle(event) }}
+                    </span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- =======================================================
+       Legend
+       ======================================================= -->
+
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <span class="legend-dot lecture"></span>
+      <span>Lecture</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-dot online"></span>
+      <span>Online</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-dot calendar"></span>
+      <span>Calendar Event</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-dot holiday"></span>
+      <span>Holiday</span>
+    </div>
+
+    <div class="legend-item">
+      <span class="legend-dot cancelled"></span>
+      <span>Cancelled</span>
+    </div>
+  </div>
+</div>

@@ -39,4 +39,8 @@ public class ScheduleValidationRequest
     public int Priority { get; set; }
 
     public bool AffectsTimetable { get; set; }
+
+    public DayOfWeekType DayOfWeek { get; set; }
+
+    public Guid? ExcludeTimetableTemplateId { get; set; }
 }

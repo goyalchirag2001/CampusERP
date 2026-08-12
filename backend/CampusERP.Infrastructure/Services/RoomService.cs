@@ -43,7 +43,7 @@ public class RoomService : IRoomService
 
     public async Task<RoomResponse> CreateAsync(CreateRoomRequest request)
     {
-        var roomNumber = request.RoomNumber.Trim().ToUpper();
+        var roomNumber = request.RoomNumber.Trim().ToUpperInvariant();
 
         var building = request.Building.Trim();
 
@@ -62,13 +62,51 @@ public class RoomService : IRoomService
             throw new Exception("Invalid room type.");
         }
 
+        var institutionId = _scope.InstitutionId();
+
+        if (institutionId == Guid.Empty)
+        {
+            throw new Exception("Institution scope is not available.");
+        }
+
+        var campusId = request.CampusId;
+
+        if (campusId == Guid.Empty)
+        {
+            throw new Exception("Campus is required.");
+        }
+
+        if (_scope.IsCampusAdmin())
+        {
+            var currentCampusId = _scope.CampusId();
+
+            if (currentCampusId == Guid.Empty)
+            {
+                throw new Exception("Campus scope is not available.");
+            }
+
+            if (campusId != currentCampusId)
+            {
+                throw new UnauthorizedAccessException("You cannot create a room outside your assigned campus.");
+            }
+        }
+
+        var campusBelongsToInstitution = await _dbContext.Campuses.AnyAsync(x =>
+                                            x.Id == campusId &&
+                                            x.InstitutionId == institutionId);
+
+        if (!campusBelongsToInstitution)
+        {
+            throw new Exception("Selected campus does not belong to your institution.");
+        }
+
         var room = new Room
         {
             Id = Guid.NewGuid(),
 
-            InstitutionId = _scope.InstitutionId(),
+            InstitutionId = institutionId,
 
-            CampusId = _scope.CampusId(),
+            CampusId = campusId,
 
             Building = building,
 
@@ -82,9 +120,13 @@ public class RoomService : IRoomService
 
             RoomType = roomType,
 
-            Description = request.Description?.Trim(),
+            Description = string.IsNullOrWhiteSpace(request.Description)
+                ? null
+                : request.Description.Trim(),
 
-            LocationCode = request.LocationCode?.Trim(),
+            LocationCode = string.IsNullOrWhiteSpace(request.LocationCode)
+                ? null
+                : request.LocationCode.Trim(),
 
             Capacity = request.Capacity,
 
@@ -109,10 +151,15 @@ public class RoomService : IRoomService
 
         await _dbContext.SaveChangesAsync();
 
-        return await GetByIdAsync(room.Id)
-            ?? throw new Exception("Room not found.");
-    }
+        var response = await _dbContext.Rooms
+            .AsNoTracking()
+            .Include(x => x.Campus)
+            .Where(x => x.Id == room.Id)
+            .Select(MapToResponse())
+            .FirstOrDefaultAsync();
 
+        return response ?? throw new Exception("Room was created but could not be loaded.");
+    }
     public async Task<RoomResponse> UpdateAsync(Guid id, UpdateRoomRequest request)
     {
         var room = await ApplyRoomScope(_dbContext.Rooms)

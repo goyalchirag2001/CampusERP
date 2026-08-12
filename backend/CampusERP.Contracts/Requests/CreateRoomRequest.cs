@@ -2,6 +2,8 @@
 
 public class CreateRoomRequest
 {
+    public Guid CampusId { get; set; }
+
     public string Building { get; set; } = string.Empty;
 
     public string Floor { get; set; } = string.Empty;
