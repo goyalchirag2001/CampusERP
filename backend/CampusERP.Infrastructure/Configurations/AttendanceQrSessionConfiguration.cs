@@ -38,11 +38,8 @@ public class AttendanceQrSessionConfiguration: IEntityTypeConfiguration<Attendan
         builder.HasIndex(x => x.Token)
             .IsUnique();
 
-        builder.HasIndex(x => new
-        {
-            x.AttendanceSessionId,
-            x.IsActive
-        });
+        builder.HasIndex(x => x.AttendanceSessionId)
+            .IsUnique();
 
         builder.HasIndex(x => new
         {

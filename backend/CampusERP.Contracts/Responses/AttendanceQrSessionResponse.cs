@@ -8,9 +8,9 @@ public class AttendanceQrSessionResponse
 
     public string Token { get; set; } = string.Empty;
 
-    public DateTime ValidFrom { get; set; }
+    public DateTimeOffset ValidFrom { get; set; }
 
-    public DateTime ExpiresOn { get; set; }
+    public DateTimeOffset ExpiresOn { get; set; }
 
     public int DurationSeconds { get; set; }
 

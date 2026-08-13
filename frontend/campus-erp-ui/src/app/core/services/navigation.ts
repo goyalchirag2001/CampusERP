@@ -214,6 +214,14 @@ export class NavigationService {
         permission: Permissions.StudentCalendarView,
         roles: ['Student'],
       },
+
+      {
+        label: 'Attendance',
+        icon: 'fact_check',
+        route: slug ? `/${slug}/attendance` : '/platform/attendance',
+        permission: Permissions.AttendanceView,
+        roles: ['InstitutionAdmin', 'CampusAdmin', 'Teacher'],
+      },
     ];
 
     return items.filter((item) => {

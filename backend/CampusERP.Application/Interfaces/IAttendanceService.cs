@@ -26,4 +26,6 @@ public interface IAttendanceService
     Task<AttendanceQrScanResponse> ScanAttendanceQrAsync(ScanAttendanceQrRequest request);
 
     Task<AttendanceQrSessionResponse> CloseQrAttendanceAsync(Guid attendanceSessionId);
+
+    Task ExpireQrAttendanceSessionsAsync();
 }

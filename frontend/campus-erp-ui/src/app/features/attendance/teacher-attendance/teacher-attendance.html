@@ -1,0 +1,184 @@
+<div class="attendance-page">
+  <div class="page-header">
+    <div>
+      <div class="eyebrow">ATTENDANCE</div>
+
+      <h1>Teacher Attendance</h1>
+
+      <p>Take attendance for your scheduled lectures.</p>
+    </div>
+
+    <div class="header-actions">
+      <button mat-stroked-button type="button" (click)="today()">
+        <mat-icon> today </mat-icon>
+
+        Today
+      </button>
+
+      @if (refreshing()) {
+        <mat-spinner diameter="22"></mat-spinner>
+      }
+    </div>
+  </div>
+
+  <!-- Date toolbar -->
+
+  <mat-card class="date-card">
+    <button mat-icon-button type="button" matTooltip="Previous day" (click)="previousDay()">
+      <mat-icon> chevron_left </mat-icon>
+    </button>
+
+    <div class="date-display">
+      <span>
+        {{ formatDate(selectedDate()) }}
+      </span>
+    </div>
+
+    <button mat-icon-button type="button" matTooltip="Next day" (click)="nextDay()">
+      <mat-icon> chevron_right </mat-icon>
+    </button>
+
+    <mat-form-field appearance="outline" class="date-picker">
+      <mat-label> Select date </mat-label>
+
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [value]="selectedDate()"
+        (dateChange)="onDateChange($event.value)"
+      />
+
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </mat-card>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="42"></mat-spinner>
+
+      <span> Loading your classes... </span>
+    </div>
+  } @else {
+    @if (lectures().length === 0) {
+      <mat-card class="empty-card">
+        <mat-icon> event_busy </mat-icon>
+
+        <h2>No lectures scheduled</h2>
+
+        <p>There are no timetable lectures assigned to you on this date.</p>
+      </mat-card>
+    } @else {
+      <div class="lecture-list">
+        @for (lecture of lectures(); track lecture.timetableTemplateId + lecture.date) {
+          <mat-card class="lecture-card" [class.cancelled]="lecture.isCancelled">
+            <div class="time-column">
+              <strong>
+                {{ formatTime(lecture.startTime) }}
+              </strong>
+
+              <span>
+                {{ formatTime(lecture.endTime) }}
+              </span>
+            </div>
+
+            <div class="lecture-main">
+              <div class="lecture-title-row">
+                <div>
+                  <span class="subject-code">
+                    {{ lecture.subjectCode || 'Subject' }}
+                  </span>
+
+                  <h2>
+                    {{ lecture.subjectName || lecture.title }}
+                  </h2>
+                </div>
+
+                @if (lecture.isOverride) {
+                  <mat-chip> Override </mat-chip>
+                }
+              </div>
+
+              <div class="lecture-meta">
+                @if (lecture.sectionName) {
+                  <span>
+                    <mat-icon> groups </mat-icon>
+
+                    {{ lecture.sectionName }}
+                  </span>
+                }
+
+                @if (lecture.isOnline) {
+                  <span>
+                    <mat-icon> videocam </mat-icon>
+
+                    Online
+                  </span>
+                } @else if (lecture.roomName) {
+                  <span>
+                    <mat-icon> meeting_room </mat-icon>
+
+                    {{ lecture.roomName }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="lecture-actions">
+              @if (lecture.isCancelled) {
+                <mat-chip class="cancelled-chip"> Cancelled </mat-chip>
+              } @else if (!lecture.isAttendanceCreated) {
+                <button
+                  mat-flat-button
+                  color="primary"
+                  type="button"
+                  (click)="createSession(lecture)"
+                >
+                  <mat-icon> how_to_reg </mat-icon>
+
+                  Take Attendance
+                </button>
+              } @else {
+                <div class="status-area">
+                  @if (lecture.isAttendanceCompleted) {
+                    <mat-chip class="completed-chip">
+                      {{ getStatusLabel(lecture) }}
+                    </mat-chip>
+                  } @else {
+                    <mat-chip class="open-chip">
+                      {{ getStatusLabel(lecture) }}
+                    </mat-chip>
+                  }
+
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    (click)="openSession(lecture.attendanceSessionId!)"
+                  >
+                    <mat-icon> visibility </mat-icon>
+
+                    Open
+                  </button>
+
+                  @if (!lecture.isAttendanceCompleted && !lecture.isAttendanceLocked) {
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      type="button"
+                      (click)="openQr(lecture.attendanceSessionId!)"
+                    >
+                      <mat-icon> qr_code_2 </mat-icon>
+
+                      QR
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

@@ -47,5 +47,7 @@ export const ApiEndpoints = {
 
   TimetableCalendar: 'TimetableCalendar',
 
+  Attendances: 'attendances',
+
   //#endregion
 } as const;

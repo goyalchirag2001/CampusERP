@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using CampusERP.Infrastructure.Services;
 using CampusERP.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using CampusERP.BackgroundJobs.Attendance;
 
 namespace CampusERP.Infrastructure;
 
@@ -85,6 +86,8 @@ public static class DependencyInjection
         services.AddScoped<ITimetableCalendarService, TimetableCalendarService>();
 
         services.AddScoped<IAttendanceService, AttendanceService>();
+
+        services.AddHostedService<CampusERP.BackgroundJobs.Attendance.QrAttendanceExpiryBackgroundService>();
 
         services.AddDbContext<ApplicationDbContext>(options =>
         {

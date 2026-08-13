@@ -4,6 +4,7 @@
 		<ProjectReference Include="..\CampusERP.Domain\CampusERP.Domain.csproj" />
 		<ProjectReference Include="..\CampusERP.Application\CampusERP.Application.csproj" />
 		<ProjectReference Include="..\CampusERP.Shared\CampusERP.Shared.csproj" />
+		<ProjectReference Include="..\CampusERP.BackgroundJobs\CampusERP.BackgroundJobs.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

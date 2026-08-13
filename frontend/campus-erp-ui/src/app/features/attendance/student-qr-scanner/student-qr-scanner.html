@@ -1,0 +1,115 @@
+<div class="scanner-page">
+  <div class="page-header">
+    <div class="eyebrow">ATTENDANCE</div>
+
+    <h1>Mark Attendance</h1>
+
+    <p>Scan the QR code displayed by your teacher.</p>
+  </div>
+
+  @if (success()) {
+    <mat-card class="success-card">
+      <div class="success-icon">
+        <mat-icon> check </mat-icon>
+      </div>
+
+      <h2>Attendance marked</h2>
+
+      <p>Your attendance has been recorded successfully.</p>
+
+      <button mat-flat-button color="primary" type="button" (click)="scanAgain()">
+        <mat-icon> qr_code_scanner </mat-icon>
+
+        Scan Another QR
+      </button>
+    </mat-card>
+  } @else {
+    @if (error()) {
+      <mat-card class="error-card">
+        <mat-icon> error_outline </mat-icon>
+
+        <div>
+          {{ error() }}
+        </div>
+      </mat-card>
+    }
+
+    <mat-card class="scanner-card">
+      <div class="scanner-header">
+        <div>
+          <div class="eyebrow">QR SCANNER</div>
+
+          <h2>Scan attendance QR</h2>
+        </div>
+
+        <mat-icon> qr_code_scanner </mat-icon>
+      </div>
+
+      <div class="camera-container" [class.scanning]="scanning()">
+        <video #video autoplay muted playsinline></video>
+
+        @if (!scanning()) {
+          <div class="camera-placeholder">
+            <mat-icon> photo_camera </mat-icon>
+
+            <span> Camera is not active </span>
+          </div>
+        }
+      </div>
+
+      @if (submitting()) {
+        <div class="processing">
+          <mat-spinner diameter="28"></mat-spinner>
+
+          <span> Verifying attendance... </span>
+        </div>
+      } @else {
+        <div class="scanner-actions">
+          @if (scanning()) {
+            <button mat-stroked-button type="button" (click)="stopCamera()">
+              <mat-icon> stop </mat-icon>
+
+              Stop Camera
+            </button>
+          } @else {
+            <button mat-flat-button color="primary" type="button" (click)="startCamera()">
+              <mat-icon> photo_camera </mat-icon>
+
+              Scan with Camera
+            </button>
+          }
+
+          <div class="or-divider">
+            <span> OR </span>
+          </div>
+
+          <label class="upload-button">
+            <mat-icon> upload_file </mat-icon>
+
+            Upload QR Image
+
+            <input type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+          </label>
+        </div>
+      }
+    </mat-card>
+
+    <mat-card class="info-card">
+      <mat-icon> info </mat-icon>
+
+      <div>
+        <h3>Important</h3>
+
+        <p>
+          Scan the QR code while it is displayed by your teacher. The QR code is valid only for a
+          short period of time.
+        </p>
+
+        <p>
+          If the QR has expired, your attendance can only be corrected through the attendance
+          correction process.
+        </p>
+      </div>
+    </mat-card>
+  }
+</div>

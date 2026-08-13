@@ -609,6 +609,52 @@ export const routes: Routes = [
       },
 
       /* -------------------------------------------------------
+   Attendance
+   ------------------------------------------------------- */
+
+      {
+        path: 'attendance',
+
+        loadComponent: () =>
+          import('./features/attendance/teacher-attendance/teacher-attendance').then(
+            (m) => m.TeacherAttendance,
+          ),
+
+        canActivate: [permissionGuard(Permissions.AttendanceView)],
+      },
+
+      {
+        path: 'attendance/sessions/:id',
+
+        loadComponent: () =>
+          import('./features/attendance/attendance-session/attendance-session').then(
+            (m) => m.AttendanceSession,
+          ),
+
+        canActivate: [permissionGuard(Permissions.AttendanceView)],
+      },
+
+      {
+        path: 'attendance/sessions/:id/qr',
+
+        loadComponent: () =>
+          import('./features/attendance/teacher-qr/teacher-qr').then((m) => m.TeacherQr),
+
+        canActivate: [permissionGuard(Permissions.AttendanceManage)],
+      },
+
+      {
+        path: 'attendance/qr/scan',
+
+        loadComponent: () =>
+          import('./features/attendance/student-qr-scanner/student-qr-scanner').then(
+            (m) => m.StudentQrScanner,
+          ),
+
+        canActivate: [permissionGuard(Permissions.AttendanceStudentMark)],
+      },
+
+      /* -------------------------------------------------------
          Institution Profile
          ------------------------------------------------------- */
 

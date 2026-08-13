@@ -1,0 +1,227 @@
+<div class="qr-page">
+  <div class="page-header">
+    <div class="header-content">
+      <button mat-icon-button type="button" matTooltip="Back" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div>
+        <div class="eyebrow">ATTENDANCE</div>
+
+        <h1>QR Attendance</h1>
+
+        <p>Display this QR code so students can mark themselves present.</p>
+      </div>
+    </div>
+  </div>
+
+  @if (error()) {
+    <mat-card class="error-card">
+      <mat-icon> error_outline </mat-icon>
+
+      <span>
+        {{ error() }}
+      </span>
+    </mat-card>
+  }
+
+  @if (loading()) {
+    <div class="loading-state">
+      <mat-spinner diameter="42"></mat-spinner>
+
+      <span> Checking attendance QR... </span>
+    </div>
+  } @else {
+    @if (!hasQr()) {
+      <mat-card class="start-card">
+        <div class="start-icon">
+          <mat-icon> qr_code_2 </mat-icon>
+        </div>
+
+        <div class="start-content">
+          <div class="eyebrow">READY TO START</div>
+
+          <h2>Start QR attendance</h2>
+
+          <p>
+            Generate a temporary QR code and share your screen. Students who scan it during the
+            active window will be marked present.
+          </p>
+
+          <mat-divider></mat-divider>
+
+          <div class="start-controls">
+            <mat-form-field appearance="outline">
+              <mat-label> QR duration </mat-label>
+
+              <mat-select
+                [value]="selectedDuration()"
+                (selectionChange)="selectedDuration.set($event.value)"
+              >
+                <mat-option [value]="30"> 30 seconds </mat-option>
+
+                <mat-option [value]="60"> 1 minute </mat-option>
+
+                <mat-option [value]="90"> 1 minute 30 seconds </mat-option>
+
+                <mat-option [value]="120"> 2 minutes </mat-option>
+
+                <mat-option [value]="180"> 3 minutes </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="starting()"
+              (click)="startQr()"
+            >
+              @if (starting()) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon> qr_code_2 </mat-icon>
+              }
+
+              Start QR Attendance
+            </button>
+          </div>
+        </div>
+      </mat-card>
+    }
+
+    @if (hasQr()) {
+      <div class="qr-layout">
+        <mat-card class="qr-card">
+          <div class="qr-header">
+            <div>
+              <div class="eyebrow">QR ATTENDANCE</div>
+
+              <h2>Scan to mark attendance</h2>
+            </div>
+
+            @if (isQrActive()) {
+              <div class="live-badge">
+                <span class="live-dot"></span>
+
+                LIVE
+              </div>
+            } @else {
+              <div class="expired-badge">CLOSED</div>
+            }
+          </div>
+
+          <div class="qr-container">
+            <canvas #qrCanvas aria-label="Attendance QR code"></canvas>
+          </div>
+
+          <div class="countdown">
+            <span class="countdown-label">
+              {{ isQrActive() ? 'Time remaining' : 'QR window closed' }}
+            </span>
+
+            <strong>
+              {{ formatRemainingTime() }}
+            </strong>
+          </div>
+
+          @if (qrSession(); as qr) {
+            <div class="qr-validity">
+              <span> Started </span>
+
+              <strong>
+                {{ formatTime(qr.validFrom) }}
+              </strong>
+
+              <span> Expires </span>
+
+              <strong>
+                {{ formatTime(qr.expiresOn) }}
+              </strong>
+            </div>
+          }
+        </mat-card>
+
+        <div class="right-column">
+          <mat-card class="stats-card">
+            <div class="stats-header">
+              <div>
+                <div class="eyebrow">LIVE STATUS</div>
+
+                <h2>Attendance</h2>
+              </div>
+
+              @if (refreshing()) {
+                <mat-spinner diameter="22"></mat-spinner>
+              }
+            </div>
+
+            @if (qrSession(); as qr) {
+              <div class="stats-grid">
+                <div class="stat present">
+                  <span class="stat-value">
+                    {{ qr.markedCount }}
+                  </span>
+
+                  <span class="stat-label"> Present </span>
+                </div>
+
+                <div class="stat remaining">
+                  <span class="stat-value">
+                    {{ qr.remainingStudentCount }}
+                  </span>
+
+                  <span class="stat-label"> Remaining </span>
+                </div>
+
+                <div class="stat total">
+                  <span class="stat-value">
+                    {{ qr.totalStudentCount }}
+                  </span>
+
+                  <span class="stat-label"> Total Students </span>
+                </div>
+              </div>
+            }
+          </mat-card>
+
+          <mat-card class="instructions-card">
+            <mat-icon> info </mat-icon>
+
+            <div>
+              <h3>How this works</h3>
+
+              <ol>
+                <li>Share this screen with the class.</li>
+
+                <li>Students scan the QR code.</li>
+
+                <li>A successful scan marks the student present.</li>
+
+                <li>When the timer ends, remaining students are automatically marked absent.</li>
+              </ol>
+            </div>
+          </mat-card>
+
+          @if (isQrActive()) {
+            <button
+              mat-stroked-button
+              color="warn"
+              type="button"
+              [disabled]="closing()"
+              (click)="closeQr()"
+            >
+              @if (closing()) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon> stop_circle </mat-icon>
+              }
+
+              Close QR & Mark Remaining Absent
+            </button>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

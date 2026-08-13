@@ -92,4 +92,7 @@ export const Permissions = {
   TeacherCalendarView: 'TeacherCalendar.View',
   StudentCalendarView: 'StudentCalendar.View',
 
+  AttendanceManage: 'Attendance.Manage',
+  AttendanceView: 'Attendance.View',
+  AttendanceStudentMark: 'Attendance-Student.Mark',
 } as const;

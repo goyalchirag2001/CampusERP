@@ -307,6 +307,7 @@ public class AttendanceService : IAttendanceService
             .AsNoTracking()
             .Include(x => x.AttendanceRecords)
                 .ThenInclude(x => x.Student)
+                    .ThenInclude(x => x.User)
             .FirstOrDefaultAsync(x =>
                 x.Id == id &&
                 x.InstitutionId == institutionId &&
@@ -355,6 +356,7 @@ public class AttendanceService : IAttendanceService
             .AsNoTracking()
             .Include(x => x.AttendanceRecords)
                 .ThenInclude(x => x.Student)
+                    .ThenInclude(x => x.User)
             .Where(x =>
                 x.InstitutionId == institutionId &&
                 x.CampusId == campusId &&
@@ -704,19 +706,14 @@ public class AttendanceService : IAttendanceService
         /*
          * Close any currently active QR window.
          */
-        var activeQrSessions = await _dbContext.AttendanceQrSessions
-            .Where(x =>
-                x.AttendanceSessionId == session.Id &&
-                x.IsActive)
-            .ToListAsync();
+        var existingQrSession = await _dbContext.AttendanceQrSessions.AsNoTracking().AnyAsync(x => x.AttendanceSessionId == session.Id);
+
+        if (existingQrSession)
+        {
+            throw new InvalidOperationException("QR attendance has already been used for this attendance session.");
+        }
 
         var now = DateTime.UtcNow;
-
-        foreach (var activeQr in activeQrSessions)
-        {
-            activeQr.IsActive = false;
-            activeQr.ClosedOn = now;
-        }
 
         /*
          * Session must be open while QR attendance is running.
@@ -737,8 +734,7 @@ public class AttendanceService : IAttendanceService
 
             ValidFrom = now,
 
-            ExpiresOn = now.AddSeconds(
-                request.DurationSeconds),
+            ExpiresOn = now.AddSeconds(request.DurationSeconds),
 
             IsActive = true,
 
@@ -758,16 +754,17 @@ public class AttendanceService : IAttendanceService
         var campusId = GetRequiredCampusId();
 
         var qrSession = await _dbContext.AttendanceQrSessions
-            .FirstOrDefaultAsync(x =>
+            .AsNoTracking()
+            .Where(x =>
                 x.AttendanceSessionId == attendanceSessionId &&
                 x.InstitutionId == institutionId &&
-                x.CampusId == campusId &&
-                x.IsActive &&
-                x.ExpiresOn > DateTime.UtcNow);
+                x.CampusId == campusId)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefaultAsync();
 
         if (qrSession == null)
         {
-            throw new KeyNotFoundException("No active QR attendance window exists.");
+            throw new KeyNotFoundException("QR attendance has not been started for this session.");
         }
 
         return await BuildQrSessionResponseAsync(qrSession.Id);
@@ -805,7 +802,7 @@ public class AttendanceService : IAttendanceService
             qrSession.IsActive = false;
             qrSession.ClosedOn = now;
 
-            await _dbContext.SaveChangesAsync();
+            await ExpireQrAttendanceAsync(qrSession);
 
             throw new InvalidOperationException("QR attendance window has expired.");
         }
@@ -878,6 +875,8 @@ public class AttendanceService : IAttendanceService
 
         record.Remarks = "Attendance marked using QR code.";
 
+        await UpdateSessionAttendanceStateAsync(session.Id);
+
         await _dbContext.SaveChangesAsync();
 
         return new AttendanceQrScanResponse
@@ -894,6 +893,31 @@ public class AttendanceService : IAttendanceService
         };
     }
 
+    public async Task ExpireQrAttendanceSessionsAsync()
+    {
+        var now = DateTime.UtcNow;
+
+        /*
+         * Only retrieve currently active QR sessions that have
+         * actually expired.
+         */
+        var expiredQrSessions = await _dbContext.AttendanceQrSessions
+            .Where(x =>
+                x.IsActive &&
+                x.ExpiresOn <= now)
+            .ToListAsync();
+
+        if (expiredQrSessions.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var qrSession in expiredQrSessions)
+        {
+            await ExpireQrAttendanceAsync(qrSession);
+        }
+    }
+
     private async Task ExpireQrAttendanceAsync(AttendanceQrSession qrSession)
     {
         if (!qrSession.IsActive)
@@ -908,14 +932,47 @@ public class AttendanceService : IAttendanceService
             return;
         }
 
+        var attendanceSession = await _dbContext.AttendanceSessions.FirstOrDefaultAsync(x => x.Id == qrSession.AttendanceSessionId);
+
+        if (attendanceSession == null)
+        {
+            /*
+             * The QR session points to a missing attendance session.
+             * Deactivate the QR so it cannot remain active forever.
+             */
+            qrSession.IsActive = false;
+            qrSession.ClosedOn = now;
+
+            await _dbContext.SaveChangesAsync();
+
+            return;
+        }
+
+        /*
+         * Close the QR window first.
+         */
         qrSession.IsActive = false;
 
         qrSession.ClosedOn = now;
 
-        var records = await _dbContext.AttendanceRecords
-            .Where(x =>
-                x.AttendanceSessionId == qrSession.AttendanceSessionId &&
-                !x.IsMarked)
+        /*
+         * If attendance has already been completed/locked,
+         * there is nothing left to finalize.
+         */
+        if (attendanceSession.Status == AttendanceSessionStatus.Completed ||
+            attendanceSession.Status == AttendanceSessionStatus.Locked ||
+            attendanceSession.Status == AttendanceSessionStatus.Cancelled)
+        {
+            await _dbContext.SaveChangesAsync();
+
+            return;
+        }
+
+        /*
+         * Any student who did not mark attendance during the
+         * QR window is automatically absent.
+         */
+        var records = await _dbContext.AttendanceRecords.Where(x => x.AttendanceSessionId == qrSession.AttendanceSessionId && !x.IsMarked)
             .ToListAsync();
 
         foreach (var record in records)
@@ -933,6 +990,26 @@ public class AttendanceService : IAttendanceService
             record.Remarks = "Automatically marked absent after QR attendance window expired.";
         }
 
+        /*
+         * If every student now has a definitive attendance result,
+         * the session can be completed.
+         *
+         * We intentionally do not lock it here.
+         * Locking remains a separate administrative/teacher action.
+         */
+        var remainingUnmarked = await _dbContext.AttendanceRecords
+            .AnyAsync(x =>
+                x.AttendanceSessionId ==
+                    qrSession.AttendanceSessionId &&
+                !x.IsMarked);
+
+        if (!remainingUnmarked)
+        {
+            attendanceSession.IsAttendanceMarked = true;
+
+            attendanceSession.Status = AttendanceSessionStatus.Completed;
+        }
+
         await _dbContext.SaveChangesAsync();
     }
 
@@ -943,6 +1020,7 @@ public class AttendanceService : IAttendanceService
         var userId = GetRequiredUserId();
 
         var qrSession = await _dbContext.AttendanceQrSessions
+            .Include(x => x.AttendanceSession)
             .FirstOrDefaultAsync(x =>
                 x.AttendanceSessionId == attendanceSessionId &&
                 x.InstitutionId == institutionId &&
@@ -994,6 +1072,10 @@ public class AttendanceService : IAttendanceService
             record.Remarks = "Automatically marked absent when QR attendance was closed.";
         }
 
+        qrSession.AttendanceSession.IsAttendanceMarked = true;
+
+        qrSession.AttendanceSession.Status = AttendanceSessionStatus.Completed;
+
         await _dbContext.SaveChangesAsync();
 
         return await BuildQrSessionResponseAsync(qrSession.Id);
@@ -1040,8 +1122,7 @@ public class AttendanceService : IAttendanceService
 
         if (qrSession == null)
         {
-            throw new KeyNotFoundException(
-                "QR attendance session not found.");
+            throw new KeyNotFoundException("QR attendance session not found.");
         }
 
         var records = await _dbContext.AttendanceRecords
@@ -1057,6 +1138,8 @@ public class AttendanceService : IAttendanceService
 
         var markedCount = records.Count(x => x.IsMarked);
 
+        var isActive = qrSession.IsActive && qrSession.ExpiresOn > DateTime.UtcNow;
+
         return new AttendanceQrSessionResponse
         {
             Id = qrSession.Id,
@@ -1065,13 +1148,13 @@ public class AttendanceService : IAttendanceService
 
             Token = qrSession.Token,
 
-            ValidFrom = qrSession.ValidFrom,
+            ValidFrom = new DateTimeOffset(DateTime.SpecifyKind(qrSession.ValidFrom, DateTimeKind.Utc)),
 
-            ExpiresOn = qrSession.ExpiresOn,
+            ExpiresOn = new DateTimeOffset(DateTime.SpecifyKind(qrSession.ExpiresOn, DateTimeKind.Utc)),
 
             DurationSeconds = (int)(qrSession.ExpiresOn - qrSession.ValidFrom).TotalSeconds,
 
-            IsActive = qrSession.IsActive && qrSession.ExpiresOn > DateTime.UtcNow,
+            IsActive = isActive,
 
             MarkedCount = markedCount,
 
@@ -1096,11 +1179,6 @@ public class AttendanceService : IAttendanceService
         if (session.Status == AttendanceSessionStatus.Completed)
         {
             throw new InvalidOperationException("Attendance session has already been completed.");
-        }
-
-        if (session.Status == AttendanceSessionStatus.Scheduled)
-        {
-            throw new InvalidOperationException("Attendance session must be opened before attendance can be marked.");
         }
     }
 
